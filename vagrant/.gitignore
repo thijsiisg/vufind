@@ -1,0 +1,6 @@
+.vagrant
+.tmp
+*.swp
+*.lock
+puppet/modules
+puppet/.librarian

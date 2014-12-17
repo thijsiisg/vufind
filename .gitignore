@@ -6,3 +6,13 @@ ChangeLog
 TAGS
 *~
 vendor/.git
+
+*.iml
+*.ipr
+*.iws
+.idea
+
+solr/**/index
+solr/**/tlog
+solr/**/spellchecker
+solr/**/spellShingle
