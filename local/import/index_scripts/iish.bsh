@@ -1,0 +1,541 @@
+import org.marc4j.marc.DataField;
+import org.marc4j.marc.Record;
+import org.marc4j.marc.Subfield;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+
+import javax.xml.namespace;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.util.Iterator;
+import java.util.List;
+import java.text.Normalizer;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import org.apache.log4j.Logger;
+
+// define the base level indexer so that its methods can be called from the script.
+// note that the SolrIndexer code will set this value before the script methods are called.
+org.solrmarc.index.SolrIndexer indexer = null;
+protected Logger logger = Logger.getLogger(this.getClass().getName());
+protected long cacheLimit = 3600000; // One hour
+
+public String getId(Record record) {
+    final String text = indexer.getFirstFieldVal(record, "001");
+    final int i = text.indexOf("/");
+    final String id = (i == -1) ? text : text.substring(i + 1);
+    
+    return id;
+}
+
+public Set getFormat(Record record) {
+    final String AB = "Articles";
+    final String SE = "Serials";
+    final String BK = "Books and brochures";
+    final String MU = "Music and sound";
+    final String DO = "Documentation";
+    final String AM = "Archives";
+    final String VM = "Visual documents";
+    final String OT = "Other";
+    final Set result = new LinkedHashSet();
+
+    String leader = record.getLeader().toString();
+
+    // example leader
+    // 00427nam a22001330a 45a0
+    String format = leader.substring(6, 8).toLowerCase();
+    if (format.equals("ab"))
+        result.add(AB);
+    if (format.equals("ar") || format.equals("as") || format.equals("ps") || format.equals("ar"))
+        result.add(SE);
+    if (format.equals("am") || format.equals("pm"))
+        result.add(BK);
+    if (format.equals("im") || format.equals("pi") || format.equals("ic") || format.equals("jm"))
+        result.add(MU);
+    if (format.equals("do") || format.equals("oc"))
+        result.add(DO);
+    if (format.equals("bm") || format.equals("pc"))
+        result.add(AM);
+    if (format.equals("av") || format.equals("rm") || format.equals("gm") || format.equals("pv") || format.equals("km") || format.equals("kc"))
+        result.add(VM);
+
+    List fields = record.getVariableFields("245");
+    if (fields != null) {
+        Iterator fieldsIter = fields.iterator();
+        DataField physical;
+        while (fieldsIter.hasNext()) {
+            physical = (DataField) fieldsIter.next();
+            List subfields = physical.getSubfields('k');
+            if (subfields != null) {
+                Iterator subfieldsIter = subfields.iterator();
+                while (subfieldsIter.hasNext()) {
+                    String coll = subfield(subfieldsIter.next()).getData().trim().toLowerCase();
+                    if (format.equals("ac") && coll.contains("book collection")) {
+                        result.add(BK);
+                    }
+                    if (format.equals("ac") && coll.contains("serial collection")) {
+                        result.add(SE);
+                    }
+                    if (format.equals("pc") && coll.contains("archief")) {
+                        result.add(AM);
+                    }
+                    if (format.equals("pc") && coll.contains("archive")) {
+                        result.add(AM);
+                    }
+                    if (format.equals("pc") && coll.contains("collection")) {
+                        result.add(DO);
+                    }
+                    if (format.equals("gc") && coll.contains("moving image collection")) {
+                        result.add(VM);
+                    }
+                    if (format.equals("kc") && coll.contains("photo collection")) {
+                        result.add(VM);
+                    }
+                    if (format.equals("kc") && coll.contains("poster collection")) {
+                        result.add(VM);
+                    }
+                    if (format.equals("rc") && coll.contains("object collection")) {
+                        result.add(VM);
+                    }
+                    if (format.equals("ic") && coll.contains("sound collection")) {
+                        result.add(MU);
+                    }
+                    if (format.equals("jc") && coll.contains("music collection")) {
+                        result.add(MU);
+                    }
+                }
+            }
+        }
+    }
+
+    if (result.isEmpty())
+        result.add(OT);
+
+    return result;
+}
+
+public String getRecordType(Record record) {
+    List fields = record.getVariableFields("856");
+    if (fields != null) {
+        Iterator fieldsIter = fields.iterator();
+        DataField physical;
+        while (fieldsIter.hasNext()) {
+            physical = (DataField) fieldsIter.next();
+            List subfields = physical.getSubfields('u');
+            if (subfields != null) {
+                Iterator subfieldsIter = subfields.iterator();
+                String desc;
+                while (subfieldsIter.hasNext()) {
+                    desc = (subfield(subfieldsIter.next())).getData().toLowerCase();
+                    if (desc.contains("/10622/3005")) {
+                        return "av";
+                    }
+                }
+            }
+        }
+    }
+
+    return "marc";
+}
+
+/**
+* Determine Collection: from the 852c
+*
+* @return String Type of collection
+*/
+public Set getCollection(Record record) {
+    final Set result = new LinkedHashSet();
+    final List fields = record.getVariableFields("852");	
+    if (fields != null) {
+        final Iterator fieldsIter = fields.iterator();
+        while (fieldsIter.hasNext()) {
+            final DataField physical = (DataField) fieldsIter.next();
+            final List subfields = physical.getSubfields('c');
+            if (subfields != null) {
+                final Iterator subfieldsIter = subfields.iterator();
+                while (subfieldsIter.hasNext()) {
+                    final Subfield subfield = subfield(subfieldsIter.next());
+                    final String data = subfield.getData();
+                    if (!result.contains(data))
+                        result.add(data);
+                }
+            }
+        }
+    }
+    
+    if (result.size() == 0)
+        result.add("IISG");
+        
+    return result;
+}
+
+/**
+* Determine Building\depot
+*
+* @return String Type of collection
+*/
+public String getBuilding(Record record) {
+    String recordType = getRecordType(record);	
+    if (recordType.equals("av"))
+        return "Digital repository";
+
+    return "Catalog";
+}
+
+public String getAllSearchableFields(Record record, String fieldSpec) throws Exception {
+    String url = indexer.getFirstFieldVal(record, fieldSpec);
+    String id = indexer.getFirstFieldVal(record, "001");
+    if (url == null)
+        return " ";
+        
+    Document document = loadDocument(url, getId(record));	
+    return getText(document);
+}
+
+public String getAllSearchableFields(Record record, String lowerBoundStr, String upperBoundStr){
+    return indexer.getAllSearchableFields(record, lowerBoundStr, upperBoundStr) ;
+}
+
+private Document loadDocument(String url, String id) throws Exception {
+    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    dbf.setIgnoringComments(true);
+    dbf.setNamespaceAware(true);
+    dbf.setValidating(false);
+    DocumentBuilder db = dbf.newDocumentBuilder();
+
+    final String vufind_home = System.getenv().get("VUFIND_HOME");
+    String folder = vufind_home + "local/cache/xml/";
+    File f = new File(folder);
+    if (!f.exists())
+        f.mkdirs();
+
+    final File file = new File(f, md5FromString(id+"_ead"));
+
+    // Use cache ?
+    boolean useCache = file.exists() && file.lastModified() + cacheLimit > new Date().getTime() ;
+    final Document document = ( useCache ) ? db.parse(file) : db.parse(url);
+    if ( !useCache ) saveDocument(document, file);
+    
+    return document;
+}
+
+private String md5FromString(String text) throws NoSuchAlgorithmException {
+    MessageDigest md = MessageDigest.getInstance("MD5");
+    md.update(text.getBytes());	
+    byte[] mdbytes = md.digest();
+    
+    return getHex(mdbytes);
+}
+
+private String getHex(byte[] mdbytes) {
+    StringBuffer sb = new StringBuffer();
+    for (byte mdbyte : mdbytes) {
+        String hex = Integer.toHexString(0xff & mdbyte);
+        if (hex.length() == 1) sb.append('0');
+        sb.append(hex);
+    }
+    
+    return sb.toString();
+}
+
+private void saveDocument(Document document, File file) throws Exception {
+    TransformerFactory transformerFactory = TransformerFactory.newInstance();
+    Transformer transformer = transformerFactory.newTransformer();
+    DOMSource source = new DOMSource(document);
+    StreamResult result = new StreamResult(file);
+    transformer.transform(source, result);
+}
+
+private String getText(Document document) throws XPathExpressionException {
+    XPathFactory factory = XPathFactory.newInstance();
+    XPath xpath = factory.newXPath();
+    final javax.xml.xpath.XPathExpression expr = xpath.compile("//@TEXT | //text()");
+    final NodeList nodelist = (NodeList) expr.evaluate(document.getDocumentElement(), XPathConstants.NODESET);
+    
+    StringBuilder sb = new StringBuilder();	
+    for (int i = 0; i < nodelist.getLength(); i++) {
+        sb.append(nodelist.item(i).getTextContent().replaceAll("(\\r|\\n|\\t)", "").trim());
+        sb.append(" ");
+    }
+    
+    return sb.toString();
+}
+
+public String getCollector(Record record) {
+    final String[] fieldSpecs = new String[]{"700", "710", "711"};
+    final List datafields = record.getVariableFields(fieldSpecs);
+    Iterator fieldsIter = datafields.iterator();
+    while (fieldsIter.hasNext()) {
+        DataField datafield = (DataField) fieldsIter.next();
+        Subfield subfield_a = datafield.getSubfield('a');
+        Subfield subfield_e = datafield.getSubfield('e');
+        
+        if (subfield_a != null && subfield_e != null && subfield_e.getData().equals("collector")) {
+            return subfield_a.getData();
+        }
+    }
+    
+    return null;
+}
+
+public Set getGenreFacets(Record record) {
+    final Set result = new LinkedHashSet();
+    final String[] fieldSpecs = new String[]{"245", "600", "610", "611", "630", "648", "650", "651", "655"};
+
+    final List fields = record.getVariableFields(fieldSpecs);
+    if (fields != null) {
+        final Iterator fieldsIter = fields.iterator();
+        while (fieldsIter.hasNext()) {
+            DataField physical = (DataField) fieldsIter.next();
+            String tag = physical.getTag();
+            List subfields;
+            if (tag.equals("245")) {
+                subfields = physical.getSubfields('k');
+            }
+            else if (tag.equals("655")) {
+                subfields = physical.getSubfields('v');
+                List subfields2 = physical.getSubfields('a');
+                if (subfields == null) {
+                    subfields = subfields2;
+                }
+                else if (subfields2 != null) {
+                    subfields.add(subfields2);
+                }
+            }
+            else {
+                subfields = physical.getSubfields('v');
+            }
+
+            if (subfields != null) {
+                final Iterator subfieldsIter = subfields.iterator();
+                while (subfieldsIter.hasNext()) {
+                    // Authorities are now part of the marc metadata. In that case, we get a list.
+                    final Subfield subfield = subfield(subfieldsIter.next()) ;
+
+                    final String data = subfield.getData().trim().toLowerCase();
+                    if (tag.equals("245")) {
+                        if (data.contains("annual report")) {
+                            result.add("Annual report");
+                        }						
+                        if (data.contains("book collection")) {
+                            result.add("Book collection");
+                        }
+                        if (data.contains("serial collection")) {
+                            result.add("Serial collection");
+                        }
+                        if (data.contains("collection")) {
+                            result.add("Collection");
+                        }
+                        if (data.contains("moving image collection")) {
+                            result.add("Moving image collection");
+                        }
+                        if (data.contains("photo collection")) {
+                            result.add("Photo collection");
+                        }
+                        if (data.contains("poster collection")) {
+                            result.add("Poster collection");
+                        }
+                        if (data.contains("object collection")) {
+                            result.add("Object collection");
+                        }
+                        if (data.contains("sound collection")) {
+                            result.add("Sound collection");
+                        }
+                        if (data.contains("music collection")) {
+                            result.add("Music collection");
+                        }
+                    }
+                    else if (!result.contains(data)) {
+                        result.add(data);
+                    }
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
+public Set getAuthorityFacets(Record record) {
+    final Set result = new LinkedHashSet();
+    final List fields = record.getDataFields();
+    if (fields != null) {
+        final Iterator fieldsIter = fields.iterator();
+        while (fieldsIter.hasNext()) {
+            DataField physical = (DataField) fieldsIter.next();
+            Subfield subfield = physical.getSubfield('0');
+
+            if (subfield != null) {
+                final String data = subfield.getData();
+                result.add(data);
+            }
+        }
+    }
+
+    return result;
+}
+
+public String hack(Record record) {
+    final Set result = new LinkedHashSet();
+    final List fields = record.getVariableFields("655");
+    if (fields != null) {
+        final Iterator fieldsIter = fields.iterator();
+        while (fieldsIter.hasNext()) {
+            final DataField physical = (DataField) fieldsIter.next();
+            final List subfields = physical.getSubfields('a');
+            if (subfields != null) {
+                final Iterator subfieldsIter = subfields.iterator();
+                while (subfieldsIter.hasNext()) {
+                    final Subfield subfield = subfield( subfieldsIter.next() );
+                    final String data = subfield.getData().toLowerCase().trim();
+                    if (data.equals("archives format") || data.equals("archives format."))
+                        throw Exception("Marc records with 655$a='Archives format.' will not be indexed.");
+                }
+            }
+        }
+    }
+    
+    return null;
+}
+
+public String downloadableEad(Record record ){
+    final List fields = record.getVariableFields("856");
+    if (fields != null) {
+        final Iterator fieldsIter = fields.iterator();
+        while (fieldsIter.hasNext()) {
+            final DataField physical = (DataField) fieldsIter.next();
+            final List subfields = physical.getSubfields('q');
+            if (subfields != null) {
+                final Iterator subfieldsIter = subfields.iterator();
+                while (subfieldsIter.hasNext()) {
+                    final Subfield subfield = subfield(subfieldsIter.next());
+                    final String data = subfield.getData().toLowerCase().trim();
+                    if (data.equalsIgnoreCase("image/jpeg"))
+                        return getFormat(record).iterator().next();
+                }
+            }
+        }
+    }
+    
+    return null;
+}
+
+public String downloadableBiblio(Record record ){
+    final Set result = new LinkedHashSet();
+    final List fields = record.getVariableFields("856");
+    if (fields != null) {
+        final Iterator fieldsIter = fields.iterator();
+        while (fieldsIter.hasNext()) {
+            final DataField physical = (DataField) fieldsIter.next();
+            
+            final String q = subfieldQ(physical);
+            if ( q != null ) 
+                return getFormat(record).iterator().next();
+                
+            final String u = subfieldU(physical);
+            if ( u != null ) 
+                return getFormat(record).iterator().next();
+        }
+    }
+    
+    return null;
+}
+
+public String getAlphabetical(Record record) {
+    final String[] tags = {"100", "110", "111"};
+    final String[] toRemove = { "the", "a", "an", "de", "het", "een", "le", "la",
+                                "les", "dem", "der", "dem", "das", "t", "l"};
+
+    String title = "";
+    final List fields = record.getVariableFields(tags);
+    if (fields != null) {
+        final Iterator fieldsIter = fields.iterator();
+        while (fieldsIter.hasNext()) {
+            DataField field = (DataField) fieldsIter.next();
+            Subfield subfield = field.getSubfield('a');
+            if (subfield != null) {
+                title += subfield.getData() + " ";
+            }
+        }
+    }
+
+    title = Normalizer
+        .normalize(title, Normalizer.Form.NFKD)
+        .replaceAll("[^\\p{Alpha}\\s]", "")
+        .trim()
+        .toLowerCase();
+
+    title = " " + title + " ";
+    for (String word : toRemove) {
+        String wordTarget = " " + word + " ";
+        if (title.contains(wordTarget)) {
+            title = title.replace(wordTarget, " ");
+        }
+    }
+
+    title = title.trim().toUpperCase();
+    if (title.length() > 0) {
+        return title.substring(0, 1);
+    }
+
+    return null;
+}
+
+private String subfieldQ(DataField datafield) {
+    if (datafield != null) {
+        final List subfields = datafield.getSubfields('q');
+        if (subfields != null) {
+            final Iterator subfieldsIter = subfields.iterator();
+            while (subfieldsIter.hasNext()) {
+                final Subfield subfield = subfield( subfieldsIter.next() );
+                final String data = subfield.getData();
+                final int i = data.indexOf("/");
+                if ( i != 0 ) 
+                    return data.substring(0, 1).toUpperCase() + data.substring(1, i);
+            }
+        }
+    }
+    
+    return null;
+}
+
+private String subfieldU(DataField datafield) {
+    if (datafield != null) {
+        final List subfields = datafield.getSubfields('u');
+        if (subfields != null) {
+            final Iterator subfieldsIter = subfields.iterator();
+            while (subfieldsIter.hasNext()) {
+                final Subfield subfield = subfield( subfieldsIter.next());
+                final String data = subfield.getData();
+                
+                if (data.contains("10622/3005100")) 
+                    return "Image";
+                    
+                if (data.startsWith("http://hdl.handle.net/10622/")) 
+                    return "Image";
+            }
+        }
+    }
+    
+    return null;
+}
+
+private Subfield subfield(Object o) {
+    return ((o instanceof List) ? ((List) o).get(0) : o);
+}
+
