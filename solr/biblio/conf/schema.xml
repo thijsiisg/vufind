@@ -191,10 +191,9 @@
    <field name="long_lat" type="textFacet" indexed="true" stored="true" multiValued="false"/>
    <!-- Fields added by the IISH -->
    <field name="pid" type="string" indexed="true" stored="false"/>
+   <field name="downloadable" type="boolean" indexed="true" stored="true" multiValued="false"/>
    <field name="collector" type="string" indexed="true" stored="true"/>
    <field name="collector_facet" type="stringPunctuation" indexed="true" stored="true"/>
-   <field name="downloadable" type="text" indexed="true" stored="true" multiValued="false"/>
-   <field name="downloadable_facet" type="textFacet" indexed="true" stored="true" multiValued="false"/>
    <field name="authority_facet" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
    <field name="alphabetical_facet" type="textFacet" indexed="true" stored="true" multiValued="false"/>
    <!-- Container fields (i.e. for describing journal containing an article) -->

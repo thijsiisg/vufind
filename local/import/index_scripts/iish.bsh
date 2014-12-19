@@ -413,7 +413,7 @@ public String hack(Record record) {
     return null;
 }
 
-public String downloadableEad(Record record ){
+public boolean downloadableEad(Record record ){
     final List fields = record.getVariableFields("856");
     if (fields != null) {
         final Iterator fieldsIter = fields.iterator();
@@ -425,14 +425,13 @@ public String downloadableEad(Record record ){
                 while (subfieldsIter.hasNext()) {
                     final Subfield subfield = subfield(subfieldsIter.next());
                     final String data = subfield.getData().toLowerCase().trim();
-                    if (data.equalsIgnoreCase("image/jpeg"))
-                        return getFormat(record).iterator().next();
+                    return data.equalsIgnoreCase("image/jpeg");
                 }
             }
         }
     }
     
-    return null;
+    return false;
 }
 
 public String downloadableBiblio(Record record ){
@@ -444,16 +443,16 @@ public String downloadableBiblio(Record record ){
             final DataField physical = (DataField) fieldsIter.next();
             
             final String q = subfieldQ(physical);
-            if ( q != null ) 
-                return getFormat(record).iterator().next();
-                
+            if (q != null)
+                return "TRUE";
+
             final String u = subfieldU(physical);
-            if ( u != null ) 
-                return getFormat(record).iterator().next();
+            if (u != null)
+                return "u";
         }
     }
     
-    return null;
+    return "null";
 }
 
 public String getAlphabetical(Record record) {
