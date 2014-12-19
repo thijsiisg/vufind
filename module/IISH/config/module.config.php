@@ -2,12 +2,17 @@
 namespace IISH\Module\Configuration;
 
 $config = array(
-    'controllers' => array(
+    'controllers'     => array(
         'factories' => array(
             'record' => 'IISH\Controller\Factory::getRecordController',
         ),
     ),
-    'vufind'      => array(
+    'service_manager' => array(
+        'factories' => array(
+            'VuFind\CacheManager' => 'IISH\Service\Factory::getCacheManager',
+        ),
+    ),
+    'vufind'          => array(
         'plugin_managers' => array(
             'recorddriver' => array(
                 'factories' => array(
