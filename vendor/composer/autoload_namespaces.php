@@ -15,4 +15,5 @@ return array(
     'SerialsSolutions' => array($vendorDir . '/serialssolutions/summon'),
     'PHPQRCode' => array($vendorDir . '/aferrandini/phpqrcode/lib'),
     'Less' => array($vendorDir . '/oyejorge/less.php/lib'),
+    'EasyRdf_' => array($vendorDir . '/easyrdf/easyrdf/lib'),
 );
