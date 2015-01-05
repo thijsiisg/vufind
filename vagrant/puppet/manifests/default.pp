@@ -77,3 +77,19 @@ exec { '/usr/sbin/php5dismod xdebug':
   onlyif => "/usr/sbin/php5query -s apache2 -m xdebug ||\
              /usr/sbin/php5query -s cli -m xdebug",
 }
+
+file { '/etc/php5/mods-available/xdebug.ini':
+  ensure => present,
+  require => Package['php5-xdebug'],
+  notify => Service['apache2']
+} ->
+file_line { 'xdebug.remote_enable':
+  path => '/etc/php5/mods-available/xdebug.ini',
+  line => 'xdebug.remote_enable=1',
+  match => '^xdebug.remote_enable*$'
+} ->
+file_line { 'xdebug.remote_connect_back':
+  path => '/etc/php5/mods-available/xdebug.ini',
+  line => 'xdebug.remote_connect_back=1',
+  match => '^xdebug.remote_connect_back*$'
+}
