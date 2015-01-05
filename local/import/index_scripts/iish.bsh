@@ -444,15 +444,15 @@ public String downloadableBiblio(Record record ){
             
             final String q = subfieldQ(physical);
             if (q != null)
-                return "TRUE";
+                return "true";
 
             final String u = subfieldU(physical);
             if (u != null)
-                return "u";
+                return "true";
         }
     }
     
-    return "null";
+    return "false";
 }
 
 public String getAlphabetical(Record record) {

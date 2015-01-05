@@ -14,7 +14,7 @@ class Factory {
      *
      * @param ServiceManager $sm Service manager.
      *
-     * @return \VuFind\Cache\Manager
+     * @return \IISH\Cache\Manager
      */
     public static function getCacheManager(ServiceManager $sm) {
         return new \IISH\Cache\Manager(
