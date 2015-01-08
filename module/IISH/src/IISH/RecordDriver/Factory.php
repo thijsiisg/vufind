@@ -64,6 +64,7 @@ class Factory {
      */
     public static function getSolrEad(ServiceManager $sm) {
         $driver = new SolrEad(
+            $sm->getServiceLocator(),
             $sm->getServiceLocator()->get('VuFind\Config')->get('config'),
             null,
             $sm->getServiceLocator()->get('VuFind\Config')->get('searches'),
