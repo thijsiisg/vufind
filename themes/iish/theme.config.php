@@ -1,6 +1,6 @@
 <?php
 return array(
-    'extends' => 'blueprint',
+    'extends' => 'bootprint3',
     'css'     => array(),
     'js'      => array(),
     'favicon' => 'favicon.ico',
