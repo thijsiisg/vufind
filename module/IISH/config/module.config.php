@@ -25,6 +25,7 @@ $config = array(
             'record' => 'IISH\Controller\Factory::getRecordController',
         ),
         'invokables' => array(
+            'cover'      => 'IISH\Controller\CoverController',
             'navigation' => 'IISH\Controller\NavigationController',
         ),
     ),
