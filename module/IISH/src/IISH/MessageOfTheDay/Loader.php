@@ -23,7 +23,7 @@ class Loader extends Cacheable {
      * Constructor.
      * For the creation of a 'message of the day'.
      *
-     * @param ServiceLocatorInterface $serviceLocator
+     * @param ServiceLocatorInterface $serviceLocator.
      */
     public function __construct(ServiceLocatorInterface $serviceLocator) {
         parent::__construct($serviceLocator, 'MessageOfTheDay');

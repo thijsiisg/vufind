@@ -28,21 +28,21 @@ abstract class Cacheable {
     /**
      * The key of the cached item.
      *
-     * @return string The key
+     * @return string The key.
      */
     abstract protected function getKey();
 
     /**
      * Creates a new instance, ready to be cached.
      *
-     * @return mixed The instance to cache
+     * @return mixed The instance to cache.
      */
     abstract protected function create();
 
     /**
      * Retrieves an instance from cache, or creates a new instance in the cache.
      *
-     * @return mixed The instance
+     * @return mixed The instance.
      */
     protected function get() {
         $cachedInstance = $this->getFromCache();
@@ -59,7 +59,7 @@ abstract class Cacheable {
     /**
      * Tries to obtain an instance from the cache.
      *
-     * @return mixed Instance from the cache
+     * @return mixed Instance from the cache.
      */
     private function getFromCache() {
         if ($this->cache !== null) {
@@ -70,9 +70,9 @@ abstract class Cacheable {
     }
 
     /**
-     * Caches the given instance
+     * Caches the given instance.
      *
-     * @param mixed $instance Instance to cache
+     * @param mixed $instance Instance to cache.
      */
     private function setCache($instance) {
         if ($this->cache !== null) {

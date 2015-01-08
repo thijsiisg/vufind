@@ -28,7 +28,7 @@ class Manager extends VuFindCacheManager {
 
         $caches = isset($iishConfig->Caches) ? $iishConfig->Caches->toArray() : array();
         foreach ($caches as $name => $ttl) {
-            if (is_int($ttl)) {
+            if (is_numeric($ttl)) {
                 // The only way to set the TTL is to change the default caching values
                 $this->defaults = array_merge($defaultOptions, array('ttl' => $ttl));
                 $this->createFileCache($name, $this->getValidCacheDir($name));
