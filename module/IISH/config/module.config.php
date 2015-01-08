@@ -26,7 +26,9 @@ $config = array(
         ),
         'invokables' => array(
             'cover'      => 'IISH\Controller\CoverController',
+            'iish'       => 'IISH\Controller\IISHController',
             'navigation' => 'IISH\Controller\NavigationController',
+            'search'     => 'IISH\Controller\SearchController',
         ),
     ),
     'service_manager' => array(
@@ -36,14 +38,19 @@ $config = array(
     ),
     'vufind'          => array(
         'plugin_managers'   => array(
-            'recorddriver' => array(
+            'content_covers' => array(
+                'factories' => array(
+                    'iish' => 'IISH\Content\Covers\Factory::getIISH',
+                ),
+            ),
+            'recorddriver'   => array(
                 'factories' => array(
                     'solrmarc' => 'IISH\RecordDriver\Factory::getSolrMarc',
                     'solrav'   => 'IISH\RecordDriver\Factory::getSolrAv',
                     'solread'  => 'IISH\RecordDriver\Factory::getSolrEad',
                 ),
             ),
-            'recordtab'    => array(
+            'recordtab'      => array(
                 'invokables' => array(
                     'holdingsmarc'               => 'IISH\RecordTab\HoldingsMarc',
                     'holdingsav'                 => 'IISH\RecordTab\HoldingsAv',
@@ -108,5 +115,26 @@ $config = array(
         ),
     ),
 );
+
+// Define static routes -- Controller/Action strings
+$staticRoutes = array(
+    'IISH/About', 'IISH/Databases'
+);
+
+// Build static routes
+foreach ($staticRoutes as $route) {
+    list($controller, $action) = explode('/', $route);
+    $routeName = str_replace('/', '-', strtolower($route));
+    $config['router']['routes'][$routeName] = array(
+        'type'    => 'Zend\Mvc\Router\Http\Literal',
+        'options' => array(
+            'route'    => '/' . $route,
+            'defaults' => array(
+                'controller' => $controller,
+                'action'     => $action,
+            )
+        )
+    );
+}
 
 return $config;
