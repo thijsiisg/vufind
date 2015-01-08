@@ -126,7 +126,7 @@ foreach ($staticRoutes as $route) {
     list($controller, $action) = explode('/', $route);
     $routeName = str_replace('/', '-', strtolower($route));
     $config['router']['routes'][$routeName] = array(
-        'type'    => 'Zend\Mvc\Router\Http\Literal',
+        'type' => 'Zend\Mvc\Router\Http\Literal',
         'options' => array(
             'route'    => '/' . $route,
             'defaults' => array(

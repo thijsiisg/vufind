@@ -1,11 +1,11 @@
 <?php
 return array(
     'extends' => 'blueprint',
-    'css' => array(),
-    'js' => array(),
+    'css'     => array(),
+    'js'      => array(),
     'favicon' => 'favicon.ico',
     'helpers' => array(
-        'factories' => array(),
+        'factories'  => array(),
         'invokables' => array()
     )
 );

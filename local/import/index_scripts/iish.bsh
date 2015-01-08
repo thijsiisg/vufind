@@ -413,7 +413,7 @@ public String hack(Record record) {
     return null;
 }
 
-public boolean downloadableEad(Record record ){
+public String downloadableEad(Record record ){
     final List fields = record.getVariableFields("856");
     if (fields != null) {
         final Iterator fieldsIter = fields.iterator();
@@ -425,7 +425,7 @@ public boolean downloadableEad(Record record ){
                 while (subfieldsIter.hasNext()) {
                     final Subfield subfield = subfield(subfieldsIter.next());
                     final String data = subfield.getData().toLowerCase().trim();
-                    return data.equalsIgnoreCase("image/jpeg");
+                    return data.equalsIgnoreCase("image/jpeg") ? "true" : "false";
                 }
             }
         }
