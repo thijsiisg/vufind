@@ -69,6 +69,7 @@
         "zendframework/zendrest": "2.*",
         "zendframework/zendservice-amazon": "2.*",
         "zendframework/zendservice-recaptcha": "2.*",
-        "easyrdf/easyrdf": "0.9.0"
+        "easyrdf/easyrdf": "0.9.0",
+        "abeautifulsite/simpleimage": "2.5.3"
     }
 }

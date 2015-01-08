@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'abeautifulsite' => array($vendorDir . '/abeautifulsite/simpleimage/src'),
     'Zend\\' => array($vendorDir . '/zendframework/zendframework/library'),
     'ZendXml' => array($vendorDir . '/zendframework/zendxml/library'),
     'ZendService\\Amazon\\' => array($vendorDir . '/zendframework/zendservice-amazon/library'),
