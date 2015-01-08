@@ -27,6 +27,13 @@ class SolrMarc extends VuFindSolrMarc {
     }
 
     /**
+     * We don't use the built-in AJAX status lookups.
+     */
+    public function supportsAjaxStatus() {
+        return false;
+    }
+
+    /**
      * True if we have a link to downloadable content.
      *
      * @return bool
@@ -381,36 +388,46 @@ class SolrMarc extends VuFindSolrMarc {
     }
 
     /**
-     * TODO: 1) Fix book cover link. 2) Move to another class?
-     *
      * Returns the URL that resolves to the image resource.
-     *
-     * @param bool $showPersistentUrl Set to true if the persistent URL is to be returned.
-     *                                If set to false, the bookcover URL is returned instead.
-     *                                Is true by default.
      *
      * @return string|null The URL that resolves to the image resource.
      */
-    public function getImageURL($showPersistentUrl = true) {
+    public function getImageURL() {
         $pid = $this->getIsShownBy();
         if (!empty($pid)) {
-            $openURL = 'http://hdl.handle.net/10622/' . $pid;
+            $url = 'http://hdl.handle.net/10622/' . $pid;
 
-            switch ($this->getPublicationStatus()) {
-                case 'closed':
-                    return ($showPersistentUrl) ? $openURL :
-                        '/bookcover.php?size=large&pid=' . $pid;
-                case 'minimal':
-                    return ($showPersistentUrl) ? $openURL . '?locatt=view:level3' :
-                        '/bookcover.php?size=small&pid=' . $pid;
-                case 'restricted':
+            switch ($this->getLargestPossibleSize()) {
+                case 'large':
+                    return $url;
+                case 'small':
+                    return $url . '?locatt=view:level3';
+                case 'medium':
                 default:
-                    return ($showPersistentUrl) ? $openURL . '?locatt=view:level2' :
-                        '/bookcover.php?size=medium&pid=' . $pid;
+                    return $url . '?locatt=view:level2';
             }
         }
 
         return null;
+    }
+
+    /**
+     * Determine the largest possible image size, based on the publication status.
+     *
+     * @param string $largestSize The largest possible size anyway.
+     *
+     * @return string The largest possible image size.
+     */
+    public function getLargestPossibleSize($largestSize = 'large') {
+        switch ($this->getPublicationStatus()) {
+            case 'closed':
+                return $largestSize;
+            case 'minimal':
+                return 'small';
+            case 'restricted':
+            default:
+                return ($largestSize === 'small') ? $largestSize : 'medium';
+        }
     }
 
     /**
@@ -504,18 +521,17 @@ class SolrMarc extends VuFindSolrMarc {
      * @return string|array|bool
      */
     public function getThumbnail($size = 'small') {
-        if ($thumbnail = parent::getThumbnail($size)) {
-            return $thumbnail;
-        }
-        else if ($pid = $this->getAudioVisualPid()) {
-            return array(
-                'pid'         => $pid,
-                'size'        => $size,
-                'publication' => $this->getPublicationStatus()
-            );
+        $thumbnail = parent::getThumbnail($size);
+
+        if ($pid = $this->getAudioVisualPid()) {
+            $thumbnail = is_array($thumbnail) ? $thumbnail : array();
+
+            $thumbnail['pid'] = $pid;
+            $thumbnail['size'] = $this->getLargestPossibleSize($size);
+            $thumbnail['publication'] = $this->getPublicationStatus();
         }
 
-        return false;
+        return $thumbnail;
     }
 
     /**
