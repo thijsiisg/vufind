@@ -1,1 +1,32 @@
 @import "bootprint";
+@import "ead";
+@import "navigation";
+
+.holding {
+  margin-bottom: 25px;
+
+  .callnumber {
+    display: inline;
+  }
+
+  .state {
+    display: inline;
+    margin-left: 10px;
+  }
+}
+
+.mets-embedded {
+  background: url("../../images/ajax_spinner.gif") no-repeat center;
+  height: 550px;
+  margin: 1em 0 1em 0;
+
+  // Mets viewer full screen fix
+  .mets-layout-full-screen-page,
+  .mets-layout-full-screen-thumbnail {
+    position: fixed !important;
+  }
+}
+
+.audio-container {
+  margin: 0 8px 20px;
+}
