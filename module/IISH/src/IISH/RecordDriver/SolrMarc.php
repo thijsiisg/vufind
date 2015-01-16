@@ -34,6 +34,16 @@ class SolrMarc extends VuFindSolrMarc {
     }
 
     /**
+     * Get the short (pre-subtitle) title of the record.
+     * If the title ends with a single character, remove it. (Usually /)
+     *
+     * @return string The short title escaped.
+     */
+    public function getShortTitleEscaped() {
+        return preg_replace('/\s.\Z/', '', $this::getShortTitle());
+    }
+
+    /**
      * True if we have a link to downloadable content.
      *
      * @return bool
@@ -200,7 +210,6 @@ class SolrMarc extends VuFindSolrMarc {
                     switch ($subfield->getCode()) {
                         case 'a':
                             $link = $subfield->getData();
-                            break;
                         case 'b':
                         case 'c':
                         case 'd':
@@ -257,6 +266,24 @@ class SolrMarc extends VuFindSolrMarc {
         }
 
         return ($pos === false) ? null : $p;
+    }
+
+    /**
+     * Returns the copyright 'A' field.
+     *
+     * @return string The copyright 'a' field.
+     */
+    public function getCopyrightA() {
+        return $this->getFirstFieldValue('540', array('a'));
+    }
+
+    /**
+     * Returns the copyright 'B' field.
+     *
+     * @return string The copyright 'b' field.
+     */
+    public function getCopyrightB() {
+        return $this->getFirstFieldValue('540', array('b'));
     }
 
     /**

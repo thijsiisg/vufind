@@ -37,7 +37,6 @@ class RecordController extends VuFindRecordController {
         $viewModel->pid = $driver->getUniqueID(); // TODO: replace with PID in 902$a
         $viewModel->baseUrl = '/Record/' . $driver->getUniqueID();
 
-        $viewModel->deliveryUrl = $this->iishConfig->Delivery->url;
         $viewModel->visualmetsUrl = $this->iishConfig->VisualMets->url;
         $viewModel->visualmetsRows = $this->iishConfig->VisualMets->rows;
 

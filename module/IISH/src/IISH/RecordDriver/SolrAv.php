@@ -7,13 +7,6 @@ namespace IISH\RecordDriver;
 class SolrAv extends SolrMarc {
 
     /**
-     * TODO: Migrated from 1.1, but should most likely be handled at a higher level.
-     */
-    /*public function getUrls() {
-        return null;
-    }*/
-
-    /**
      * Returns the subject person field.
      *
      * @return array The subject person field.
@@ -65,24 +58,6 @@ class SolrAv extends SolrMarc {
      */
     public function getBarcode() {
         return $this->getFirstFieldValue('852', array('p'));
-    }
-
-    /**
-     * Returns the copyright 'A' field.
-     *
-     * @return string The copyright 'a' field.
-     */
-    public function getCopyrightA() {
-        return $this->getFirstFieldValue('540', array('a'));
-    }
-
-    /**
-     * Returns the copyright 'B' field.
-     *
-     * @return string The copyright 'b' field.
-     */
-    public function getCopyrightB() {
-        return $this->getFirstFieldValue('540', array('b'));
     }
 
     /**

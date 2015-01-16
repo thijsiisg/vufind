@@ -1,1 +1,82 @@
 <? $this->headTitle($this->translate('Holdings') . ': ' . $this->driver->getBreadcrumb()); ?>
+
+<? $holdings = $this->driver->getHoldings(); if (!empty($holdings)): ?>
+  <h3><?=$this->transEsc('Holding')?></h3>
+
+  <div id="holdings">
+    <? foreach ($holdings as $counter => $holding): ?>
+      <div class="holding">
+        <div class="callnumber">
+          <?=$this->escapeHtml($holding['c'])?>
+        </div>
+
+        <? $format = strtolower($this->driver->getFormats()[0]); ?>
+        <? if (($format === 'books and brochures') || ($format === 'serials')): ?>
+          <div class="state"
+               data-label="<?=$this->escapeHtmlAttr($this->truncate(preg_replace('/[\'"]/', '`',
+                 $this->driver->getShortTitle()), 40))?> - <?=$this->escapeHtmlAttr($holding['j'])?>"
+               data-pid="<?=$this->escapeHtmlAttr($this->driver->getIsShownAt())?>"
+               data-signature="<?=$this->escapeHtmlAttr($holding['j'])?>">
+          </div>
+        <? endif; ?>
+
+        <? if (isset($holding['note'])): ?>
+          <div class="note">
+            <?=$this->escapeHtml($holding['note'])?>
+          </div>
+        <? endif; ?>
+      </div>
+    <? endforeach; ?>
+  </div>
+<? endif; ?>
+
+<?
+$isShownAt = $this->driver->getIsShownAt();
+$imageURL = $this->driver->getImageURL();
+?>
+<? if (!empty($isShownAt) || !empty($imageURL)): ?>
+  <div id="is-shown">
+    <? if (!empty($isShownAt)): ?>
+      <p>
+        <?= $this->transEsc('isShownAt') ?><br/>
+        <a href="http://hdl.handle.net/<?= $isShownAt ?>" target="_blank">
+          http://hdl.handle.net/<?= $isShownAt ?>
+        </a>
+      </p>
+    <? endif; ?>
+
+    <? if (!empty($imageURL)): ?>
+      <p>
+        <?= $this->transEsc('isShownBy') ?><br/>
+        <a href="<?= $imageURL ?>" target="_blank">
+          <?= $imageURL ?>
+        </a>
+      </p>
+    <? endif; ?>
+  </div>
+<? endif; ?>
+
+<?
+$copyrightA = $this->driver->getCopyrightA();
+$isShownBy = $this->driver->getIsShownBy();
+?>
+<? if (!empty($copyrightA) || ($copyrightA != 'Public Domain.') && !empty($isShownBy)): ?>
+  <div id="copyright">
+    <h3><?=$this->transEsc('copyright.use')?></h3>
+
+    <p>
+      <a href="<?=$this->translate('copyright.consult.href')?>" target="_blank">
+        <?=$this->transEsc('copyright.consult')?>
+      </a>
+    </p>
+
+    <? $copyrightB = $this->driver->getCopyrightB(); if (empty($copyrightB)): ?>
+      <p><?=$this->transEsc('copyright.unknown')?></p>
+    <? else: ?>
+      <p><?=$this->transEsc('copyright.known')?></p>
+    <? endif; ?>
+  </div>
+<? endif; ?>
+
+<?=$this->record($this->driver)->getPreviews()?>
+
