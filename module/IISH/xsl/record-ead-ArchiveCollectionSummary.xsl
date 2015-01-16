@@ -30,30 +30,44 @@
   </xsl:template>
 
   <xsl:template match="ead:ead">
-    <xsl:if test="$digital_items>0">
-      <div id="teaser">
-        <img src=""/>
-        <p>
-          <xsl:call-template name="language">
-            <xsl:with-param name="key">ArchiveCollectionSummary.image</xsl:with-param>
-          </xsl:call-template>
-        </p>
+    <div class="row">
+      <xsl:if test="$digital_items>0">
+        <div id="teaser" class="col-sm-3 col-sm-push-9">
+          <img src=""/>
+          <p>
+            <xsl:call-template name="language">
+              <xsl:with-param name="key">ArchiveCollectionSummary.image</xsl:with-param>
+            </xsl:call-template>
+          </p>
+        </div>
+      </xsl:if>
+
+      <xsl:variable name="arch_class">
+        <xsl:choose>
+            <xsl:when test="$digital_items>0">
+              <xsl:text>col-sm-9 col-sm-pull-3</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:text>col-sm-12</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+
+      <div id="arch" class="{$arch_class}">
+        <table class="table table-striped">
+          <xsl:call-template name="creator"/>
+          <xsl:call-template name="secondcreator"/>
+          <xsl:call-template name="abstract"/>
+          <xsl:call-template name="period"/>
+          <xsl:call-template name="extent"/>
+          <xsl:call-template name="access"/>
+          <xsl:call-template name="digitalform"/>
+          <xsl:call-template name="langmaterial"/>
+          <xsl:call-template name="collectionid"/>
+          <xsl:call-template name="repository"/>
+          <xsl:call-template name="pid"/>
+        </table>
       </div>
-    </xsl:if>
-    <div id="arch">
-      <table>
-        <xsl:call-template name="creator"/>
-        <xsl:call-template name="secondcreator"/>
-        <xsl:call-template name="abstract"/>
-        <xsl:call-template name="period"/>
-        <xsl:call-template name="extent"/>
-        <xsl:call-template name="access"/>
-        <xsl:call-template name="digitalform"/>
-        <xsl:call-template name="langmaterial"/>
-        <xsl:call-template name="collectionid"/>
-        <xsl:call-template name="repository"/>
-        <xsl:call-template name="pid"/>
-      </table>
     </div>
 
     <xsl:if test="$digital_items>0">

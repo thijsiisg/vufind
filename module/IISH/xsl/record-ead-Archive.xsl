@@ -138,12 +138,14 @@
             name="key" select="'ArchiveContentList.pdf'"/>
       </xsl:call-template>
     </a>
-    |
-    <span class="m" title="{ead:daoloc[@xlink:label='mets']/@xlink:href}">
-      <xsl:call-template name="language">
-        <xsl:with-param
-            name="key" select="'ArchiveContentList.view'"/>
-      </xsl:call-template>
+    <span class="hidden-xs hidden-ms">
+      |
+      <span class="m" title="{ead:daoloc[@xlink:label='mets']/@xlink:href}">
+        <xsl:call-template name="language">
+          <xsl:with-param
+              name="key" select="'ArchiveContentList.view'"/>
+        </xsl:call-template>
+      </span>
     </span>
     ] -
   </xsl:template>

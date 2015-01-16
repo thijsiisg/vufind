@@ -31,6 +31,11 @@ class NavigationController extends AbstractRecord {
         $template = 'RecordTab/Navigation/' . strtolower($name) . '.phtml';
         $viewModel->setTemplate($template);
 
+        // If called via AJAX, use the Lightbox layout
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->layout()->setTemplate('layout/lightbox');
+        }
+
         return $viewModel;
     }
 

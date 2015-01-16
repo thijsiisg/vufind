@@ -26,7 +26,7 @@
 
   <xsl:template match="ead:ead">
     <div id="arch">
-      <table>
+      <table class="table table-striped">
         <xsl:call-template name="access"/>
         <xsl:call-template name="userestrict"/>
         <xsl:call-template name="prefercite"/>

@@ -26,7 +26,7 @@
 
   <xsl:template match="ead:ead">
     <div id="arch">
-      <table>
+      <table class="table table-striped">
         <xsl:call-template name="persname"/>
         <xsl:call-template name="corpname"/>
         <xsl:call-template name="subject"/>

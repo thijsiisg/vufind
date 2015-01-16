@@ -26,7 +26,7 @@
 
   <xsl:template match="ead:ead">
     <div id="arch">
-      <table>
+      <table class="table table-striped">
         <xsl:call-template name="bibliographical"/>
         <xsl:call-template name="custodhist"/>
         <xsl:call-template name="arrangement"/>

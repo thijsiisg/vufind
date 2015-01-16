@@ -1,0 +1,46 @@
+#navigation {
+  position: absolute;
+  background-color: white;
+  padding: 5px;
+  margin-left: 10px;
+  margin-top: 10px;
+  left: 0;
+  z-index: 888;
+  width: 300px;
+  overflow: scroll;
+  border: 1px solid #888;
+  box-shadow: 0 0 5px #888;
+
+  &.affix {
+    position: fixed;
+    top: 0;
+  }
+
+  ul {
+    &.tree, &.tree ul {
+      list-style-type: none;
+      background: #ffffff url('../../images//vline.png') repeat-y;
+      margin: 0;
+      padding: 0;
+    }
+
+    &.tree {
+      ul {
+        margin-left: 10px;
+      }
+
+      li {
+        text-align: left;
+        margin: 0;
+        padding: 0 12px;
+        line-height: 20px;
+        background: #ffffff url('../../images/node.png') no-repeat;
+        color: #369;
+
+        &:last-child {
+          background: #ffffff url('../../images/lastnode.png') no-repeat;
+        }
+      }
+    }
+  }
+}
