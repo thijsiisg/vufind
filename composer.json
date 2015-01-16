@@ -71,12 +71,19 @@
         "zendframework/zendservice-recaptcha": "2.*",
         "easyrdf/easyrdf": "0.9.0",
         "abeautifulsite/simpleimage": "2.5.3",
-        "fxp/composer-asset-plugin": "1.0.0-beta4"
+        "fxp/composer-asset-plugin": "1.0.0-beta4",
+        "npm-asset/mediaelement": "2.16.3"
     },
     "extra": {
         "asset-installer-paths": {
             "npm-asset-library": "themes/iish/vendor",
             "bower-asset-library": "themes/iish/vendor"
-        }
+        },
+        "asset-repositories": [
+            {
+                "type": "npm-git",
+                "url": "https://github.com/johndyer/mediaelement.git"
+            }
+        ]
     }
 }
