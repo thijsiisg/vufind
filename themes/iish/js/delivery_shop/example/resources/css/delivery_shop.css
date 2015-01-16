@@ -1,0 +1,128 @@
+/*
+ * Copyright 2013 International Institute of Social History
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+/*
+    DeliveryShop classes
+*/
+/* The "Request Item" button */
+.deliveryReserveButton
+{
+    background-color: lightgreen;
+}
+/* The "Request Permission"" button */
+.deliveryPermissionButton
+{
+    background-color: lightblue;
+}
+/* Delivery response text if no button is displayed */
+.deliveryResponseText
+{
+    color: darkred;
+}
+/* Delivery response error text (ex. HTTP 404) */
+.deliveryResponseError
+{
+    font-weight: bold;
+    color:       red;
+    /* display:     none; */
+}
+/* The div containing the "Reserve" and "Empty" buttons */
+#deliveryCartButtons
+{
+    background-color: lemonchiffon;
+    width:            750px;
+}
+
+/*
+    The simpleCart classes
+*/
+/* The div with item list */
+.simpleCart_items
+{
+    background-color: white;
+    width:            750px;
+    display:          table;
+}
+/* The item list header */
+.simpleCart_items .headerRow
+{
+    background-color: lightgray;
+    width:            750px;
+    display:          table-row;
+}
+/* The item list header label for the title */
+.simpleCart_items .headerRow .item-name
+{
+    font-weight: bold;
+    text-align:  left;
+    display:     table-cell;
+}
+/* The item list header label for the pid/signature (normally hidden) */
+.simpleCart_items .headerRow .item-pid
+{
+    font-weight: bold;
+    text-align:  left;
+    display:     none;
+    /* display:     table-cell; */
+}
+/* The item list header label for the Remove links */
+.simpleCart_items .headerRow .item-remove
+{
+    font-weight: bold;
+    text-align:  right;
+    display:     table-cell;
+}
+/* An item row */ 
+.simpleCart_items .itemRow
+{
+    background-color: lightcyan;
+    width:            750px;
+    display:          table-row;
+}
+/* The item row cell with title */
+.simpleCart_items .itemRow .item-name
+{
+    text-align: left;
+    display:    table-cell;
+}
+/* The item row cell with pid/signature (normally hidden) */
+.simpleCart_items .itemRow .item-pid
+{
+    text-align:  left;
+    display:     none;
+    /* display:     table-cell; */
+}
+/* The item row cell with remove link (X) */
+.simpleCart_items .itemRow .item-remove
+{
+    text-align:  right;
+    display:     table-cell;
+}
+/* The remove link (X) */
+.simpleCart_remove
+{
+    background-color: lightskyblue;
+}
+/* The "Reserve" button */
+.simpleCart_checkout
+{
+    background-color: lawngreen;
+}
+/* The "Empty" button */
+.simpleCart_empty
+{
+    background-color: lawngreen;
+}

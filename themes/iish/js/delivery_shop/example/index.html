@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Test Page</title>
+        
+        <link rel="stylesheet" media="all" href="resources/css/delivery_shop.css"/>
+        
+        <script type="text/javascript" charset="utf-8" src="resources/js/jquery-1.5.1.min.js"></script>
+        <script type="text/javascript" charset="utf-8" src="resources/js/jquery-ui-1.8.13.custom.min.js"></script>
+		<script type="text/javascript" charset="utf-8" src="resources/js/jquery.jsonp.js"></script>
+		<script type="text/javascript" charset="utf-8" src="resources/js/simpleCart.min.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../delivery.locale.nl.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../delivery.locale.en.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../delivery_shop.js"></script>
+		<script type="text/javascript" charset="utf-8">
+            $(document).ready(function()
+            {
+                initDelivery({ 
+                    host:      "node-120.dev.socialhistoryservices.org",
+                    language:  "nl",
+                    max_items: 2,
+                    cart_div:  "#delivery_cart"
+                });
+                $("#delivery_info").getDeliveryInfo();     // For debugging
+                // $("#delivery_cart").emptyShoppingCart();
+                
+                setButtons();
+            });  /* ready */
+            
+            function setButtons()
+            {
+                $("#delivery_test1").getRecordInfo("10622/03D5FEE7-F079-4A5C-A85E-5D22C251933C", "BG C37/328"); // For debugging
+                $("#delivery_test2").getRecordInfo("10622/816FC0F9-C941-46E6-86DB-3A66D253D398", "110/61");     // For debugging
+                $("#delivery_test3").getRecordInfo("10622/6D8399C0-A2A0-4537-A380-9AE6CF0D05BD", "PM 10546");    // For debugging                
+
+                
+                $("#delivery_button1").determineReservationButton("Info about Den Uyl",   "10622/03D5FEE7-F079-4A5C-A85E-5D22C251933C", "BG C37/328", false);
+                $("#delivery_button2").determineReservationButton("Test the second item", "10622/816FC0F9-C941-46E6-86DB-3A66D253D398", "110/61",     false);
+                $("#delivery_button3").determineReservationButton(null,                   "10622/6D8399C0-A2A0-4537-A380-9AE6CF0D05BD", "PM 10546",   false);                
+
+            } /* setButtons */
+            
+            function getHolding()
+            {
+                $("#delivery_test4").getRecordInfo($("#pid").val(), $("#signature").val());   // For debugging
+                
+                $("#delivery_button4").determineReservationButton(null, $("#pid").val(), $("#signature").val(), false);
+            } /* getHolding */
+        </script>
+    </head>
+    <body>
+        <h1>The Delivery Shop Tester!</h1>
+        <div id="delivery_info"></div>
+        <p></p>
+        
+        <b>Pid: 10622/03D5FEE7-F079-4A5C-A85E-5D22C251933C Signature: BG C37/328</b><br />
+        <div id="delivery_test1"></div>
+        <div id="delivery_button1"></div>
+        <br />
+        <b>Pid: 10622/816FC0F9-C941-46E6-86DB-3A66D253D398 Signature: 110/61</b><br />
+        <div id="delivery_test2"></div>
+        <div id="delivery_button2"></div>
+        <br />
+        <b>Pid: 10622/6D8399C0-A2A0-4537-A380-9AE6CF0D05BD Signature: PM 10546</b><br />
+        <div id="delivery_test3"></div>
+        <div id="delivery_button3"></div>
+        <br />
+        <div>
+            &nbsp; Pid <input type="text" name="pid" id="pid" value="" size="80"/>
+            &nbsp; Signature <input type="text" name="signature" id="signature" value="" size="50"/>
+            &nbsp; <input type="submit" value="Get Holding" name="GetHolding" onclick="getHolding();" />
+            <div id="delivery_test4"></div>
+            <div id="delivery_button4"></div>
+        </div>
+        <p></p>
+        
+        <h2>The Shopping Cart</h2>
+        <div id="delivery_cart"></div>
+     </body>
+</html>
