@@ -1,6 +1,145 @@
 @import "bootprint";
+@import "iish-variables";
+@import "iish-icons";
 @import "ead";
 @import "navigation";
+
+header {
+  margin-top: 0;
+
+  .navbar {
+    border-radius: 0;
+  }
+}
+
+div.main {
+  .container {
+    border-radius: 0 0 10px 10px;
+  }
+}
+
+footer {
+  margin: 0;
+  font-size: 90%;
+
+  .container {
+    border: none;
+    background-color: transparent;
+  }
+
+  ul {
+    padding: 0;
+
+    li {
+      list-style: none;
+    }
+  }
+}
+
+#delivery_cart_wrapper {
+  text-align: center;
+
+  h3 {
+    font-size: 120%;
+  }
+}
+
+#searchForm_type,
+#searchForm_lookfor {
+  border: 1px solid @input-border;
+}
+
+#messageOfTheDay,
+.searchHomeContent {
+  float: none;
+  margin: 3em auto;
+  width: 90%;
+}
+
+@media (max-width: @screen-xs-max) {
+  [name="searchForm"] {
+    .btn-primary,
+    .form-control {
+      margin-top: 2px;
+      margin-bottom: 2px;
+    }
+  }
+}
+
+.dropdown-menu > .active > a {
+  &,
+  &:hover,
+  &:focus {
+    font-weight: bold;
+    color: @dropdown-link-color;
+  }
+}
+
+.lead {
+  margin: 0 0 10px;
+  color: #06C;
+  font-size: 110%;
+}
+
+.table {
+  table-layout: auto;
+  font-size: 90%;
+
+  th {
+    color: #666;
+    font-style: normal;
+    font-weight: normal;
+  }
+}
+
+.group {
+  &.well {
+    margin: 20px 0;
+  }
+
+  [class^="col-"] {
+    padding-left: (@grid-gutter-width / 2);
+    padding-right: (@grid-gutter-width / 2);
+  }
+}
+
+.slider-container {
+  .slider {
+    .slider-track {
+      .slider-handle {
+        border: 1px solid @border-color;
+        background-color: @brand-primary;
+      }
+    }
+  }
+}
+
+.record-well {
+  margin: 0;
+
+  .nav-pills {
+    text-align: center;
+
+    > li {
+      float: none;
+      display: inline-block;
+    }
+  }
+
+  .pager {
+    margin: 10px 0 0;
+
+    li {
+      & > a,
+      & > span {
+        border: none;
+        margin: 5px 0;
+        display: inline;
+        background-color: transparent;
+      }
+    }
+  }
+}
 
 .holding {
   margin-bottom: 25px;

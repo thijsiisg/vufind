@@ -9,12 +9,26 @@
 }
 
 #arch {
-  padding: 2em 1.5em 0 1.5em;
+  ul {
+    margin: 0;
+    padding: 0;
+
+    li {
+      list-style: none;
+    }
+  }
+
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-weight: bold;
+    padding-top: 10px;
+  }
 
   h2 {
+    margin: 0;
     font-size: 1.3em;
-    font-weight: bold;
-    padding-top: 25px;
 
     &:first-child {
       padding-top: 0;
@@ -23,43 +37,11 @@
 
   h3 {
     font-size: 1.2em;
-    font-weight: bold;
-    padding-top: 25px;
   }
 
-  h4 {
-    font-size: 1.1em;
-    font-weight: bold;
-    padding-top: 25px;
-  }
-
+  h4,
   h5 {
     font-size: 1.1em;
-    font-weight: bold;
-    padding-top: 25px;
-  }
-
-  table {
-    tr {
-      border-collapse: collapse;
-    }
-
-    th, td {
-      vertical-align: top;
-    }
-
-    th {
-      width: 120px;
-      text-align: left;
-      color: #666;
-      padding: .3em 0 .3em 0;
-      border-bottom: 1px solid #f3f3f3;
-    }
-
-    td {
-      padding: .3em 22px .3em 1em;
-      border-bottom: 1px solid #f3f3f3;
-    }
   }
 
   .kfile,
@@ -93,10 +75,3 @@
     color: #000000;
   }
 }
-
-/*.appendices ul {
-  border-radius: 3px 3px 3px 3px;
-  list-style: none;
-  padding-left: 25px;
-  padding-bottom: 25px;
-}*/

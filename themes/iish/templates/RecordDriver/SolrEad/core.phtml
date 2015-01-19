@@ -1,5 +1,9 @@
 <?
-$this->headLink()->appendStylesheet($this->visualmetsUrl . '/resources/css/themes/iisg/style.css?_=2.1');
+// Make sure we the Visual Mets stylesheet comes FIRST.
+// It contains Bootstrap 2.x styling, which overrides VuFinds Bootstrap 3.x styling and we don't want that.
+$this->headLink()->offsetSetStylesheet(10, $this->visualmetsUrl . '/resources/css/themes/iisg/style.css?_=2.1');
+// And now make sure our main related stylesheet has a lower offset.
+$this->headLink()->offsetSetStylesheet(20, 'compiled.css');
 
 $this->headScript()->appendFile('navigation.js');
 
