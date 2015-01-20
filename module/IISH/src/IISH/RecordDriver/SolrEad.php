@@ -6,6 +6,8 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Model for EAD records with a base MARC record in Solr.
+ *
+ * @package IISH\RecordDriver
  */
 class SolrEad extends SolrMarc {
     /**

@@ -79,4 +79,29 @@ class Factory {
 
         return $driver;
     }
+
+    /**
+     * Factory for the SolrEci record driver.
+     *
+     * @param ServiceManager $sm Service manager.
+     *
+     * @return SolrEci
+     */
+    public static function getSolrEci(ServiceManager $sm) {
+        $driver = new SolrEci(
+            $sm->getServiceLocator(),
+            $sm->getServiceLocator()->get('VuFind\Config')->get('config'),
+            null,
+            $sm->getServiceLocator()->get('VuFind\Config')->get('searches'),
+            $sm->getServiceLocator()->get('VuFind\Config')->get('iish')
+        );
+
+        $driver->attachILS(
+            $sm->getServiceLocator()->get('VuFind\ILSConnection'),
+            $sm->getServiceLocator()->get('VuFind\ILSHoldLogic'),
+            $sm->getServiceLocator()->get('VuFind\ILSTitleHoldLogic')
+        );
+
+        return $driver;
+    }
 } 

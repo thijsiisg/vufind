@@ -61,6 +61,7 @@ class RecordController extends VuFindRecordController {
             switch (strtolower($format)) {
                 case 'marcxml':
                 case 'ead':
+                case 'eci':
                     return $this->exportFromOAI($format);
                 case 'pdf':
                     return $this->exportToPDF();
@@ -82,7 +83,8 @@ class RecordController extends VuFindRecordController {
             'http://api.socialhistoryservices.org/solr/all/oai';
 
         $oaiPid = $this->loadRecord()->getOAIPid();
-        $url = $oaiBaseUrl . '?verb=GetRecord&identifier=' . urlencode($oaiPid) . '&metadataPrefix=' . $metadataPrefix;
+        $url = $oaiBaseUrl . '?verb=GetRecord&identifier=' . urlencode($oaiPid) . '&metadataPrefix=' .
+            strtolower($metadataPrefix);
 
         return $this->redirect()->toUrl($url);
     }

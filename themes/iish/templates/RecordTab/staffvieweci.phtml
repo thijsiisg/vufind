@@ -1,0 +1,17 @@
+<? $this->headTitle($this->translate('Staff View') . ': ' . $this->driver->getBreadcrumb()); ?>
+<? $urls = $this->record($this->driver)->getLinkDetails(); if (!empty($urls)): ?>
+    <table class="citation table ecixml">
+        <tr>
+            <th><?= $this->transEsc('ecixml') ?>:</th>
+            <td>
+                <? foreach ($urls as $current): ?>
+                    <a href="<?= $this->escapeHtmlAttr($this->proxyUrl($current['url'])) ?>">
+                        <?= $this->escapeHtml($current['desc']) ?>
+                    </a>
+                    <br/>
+                <? endforeach; ?>
+            </td>
+        </tr>
+    </table>
+<? endif; ?>
+<?= \VuFind\XSLT\Processor::process('record-marc.xsl', $this->driver->getXML('marc21')) ?>

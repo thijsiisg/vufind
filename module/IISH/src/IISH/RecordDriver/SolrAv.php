@@ -3,6 +3,8 @@ namespace IISH\RecordDriver;
 
 /**
  * Model for audiovisual MARC records in Solr.
+ *
+ * @package IISH\RecordDriver
  */
 class SolrAv extends SolrMarc {
 

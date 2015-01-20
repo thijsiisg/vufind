@@ -4,6 +4,8 @@ use VuFind\RecordDriver\SolrMarc as VuFindSolrMarc;
 
 /**
  * Model for MARC records in Solr.
+ *
+ * @package IISH\RecordDriver
  */
 class SolrMarc extends VuFindSolrMarc {
     /**
