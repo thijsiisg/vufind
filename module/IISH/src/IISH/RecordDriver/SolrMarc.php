@@ -46,6 +46,17 @@ class SolrMarc extends VuFindSolrMarc {
     }
 
     /**
+     * Get text that can be displayed to represent this record in breadcrumbs.
+     *
+     * Override to make sure we use the escaped short title.
+     *
+     * @return string Breadcrumb text to represent this record.
+     */
+    public function getBreadcrumb() {
+        return $this->getShortTitleEscaped();
+    }
+
+    /**
      * True if we have a link to downloadable content.
      *
      * @return bool
