@@ -1,0 +1,17 @@
+<?= $this->translate('order') ?> <?=PHP_EOL?>
+<?= $this->translate('Title') ?>: <?= $this->driver->getShortTitle() ?> <?=PHP_EOL?>
+<?= $this->translate('Callnumbers') ?>: <?= implode(', ', $this->callnumbers) ?> <?=PHP_EOL?>
+<?= $this->translate('Barcode') ?>: <?= $this->driver->getBarcode() ?> <?=PHP_EOL?>
+<?= $this->translate('Download master from Sor') ?>: https://disseminate.objectrepository.org/file/master/10622/<?=$this->driver->getBarcode()?>?access_token=<?=$this->accessToken?>&contentType=application/save <?=PHP_EOL?>
+<?= $this->translate('Website') ?>: <?= $this->serverUrl() . $this->url('record', array('id' => $this->driver->getUniqueID())); ?> <?=PHP_EOL?>
+<?=PHP_EOL?>
+<?= $this->translate('order.details') ?> <?=PHP_EOL?>
+<?= $this->translate('order.email') ?>: <?= $this->email ?> <?=PHP_EOL?>
+<?= $this->translate('order.fullname') ?>: <?= $this->fullname ?> <?=PHP_EOL?>
+<?= $this->translate('order.address') ?>: <?= $this->address ?> <?=PHP_EOL?>
+<?= $this->translate('order.zipcode') ?>: <?= $this->zipcode ?> <?=PHP_EOL?>
+<?= $this->translate('order.city') ?>: <?= $this->city ?> <?=PHP_EOL?>
+<?= $this->translate('order.country') ?>: <?= $this->country ?> <?=PHP_EOL?>
+<?= $this->translate('order.telephone') ?>: <?= $this->telephone ?> <?=PHP_EOL?>
+<?=PHP_EOL?>
+<?= $this->translate('order.purpose') ?>: <?= $this->purpose ?> <?=PHP_EOL?>

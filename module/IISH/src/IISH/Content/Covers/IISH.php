@@ -90,7 +90,7 @@ class IISH extends AbstractCover implements ResizableCover {
     public function resizeToWidthFor($key, $size, $ids) {
         $reductionSize = null;
         if (($size !== 'small') && ($size !== 'large')) {
-            $reductionSize = 350;
+            $reductionSize = 275;
         }
 
         return $reductionSize;

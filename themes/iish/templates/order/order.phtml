@@ -1,0 +1,109 @@
+<? $this->headTitle($this->translate('order')); ?>
+<?= $this->flashmessages() ?>
+
+<p><?= $this->transEsc('order.specify') ?></p>
+
+<p>
+  <a target="_blank" href="<?= $this->transEsc('order.moreinfo1.href') ?>">
+    <?= $this->transEsc('order.moreinfo1') ?>
+  </a>
+</p>
+
+<form method="post" action="" name="orderForm" id="orderForm" class="form-horizontal">
+  <input type="hidden" name="id" value="<?= $this->escapeHtmlAttr($this->id) ?>"/>
+
+  <div class="form-group">
+    <label class="col-sm-3 control-label" for="order_email">
+      <?= $this->transEsc('order.email') ?>:
+    </label>
+
+    <div class="col-sm-9">
+      <input type="text" id="order_email" name="email" size="40" class="form-control" required
+             value="<?= $this->escapeHtmlAttr($this->request->get('email')) ?>"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-3 control-label" for="order_fullname">
+      <?= $this->transEsc('order.fullname') ?>:
+    </label>
+
+    <div class="col-sm-9">
+      <input type="text" id="order_fullname" name="fullname" size="40" class="form-control" required
+             value="<?= $this->escapeHtmlAttr($this->request->get('fullname')) ?>"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-3 control-label" for="order_address">
+      <?= $this->transEsc('order.address') ?>:
+    </label>
+
+    <div class="col-sm-9">
+      <input type="text" id="order_address" name="address" size="40" class="form-control" required
+             value="<?= $this->escapeHtmlAttr($this->request->get('address')) ?>"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-3 control-label" for="order_zipcode">
+      <?= $this->transEsc('order.zipcode') ?>:
+    </label>
+
+    <div class="col-sm-9">
+      <input type="text" id="order_zipcode" name="zipcode" size="40" class="form-control" required
+             value="<?= $this->escapeHtmlAttr($this->request->get('zipcode')) ?>"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-3 control-label" for="order_city">
+      <?= $this->transEsc('order.city') ?>:
+    </label>
+
+    <div class="col-sm-9">
+      <input type="text" id="order_city" name="city" size="40" class="form-control" required
+             value="<?= $this->escapeHtmlAttr($this->request->get('city')) ?>"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-3 control-label" for="order_country">
+      <?= $this->transEsc('order.country') ?>:
+    </label>
+
+    <div class="col-sm-9">
+      <input type="text" id="order_country" name="country" size="40" class="form-control" required
+             value="<?= $this->escapeHtmlAttr($this->request->get('country')) ?>"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-3 control-label" for="order_telephone">
+      <?= $this->transEsc('order.telephone') ?>:
+    </label>
+
+    <div class="col-sm-9">
+      <input type="text" id="order_telephone" name="telephone" size="40" class="form-control" required
+             value="<?= $this->escapeHtmlAttr($this->request->get('telephone')) ?>"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-3 control-label" for="order_purpose">
+      <?= $this->transEsc('order.purpose') ?>:
+    </label>
+
+    <div class="col-sm-9">
+      <input type="text" id="order_purpose" name="purpose" size="40" class="form-control" required
+             value="<?= $this->escapeHtmlAttr($this->request->get('purpose')) ?>"/>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-10 col-sm-offset-3">
+      <input class="btn btn-primary" type="submit" name="submit" value="<?= $this->transEsc('order.submit') ?>"/>
+    </div>
+  </div>
+</form>
+
+<p>
+  <a target="_blank" href="<?= $this->transEsc('order.moreinfo2.href') ?>">
+    <?= $this->transEsc('order.moreinfo2') ?>
+  </a>
+</p>
+
+<p><?= $this->transEsc('order.moreinfo3') ?></p>

@@ -22,6 +22,7 @@ $config = array(
     ),
     'controllers'     => array(
         'factories'  => array(
+            'order'  => 'IISH\Controller\Factory::getOrderController',
             'record' => 'IISH\Controller\Factory::getRecordController',
         ),
         'invokables' => array(
@@ -135,7 +136,7 @@ $config = array(
 
 // Define static routes -- Controller/Action strings
 $staticRoutes = array(
-    'IISH/About', 'IISH/Databases'
+    'IISH/About', 'IISH/Databases', 'Order/Home'
 );
 
 // Build static routes
