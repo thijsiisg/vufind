@@ -50,11 +50,18 @@ footer {
   border: 1px solid @input-border;
 }
 
-#messageOfTheDay,
-.searchHomeContent {
-  float: none;
-  margin: 3em auto;
-  width: 90%;
+#messageOfTheDay {
+  &,
+  .searchHomeContent {
+    float: none;
+    margin: 3em auto;
+    width: 90%;
+  }
+
+  .lead {
+    color: #06C;
+    font-size: 110%;
+  }
 }
 
 @media (max-width: @screen-xs-max) {
@@ -76,10 +83,11 @@ footer {
   }
 }
 
+h2,
 .lead {
+  font-size: 24px;
   margin: 0 0 10px;
-  color: #06C;
-  font-size: 110%;
+  line-height: 1;
 }
 
 .table {
@@ -155,6 +163,20 @@ footer {
   }
 }
 
+#itemhide {
+  margin-top: 20px;
+
+  ul {
+    padding-left: 5px;
+  }
+}
+
+.form-inline {
+  .btn.btn-default {
+    margin-bottom: 5px;
+  }
+}
+
 .mets-embedded {
   background: url("../../images/ajax_spinner.gif") no-repeat center;
   height: 550px;
@@ -164,6 +186,16 @@ footer {
   .mets-layout-full-screen-page,
   .mets-layout-full-screen-thumbnail {
     position: fixed !important;
+  }
+}
+
+.result {
+  .downloadable {
+    margin-bottom: 10px;
+  }
+
+  .savedLists {
+    margin-top: 10px;
   }
 }
 

@@ -86,7 +86,9 @@
     </div>
     <div class="col-xs-3 right hidden-print">
       <? if ($this->driver->getDownloadable()) : ?>
-        <span class="label label-info"><?=$this->transEsc('Downloadable content');?></span>
+        <div class="downloadable">
+          <span class="label label-info"><?=$this->transEsc('Downloadable content');?></span>
+        </div>
       <? endif; ?>
 
       <? /* Display qrcode if appropriate: */ ?>
