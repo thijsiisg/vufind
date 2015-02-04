@@ -472,14 +472,14 @@ class SolrMarc extends VuFindSolrMarc {
 
     /**
      * Returns an OAI identifier reference.
-     * Usually in the 902$a field.
-     * If not available, fall back to the Solr id.
+     * Either the Solr ID or the value of the 902$a field.
      *
      * @return string An OAI identifier reference.
      */
     public function getOAIPid() {
-        $pid = $this->getFieldArray('902', array('a'), false);
-        $id = (sizeof($pid) === 0) ? $this->getUniqueID() : $pid[0];
+        $pid = $this->getFirstFieldValue('902', array('a'));
+        // TODO: Find a better way to determine the OAI identifier. Could introduce a 903$a.
+        $id = (strlen($pid) === 42) ? $this->getUniqueID() : $pid;
 
         $oaiPrefix = isset($this->iishConfig->OAI->prefix)
             ? $this->iishConfig->OAI->prefix
