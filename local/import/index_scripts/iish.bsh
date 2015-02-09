@@ -198,11 +198,10 @@ public String getBuilding(Record record) {
 
 public String getAllSearchableFields(Record record, String fieldSpec) throws Exception {
     String url = indexer.getFirstFieldVal(record, fieldSpec);
-    String id = indexer.getFirstFieldVal(record, "001");
     if (url == null)
         return " ";
         
-    Document document = loadDocument(url, getId(record));	
+    Document document = loadDocument(url);
     return getText(document);
 }
 
@@ -210,7 +209,7 @@ public String getAllSearchableFields(Record record, String lowerBoundStr, String
     return indexer.getAllSearchableFields(record, lowerBoundStr, upperBoundStr) ;
 }
 
-private Document loadDocument(String url, String id) throws Exception {
+private Document loadDocument(String url) throws Exception {
     DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     dbf.setIgnoringComments(true);
     dbf.setNamespaceAware(true);

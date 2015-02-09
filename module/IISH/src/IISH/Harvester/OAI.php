@@ -10,6 +10,153 @@ use VuFind\Harvester\OAI as VuFindOAI;
  * @package IISH\Harvester
  */
 class OAI extends VuFindOAI {
+    /**
+     * Filename of the document that stored all records.
+     *
+     * @var string
+     */
+    private $catalog;
+
+    /**
+     * Constructor.
+     *
+     * Override to add support for a catalog document.
+     *
+     * @param string            $target   Target directory for harvest.
+     * @param array             $settings OAI-PMH settings from oai.ini.
+     * @param \Zend\Http\Client $client   HTTP client
+     * @param string            $from     Harvest start date (omit to use last_harvest.txt)
+     * @param string            $until    Harvest end date (optional)
+     */
+    public function __construct($target, $settings, \Zend\Http\Client $client, $from = null, $until = null) {
+        parent::__construct($target, $settings, $client, $from, $until);
+        $this->catalog = $this->basePath . 'catalog.xml';
+    }
+
+    /**
+     * Harvest all available documents.
+     *
+     * Override to add support for the catalog document.
+     *
+     * @return void
+     */
+    public function launch() {
+        // Open the XML document
+        file_put_contents($this->catalog,
+            '<?xml version="1.0" encoding="UTF-8"?>' .
+            '<marc:catalog xmlns:marc="http://www.loc.gov/MARC21/slim" ' .
+            'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' .
+            'xsi:schemaLocation="http://www.loc.gov/MARC21/slim ' .
+            'http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">');
+
+        parent::launch();
+
+        // Close the XML document
+        file_put_contents($this->catalog, '</marc:catalog>', FILE_APPEND);
+    }
+
+    /**
+     * Make an OAI-PMH request.  Die if there is an error; return a SimpleXML object on success.
+     *
+     * Override to continue in case of an error, rather than throwing an exception.
+     *
+     * @param string $verb   OAI-PMH verb to execute.
+     * @param array  $params GET parameters for ListRecords method.
+     *
+     * @return object SimpleXML-formatted response.
+     */
+    protected function sendRequest($verb, $params = array()) {
+        // Debug:
+        if ($this->verbose) {
+            $this->write(
+                "Sending request: verb = {$verb}, params = " . print_r($params, true)
+            );
+        }
+
+        // Set up retry loop:
+        while (true) {
+            // Set up the request:
+            $this->client->resetParameters();
+            $this->client->setUri($this->baseURL);
+            // TODO: make timeout configurable
+            $this->client->setOptions(array('timeout' => 60));
+
+            // Set authentication, if necessary:
+            if ($this->httpUser && $this->httpPass) {
+                $this->client->setAuth($this->httpUser, $this->httpPass);
+            }
+
+            // Load request parameters:
+            $query = $this->client->getRequest()->getQuery();
+            $query->set('verb', $verb);
+            foreach ($params as $key => $value) {
+                $query->set($key, $value);
+            }
+
+            // Perform request and die on error:
+            $result = $this->client->setMethod('GET')->send();
+            if ($result->getStatusCode() == 503) {
+                $delayHeader = $result->getHeaders()->get('Retry-After');
+                $delay = is_object($delayHeader)
+                    ? $delayHeader->getDeltaSeconds() : 0;
+                if ($delay > 0) {
+                    if ($this->verbose) {
+                        $this->writeLine(
+                            "Received 503 response; waiting {$delay} seconds..."
+                        );
+                    }
+                    sleep($delay);
+                }
+            }
+            else if (!$result->isSuccess()) {
+                $this->writeLine('Error: ' . $result->getReasonPhrase());
+                sleep(5);
+                continue;
+            }
+            else {
+                // If we didn't get an error, we can leave the retry loop:
+                break;
+            }
+        }
+
+        // If we got this far, there was no error -- send back response.
+        return $this->processResponse($result->getBody());
+    }
+
+    /**
+     * Process an OAI-PMH response into a SimpleXML object. Die if an error is detected.
+     *
+     * Override to return the errors rather than throwing an exception.
+     *
+     * @param string $xml OAI-PMH response XML.
+     *
+     * @return object     SimpleXML-formatted response.
+     */
+    protected function processResponse($xml) {
+        // Sanitize if necessary:
+        if ($this->sanitize) {
+            $xml = $this->sanitizeXML($xml);
+        }
+
+        // Parse the XML:
+        $result = simplexml_load_string($xml);
+        if (!$result) {
+            $e = "Problem loading XML: {$xml}";
+
+            return simplexml_load_string('<errors><error>' . htmlspecialchars($e) . '</error></errors>');
+        }
+
+        // Detect errors and die if one is found:
+        if ($result->error) {
+            $attribs = $result->error->attributes();
+            $e = "OAI-PMH error -- code: {$attribs['code']}, value: {$result->error}";
+
+            return simplexml_load_string('<errors><error>' . htmlspecialchars($e) . '</error></errors>');
+        }
+
+        // If we got this far, we have a valid response:
+        return $result;
+    }
 
     /**
      * Get the filename for a specific record ID.
@@ -24,43 +171,66 @@ class OAI extends VuFindOAI {
      * @throws \Exception
      */
     protected function getFilename($id, $ext) {
-        // But we add a sub folder, because we don't want to overburden our fs now, do we?
-        $f = $this->basePath . date('YmdHi') . '/';
+        $f = $this->basePath . substr(md5($id), 0, 2);
         if (!is_dir($f) && !mkdir($f, true)) {
             throw new \Exception("Problem creating directory {$f}.");
         }
 
-        return $f . time() . '_' . preg_replace('/[^\w]/', '_', $id) . '.' . $ext;
+        return $f . '/' . preg_replace('/[^\w]/', '_', $id) . '.' . $ext;
+    }
+
+    /**
+     * Delete a record.
+     *
+     * @param string $id ID of deleted record.
+     *
+     * @return void
+     */
+    protected function deleteRecord($id) {
+        $idArr = explode(':', $id); // oai:domain:identifier
+        if (count($id) === 3) {
+            $url = "wget -O /dev/null \"http://localhost:8080/solr/biblio/update?stream.body=<delete><id>" . $idArr[2] .
+                "</id></delete>\"";
+            $this->writeLine(
+                shell_exec($url)
+            );
+        }
     }
 
     /**
      * Save a record to disk.
      *
-     * Override to deal with missing metadata and updates access and modification time of the saved record.
+     * Override to validate the record and to save to catalog instead.
      *
-     * @param string $id        ID of record to save.
-     * @param object $record    Record to save (in SimpleXML format).
-     * @param string $extension The extension of the saved record.
+     * @param string $id     ID of record to save.
+     * @param object $record Record to save (in SimpleXML format).
      *
      * @throws \Exception
      */
-    protected function saveRecord($id, $record, $extension = 'xml') {
+    protected function saveRecord($id, $record) {
         if (!isset($record->metadata)) {
-            if (!isset($record->header)) {
-                throw new \Exception('Unexpected missing record metadata and header.');
-            }
+            throw new \Exception("Unexpected missing record metadata.");
+        }
 
-            $xml = '<marc:record xmlns:marc="http://www.loc.gov/MARC21/slim"><marc:controlfield tag="001">' . $id .
-                '</marc:controlfield><marc:datafield ind1=" " ind2=" " tag="902"><marc:subfield code="a">' . $id .
-                '</marc:subfield></marc:datafield></marc:record>';
+        // Extract the actual metadata from inside the <metadata></metadata> tags;
+        // there is probably a cleaner way to do this, but this simple method avoids
+        // the complexity of dealing with namespaces in SimpleXML:
+        $xml = trim($record->metadata->asXML());
+        preg_match('/^<metadata([^\>]*)>/', $xml, $extractedNs);
+        $xml = preg_replace('/(^<metadata[^\>]*>)|(<\/metadata>$)/m', '', $xml);
+
+        $marc = new \DOMDocument();
+        if ($marc->loadXML($xml)) {
+            if (!$marc->schemaValidate('marc21slim_custom.xsd')) {
+                $this->writeLine('XML not valid for ' . $id);
+
+                return;
+            }
         }
         else {
-            // Extract the actual metadata from inside the <metadata></metadata> tags;
-            // there is probably a cleaner way to do this, but this simple method avoids
-            // the complexity of dealing with namespaces in SimpleXML:
-            $xml = trim($record->metadata->asXML());
-            preg_match('/^<metadata([^\>]*)>/', $xml, $extractedNs);
-            $xml = preg_replace('/(^<metadata[^\>]*>)|(<\/metadata>$)/m', '', $xml);
+            $this->writeLine('XML cannot be parsed for ' . $id);
+
+            return;
         }
 
         // If we are supposed to inject any values, do so now inside the first
@@ -110,19 +280,14 @@ class OAI extends VuFindOAI {
         );
 
         // Save our XML:
-        $filename = $this->getFilename($id, $extension);
-        file_put_contents($filename, trim($xml));
-
-        $datestamp = (isset($record->header) && strlen((string)$record->header->datestamp) >= 10)
-            ? strtotime(substr((string)$record->header->datestamp, 0, 10))
-            : time();
-        touch($filename, $datestamp);
+        file_put_contents($this->catalog, trim($xml), FILE_APPEND);
     }
 
     /**
      * Save harvested records to disk and track the end date.
      *
-     * Override to NOT save as a deleted record, but save it as a regular file.
+     * Override to use deleteRecord rather than saveDeletedRecord.
+     * And always store harvested ids, even if the record is deleted.
      *
      * @param object $records SimpleXML records.
      *
@@ -147,7 +312,7 @@ class OAI extends VuFindOAI {
             // Save the current record, either as a deleted or as a regular file:
             $attribs = $record->header->attributes();
             if (strtolower($attribs['status']) == 'deleted') {
-                $this->saveRecord($id, $record);
+                $this->deleteRecord($id);
             }
             else {
                 $this->saveRecord($id, $record);
