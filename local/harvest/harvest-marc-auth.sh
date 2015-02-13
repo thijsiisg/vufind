@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source /usr/local/vufind/local/harvest/config.sh
+source $VUFIND_LOCAL_DIR/harvest/config.sh
 
 #############################################################################
 # The application path needs to be here:
