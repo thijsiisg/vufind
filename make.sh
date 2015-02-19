@@ -43,15 +43,15 @@ do
     chmod 744 $f
 done
 
+echo $revision>$app/revision.txt
 cd $app
 composer update
 
-echo $revision>$app/revision.txt
 tar -zcvf $expect $app
 rm -rf $app
 
 if [ -f $expect ] ; then
     echo "Build ok."
 else
-	echo -e "Unable to build ${expect}"
+    echo -e "Unable to build ${expect}"
 fi
