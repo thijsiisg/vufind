@@ -66,6 +66,9 @@ $config = array(
                     'staffvieweci'               => 'IISH\RecordTab\StaffViewECI',
                 ),
             ),
+            'search_params'  => array(
+                'abstract_factories' => array('IISH\Search\Params\PluginFactory'),
+            ),
         ),
         'recorddriver_tabs' => array(
             'IISH\RecordDriver\SolrMarc' => array(

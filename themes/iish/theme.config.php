@@ -3,7 +3,8 @@ return array(
     'extends' => 'bootprint3',
     'css'     => array(),
     'js'      => array(
-        'iish.js'
+        'iish.js',
+        '../vendor/slimScroll/jquery.slimscroll.min.js'
     ),
     'favicon' => 'favicon.ico',
     'helpers' => array(

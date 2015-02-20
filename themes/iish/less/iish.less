@@ -57,10 +57,34 @@ footer {
     margin: 3em auto;
     width: 90%;
   }
+}
+
+.homeFacets.row {
+  margin-left: 10px;
+  margin-right: 10px;
+
+  .facetList {
+    max-height: 250px;
+    overflow: hidden;
+  }
 
   .lead {
-    color: #06C;
+    border-bottom: 1px solid;
+    padding-top: 10px;
+    padding-bottom: 5px;
+  }
+
+  ul {
+    margin-bottom: 0;
+  }
+}
+
+#messageOfTheDay,
+.homeFacets {
+  & .lead {
+    color: #12538b;
     font-size: 110%;
+    font-weight: bold;
   }
 }
 
