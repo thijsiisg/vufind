@@ -883,55 +883,6 @@
         ]
     },
     {
-        "name": "symfony/yaml",
-        "version": "v2.6.3",
-        "version_normalized": "2.6.3.0",
-        "target-dir": "Symfony/Component/Yaml",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/Yaml.git",
-            "reference": "82462a90848a52c2533aa6b598b107d68076b018"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/Yaml/zipball/82462a90848a52c2533aa6b598b107d68076b018",
-            "reference": "82462a90848a52c2533aa6b598b107d68076b018",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3"
-        },
-        "time": "2015-01-03 15:33:07",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.6-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Symfony\\Component\\Yaml\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Symfony Community",
-                "homepage": "http://symfony.com/contributors"
-            },
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            }
-        ],
-        "description": "Symfony Yaml Component",
-        "homepage": "http://symfony.com"
-    },
-    {
         "name": "pear-pear.php.net/Archive_Tar",
         "version": "1.3.13",
         "version_normalized": "1.3.13.0",
@@ -963,18 +914,102 @@
         "description": "This class provides handling of tar files in PHP.\nIt supports creating, listing, extracting and adding to tar files.\nGzip support is available if PHP has the zlib extension built-in or\nloaded. Bz2 compression is also supported with the bz2 extension loaded."
     },
     {
+        "name": "npm-asset/mediaelement",
+        "version": "2.16.3",
+        "version_normalized": "2.16.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/johndyer/mediaelement.git",
+            "reference": "d799a546ed179be1ed575bde86f36c239ee25875"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/johndyer/mediaelement/zipball/d799a546ed179be1ed575bde86f36c239ee25875",
+            "reference": "d799a546ed179be1ed575bde86f36c239ee25875",
+            "shasum": ""
+        },
+        "require-dev": {
+            "npm-asset/grunt": ">=0.4.1,<0.5",
+            "npm-asset/grunt-contrib-clean": ">=0.6.0,<0.7",
+            "npm-asset/grunt-contrib-concat": ">=0.3.0,<0.4",
+            "npm-asset/grunt-contrib-copy": ">=0.4.1,<0.5",
+            "npm-asset/grunt-contrib-cssmin": ">=0.6.1,<0.7",
+            "npm-asset/grunt-contrib-uglify": ">=0.2.2,<0.3",
+            "npm-asset/grunt-remove-logging": ">=0.2.0,<0.3",
+            "npm-asset/grunt-shell": ">=1.1.1,<1.2",
+            "npm-asset/grunt-text-replace": ">=0.3.12,<0.4"
+        },
+        "type": "npm-asset-library",
+        "extra": {
+            "npm-asset-repository": {
+                "type": "git",
+                "url": "https://github.com/johndyer/mediaelement.git"
+            }
+        },
+        "installation-source": "dist"
+    },
+    {
+        "name": "symfony/yaml",
+        "version": "v2.6.4",
+        "version_normalized": "2.6.4.0",
+        "target-dir": "Symfony/Component/Yaml",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Yaml.git",
+            "reference": "60ed7751671113cf1ee7d7778e691642c2e9acd8"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/Yaml/zipball/60ed7751671113cf1ee7d7778e691642c2e9acd8",
+            "reference": "60ed7751671113cf1ee7d7778e691642c2e9acd8",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "time": "2015-01-25 04:39:26",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.6-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Yaml\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            },
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            }
+        ],
+        "description": "Symfony Yaml Component",
+        "homepage": "http://symfony.com"
+    },
+    {
         "name": "jasig/phpcas",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
             "url": "https://github.com/Jasig/phpCAS.git",
-            "reference": "268502a6b5814427689328afc4e81799e9fdb9f4"
+            "reference": "f8c16661be44f53acf3d6a81231cab9fc8999b96"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Jasig/phpCAS/zipball/268502a6b5814427689328afc4e81799e9fdb9f4",
-            "reference": "268502a6b5814427689328afc4e81799e9fdb9f4",
+            "url": "https://api.github.com/repos/Jasig/phpCAS/zipball/f8c16661be44f53acf3d6a81231cab9fc8999b96",
+            "reference": "f8c16661be44f53acf3d6a81231cab9fc8999b96",
             "shasum": ""
         },
         "require": {
@@ -983,7 +1018,7 @@
         "require-dev": {
             "phpunit/phpunit": "~3.7.10"
         },
-        "time": "2015-01-14 04:35:36",
+        "time": "2015-02-19 20:47:31",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1021,38 +1056,82 @@
         }
     },
     {
-        "name": "npm-asset/mediaelement",
-        "version": "2.16.3",
-        "version_normalized": "2.16.3.0",
+        "name": "bower-asset/jquery",
+        "version": "2.1.3",
+        "version_normalized": "2.1.3.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/johndyer/mediaelement.git",
-            "reference": "d799a546ed179be1ed575bde86f36c239ee25875"
+            "url": "https://github.com/jquery/jquery.git",
+            "reference": "8f2a9d9272d6ed7f32d3a484740ab342c02541e0"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/johndyer/mediaelement/zipball/d799a546ed179be1ed575bde86f36c239ee25875",
-            "reference": "d799a546ed179be1ed575bde86f36c239ee25875",
+            "url": "https://api.github.com/repos/jquery/jquery/zipball/8f2a9d9272d6ed7f32d3a484740ab342c02541e0",
+            "reference": "8f2a9d9272d6ed7f32d3a484740ab342c02541e0",
             "shasum": ""
         },
         "require-dev": {
-            "npm-asset/grunt": ">=0.4.1,<0.5",
-            "npm-asset/grunt-contrib-clean": ">=0.6.0,<0.7",
-            "npm-asset/grunt-contrib-concat": ">=0.3.0,<0.4",
-            "npm-asset/grunt-contrib-copy": ">=0.4.1,<0.5",
-            "npm-asset/grunt-contrib-cssmin": ">=0.6.1,<0.7",
-            "npm-asset/grunt-contrib-uglify": ">=0.2.2,<0.3",
-            "npm-asset/grunt-remove-logging": ">=0.2.0,<0.3",
-            "npm-asset/grunt-shell": ">=1.1.1,<1.2",
-            "npm-asset/grunt-text-replace": ">=0.3.12,<0.4"
+            "bower-asset/qunit": "1.14.0",
+            "bower-asset/requirejs": "2.1.10",
+            "bower-asset/sinon": "1.8.1",
+            "bower-asset/sizzle": "2.1.1-patch2"
         },
-        "type": "npm-asset-library",
+        "type": "bower-asset-library",
         "extra": {
-            "npm-asset-repository": {
-                "type": "git",
-                "url": "https://github.com/johndyer/mediaelement.git"
-            }
+            "bower-asset-main": "dist/jquery.js",
+            "bower-asset-ignore": [
+                "**/.*",
+                "build",
+                "speed",
+                "test",
+                "*.md",
+                "AUTHORS.txt",
+                "Gruntfile.js",
+                "package.json"
+            ]
         },
-        "installation-source": "dist"
+        "installation-source": "dist",
+        "license": [
+            "MIT"
+        ],
+        "keywords": [
+            "javascript",
+            "jquery",
+            "library"
+        ]
+    },
+    {
+        "name": "bower-asset/slimScroll",
+        "version": "v1.3.3",
+        "version_normalized": "1.3.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/rochal/jQuery-slimScroll.git",
+            "reference": "c1d1c794f8364d751b188c8b21859501c7991249"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/rochal/jQuery-slimScroll/zipball/c1d1c794f8364d751b188c8b21859501c7991249",
+            "reference": "c1d1c794f8364d751b188c8b21859501c7991249",
+            "shasum": ""
+        },
+        "require": {
+            "bower-asset/jquery": ">=1.7"
+        },
+        "type": "bower-asset-library",
+        "extra": {
+            "bower-asset-main": "./jquery.slimscroll.min.js"
+        },
+        "installation-source": "dist",
+        "description": "slimScroll is a small jQuery plugin that transforms any div into a scrollable area. slimScroll doesn't occupy any visual space as it only appears on a user initiated mouse-over.",
+        "keywords": [
+            "scroll",
+            "scrollable",
+            "scrollbar",
+            "scroller",
+            "scrolling",
+            "slimscroll",
+            "ui"
+        ]
     }
 ]
