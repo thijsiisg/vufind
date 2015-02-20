@@ -44,14 +44,14 @@ do
 done
 
 echo $revision>$app/revision.txt
-cd $app
-composer update
+composer -d $app install
 
 tar -zcvf $expect $app
 rm -rf $app
 
 if [ -f $expect ] ; then
     echo "Build ok."
+    exit 0
 else
     echo -e "Unable to build ${expect}"
 fi
