@@ -44,7 +44,7 @@ do
 done
 
 echo $revision>$app/revision.txt
-composer -d $app install
+composer --working-dir=$app install
 
 tar -zcvf $expect $app
 rm -rf $app
