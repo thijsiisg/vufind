@@ -23,17 +23,22 @@ class Loader extends Cacheable {
      * Constructor.
      * For the creation of a 'message of the day'.
      *
-     * @param ServiceLocatorInterface $serviceLocator.
+     * @param ServiceLocatorInterface $serviceLocator
      */
     public function __construct(ServiceLocatorInterface $serviceLocator) {
         parent::__construct($serviceLocator, 'MessageOfTheDay');
 
-        $iishConfig = $serviceLocator->get('VuFind\Config')->get('iish');
-        $this->uri = isset($iishConfig->MessageOfTheDay->uri)
-            ? $iishConfig->MessageOfTheDay->uri
-            : 'http://socialhistory.org/en/services/maintenance';
-
         $this->translator = $serviceLocator->get('VuFind\Translator');
+
+        $iishConfig = $serviceLocator->get('VuFind\Config')->get('iish');
+        $this->uri = 'http://socialhistory.org/en/services/maintenance';
+        if (isset($iishConfig->MessageOfTheDay)) {
+            $motdConfig = $iishConfig->MessageOfTheDay;
+            $key = 'uri_' . $this->getLang();
+            if (isset($motdConfig[$key])) {
+                $this->uri = $motdConfig[$key];
+            }
+        }
     }
 
     /**

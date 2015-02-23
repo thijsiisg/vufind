@@ -1,6 +1,7 @@
 <?php
 namespace IISH\Cover;
 use abeautifulsite\SimpleImage;
+use IISH\Content\AccessClosedCover;
 use IISH\Content\ResizableCover;
 use VuFind\Cover\Loader as VuFindCoverLoader;
 
@@ -14,6 +15,11 @@ class Loader extends VuFindCoverLoader {
      * @var int
      */
     private $pid;
+
+    /**
+     * @var string
+     */
+    private $publication;
 
     /**
      * @var int
@@ -41,16 +47,9 @@ class Loader extends VuFindCoverLoader {
                               $title = null, $author = null, $callnumber = null, $issn = null,
                               $oclc = null, $upc = null, $pid = null, $publication = null) {
         $this->pid = $pid;
+        $this->publication = $publication;
 
-        // If we already know access is closed, (because of the 'publication' parameter)
-        // do not continue but show 'access closed' graphic.
-        // TODO: Determine if we have an access token...
-        if (false && $publication === 'closed') {
-            $this->dieWithAccessClosedImage();
-        }
-        else {
-            parent::loadImage($isbn, $size, $type, $title, $author, $callnumber, $issn, $oclc, $upc);
-        }
+        parent::loadImage($isbn, $size, $type, $title, $author, $callnumber, $issn, $oclc, $upc);
     }
 
     /**
@@ -90,7 +89,7 @@ class Loader extends VuFindCoverLoader {
     /**
      * Load bookcover from cache or remote provider and display if possible.
      *
-     * Override to add support for resizable cover images.
+     * Override to add support for resizable cover images and access closed image.
      *
      * @return bool True if image loaded, false on failure.
      */
@@ -122,6 +121,14 @@ class Loader extends VuFindCoverLoader {
                     // Is the current provider appropriate for the available data?
                     if ($handler->supports($ids)) {
                         if ($url = $handler->getUrl($key, $this->size, $ids)) {
+                            // First check if access is closed
+                            if (($handler instanceof AccessClosedCover) &&
+                                $handler->isAccessClosed($key, $this->size, $ids, $this->publication)) {
+
+                                $this->dieWithAccessClosedImage();
+                                return true;
+                            }
+
                             // See if we have to resize the cover image
                             $this->resizeToWidth = null;
                             if ($handler instanceof ResizableCover) {
