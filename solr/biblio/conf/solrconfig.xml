@@ -17,6 +17,20 @@
 -->
 
 <config>
+
+    <requestHandler name="/replication" class="solr.ReplicationHandler" enable="${enable.replication:true}">
+        <lst name="master">
+            <str name="enable">${enable.master:false}</str>
+            <str name="replicateAfter">startup</str>
+            <str name="replicateAfter">commit</str>
+        </lst>
+        <lst name="slave">
+            <str name="enable">${enable.slave:false}</str>
+            <str name="masterUrl">${replication.master.url:http://localhost:8080/solr}/biblio</str>
+            <str name="pollInterval">00:01:00</str>
+        </lst>
+    </requestHandler>
+
   <!-- Set this to 'false' if you want solr to continue working after it has
        encountered an severe configuration error.  In a production environment,
        you may want solr to keep working even if one handler is mis-configured.
@@ -37,7 +51,7 @@
   <!-- Used to specify an alternate directory to hold all index data
        other than the default ./data under the Solr home.
        If replication is in use, this should match the replication configuration. -->
-  <dataDir>${solr.solr.home:./solr}/biblio</dataDir>
+  <dataDir>${solr.solr.data:./solr}/biblio</dataDir>
 
 
   <indexConfig>
@@ -181,8 +195,8 @@
          -->
 
     <!-- VuFind uses the default Solr settings for filterCache, which should produce a high
-         hit rate. You can carefully adjust the filterCache and check the hit ratio in 
-         admin>plugins>stats -->  
+         hit rate. You can carefully adjust the filterCache and check the hit ratio in
+         admin>plugins>stats -->
     <filterCache
         class="solr.FastLRUCache"
         size="300000"
@@ -261,7 +275,7 @@
     <listener event="newSearcher" class="solr.QuerySenderListener">
       <arr name="queries">
         <lst>
-          <str name="q">science art business engineering history</str>
+                    <str name="q">*:*</str>
           <str name="start">0</str>
           <str name="rows">10</str>
         </lst>
@@ -274,9 +288,7 @@
     <listener event="firstSearcher" class="solr.QuerySenderListener">
       <arr name="queries">
         <lst>
-          <str name="q">science art business engineering history</str>
-          <str name="facet.field">format</str>
-          <str name="fq">format:book</str>
+                    <str name="q">*:*</str>
         </lst>
       </arr>
     </listener>
@@ -587,6 +599,7 @@
        </lst>
        -->
   </requestHandler>
+    <requestHandler name="/update/json" class="solr.JsonUpdateRequestHandler" enable="${enable.master:false}"/>
 
   <!-- Field Analysis Request Handler
 
