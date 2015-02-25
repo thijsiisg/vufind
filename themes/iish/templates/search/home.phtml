@@ -38,14 +38,17 @@
   <p><?= $this->messageOfTheDay['content'] ?></p>
 </div>
 
-<? $facetList = is_object($this->results) ? $this->results->getFacetList() : array(); ?>
-<? if (isset($facetList) && is_array($facetList)): ?>
-  <div class="row">
+<?
+$facetList = is_object($this->results) ? $this->results->getFacetList() : array();
+$facetListForArchives = is_object($this->resultsForArchives) ? $this->resultsForArchives->getFacetList() : array();
+?>
+<? if ((isset($facetList) && is_array($facetList)) || (isset($facetListForArchives) && is_array($facetListForArchives))): ?>
+  <div class="row homeFacets">
     <? foreach ($facetList as $field => $details): ?>
       <? $sortedList = $this->sortFacetList($this->results, $field, $details['list'], $basicSearch); ?>
       <div class="<?=$field=='callnumber-first' ? 'col-sm-6' : 'col-sm-3' ?>">
-        <p class="lead"><?=$this->transEsc('home_browse') . ' ' . $this->transEsc($details['label'])?></p>
-        <div class="row">
+        <p class="lead"><?=$this->transEsc('home_browse') . ' ' . strtolower($this->transEsc($details['label']))?></p>
+        <div class="row facetList">
           <ul class="list-unstyled <?=$field == "callnumber-first" ? 'col-sm-6' : 'col-sm-12' ?>">
           <? /* Special case: two columns for LC call numbers... */ ?>
           <? if ($field == "callnumber-first"): ?>
@@ -70,10 +73,7 @@
             <? endforeach; ?>
           <? else: ?>
             <? $i = 0; foreach ($sortedList as $url => $value): ?>
-              <? if (++$i > 10): ?>
-                <li><a href="<?=$this->url($advSearch)?>"><strong><?=$this->transEsc("More options")?>...</strong></a></li>
-                <? break; ?>
-              <? elseif (!empty($value)): ?>
+              <? if (!empty($value)): ?>
                 <li><a href="<?=$url?>"><?=$this->escapeHtml($value)?></a></li>
               <? else: $i--; ?>
               <? endif; ?>
@@ -83,5 +83,55 @@
         </div>
       </div>
     <? endforeach; ?>
+    <? foreach ($facetListForArchives as $field => $details): ?>
+      <? $sortedList = $this->sortFacetList($this->resultsForArchives, $field, $details['list'], $basicSearch); ?>
+      <div class="<?=$field=='geographic_facet' ? 'col-sm-6' : 'col-sm-3' ?>">
+        <p class="lead"><?=$this->transEsc('home_browse_archives') . ' ' . strtolower($this->transEsc($details['label']))?></p>
+        <div class="row facetList">
+          <?
+          $listColClass = 'col-sm-12';
+          if ($field == "geographic_facet") {
+            $listColClass = 'col-sm-6';
+          }
+          if ($field == "alphabetical_facet") {
+            $listColClass = 'col-xs-6';
+          }
+          ?>
+          <ul class="list-unstyled <?=$listColClass?>">
+            <? /* Special case: two columns for geographic facets and alphabetical facet... */ ?>
+            <? if ($field == "geographic_facet" || $field == "alphabetical_facet"): ?>
+            <? $half = ceil(count($sortedList)/2); ?>
+            <? $i = 0; foreach ($sortedList as $url => $value): ?>
+            <? if (!empty($value)): ?>
+              <li><a href="<?=$url?>"><?=$this->escapeHtml($value)?></a></li>
+            <? else: $i--; ?>
+            <? endif; ?>
+            <? if (++$i == $half): ?>
+          </ul>
+          <ul class="list-unstyled col-sm-6">
+            <? endif; ?>
+            <? endforeach; ?>
+            <? /* Special case: collections */ ?>
+            <? elseif ($field == 'hierarchy_top_title'): ?>
+              <? $i = 0; foreach ($sortedList as $url => $value): ?>
+                <? if (++$i > 10): ?>
+                  <li><a href="<?=$this->url('collections-home')?>"><strong><?=$this->transEsc("More options")?>...</strong></a></li>
+                  <? break; ?>
+                <? else: ?>
+                  <li><a href="<?=$this->url('collections-bytitle')?>?title=<?=urlencode($value)?>"><?=$this->escapeHtml($value)?></a></li>
+                <? endif; ?>
+              <? endforeach; ?>
+            <? else: ?>
+              <? $i = 0; foreach ($sortedList as $url => $value): ?>
+                <? if (!empty($value)): ?>
+                  <li><a href="<?=$url?>"><?=$this->escapeHtml($value)?></a></li>
+                <? else: $i--; ?>
+                <? endif; ?>
+              <? endforeach; ?>
+            <? endif; ?>
+          </ul>
+        </div>
+      </div>
+  <? endforeach; ?>
   </div>
 <? endif; ?>

@@ -13,7 +13,7 @@ class SearchController extends VuFindSearchController {
     /**
      * Home action.
      *
-     * Override to add a 'message of the day'.
+     * Override to add a 'message of the day' and add archive facets.
      *
      * @return mixed
      */
@@ -24,6 +24,19 @@ class SearchController extends VuFindSearchController {
         $motdLoader = new MOTDLoader($this->getServiceLocator());
         $viewModel->messageOfTheDay = $motdLoader->getMessageOfTheDay();
 
+        // Add archives facets
+        $viewModel->resultsForArchives = $this->getHomePageFacetsForArchives();
+
         return $viewModel;
+    }
+
+    /**
+     * Return a Search Results object containing homepage facet information with archives.
+     * This data may come from the cache.
+     *
+     * @return \VuFind\Search\Solr\Results
+     */
+    protected function getHomePageFacetsForArchives() {
+        return $this->getFacetResults('initHomePageFacetsForArchives', 'solrSearchHomeFacetsForArchives');
     }
 } 

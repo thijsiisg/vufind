@@ -18,8 +18,7 @@ class Factory {
      */
     public static function getIISH(ServiceManager $sm) {
         $config = $sm->getServiceLocator()->get('VuFind\Config')->get('iish');
-        $accessToken = isset($config->SOR->accessToken) ? $config->SOR->accessToken : '';
 
-        return new IISH($accessToken);
+        return new IISH($config);
     }
 }

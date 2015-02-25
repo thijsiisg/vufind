@@ -33,7 +33,7 @@
     <div class="row">
       <xsl:if test="$digital_items>0">
         <div id="teaser" class="col-sm-3 col-sm-push-9">
-          <img src=""/>
+          <img class="center-block" src=""/>
           <p>
             <xsl:call-template name="language">
               <xsl:with-param name="key">ArchiveCollectionSummary.image</xsl:with-param>

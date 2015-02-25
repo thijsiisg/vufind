@@ -12,4 +12,9 @@ $(document).ready(function () {
     $('#order-record').click(function () {
         return Lightbox.get('Order', 'Home', {id: $('.hiddenId')[0].value});
     });
+
+    $('.homeFacets .facetList').slimScroll({
+        height: '',
+        touchScrollStep: 50
+    });
 });
