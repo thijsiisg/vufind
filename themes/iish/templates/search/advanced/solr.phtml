@@ -7,7 +7,7 @@
     <div class="row">
       <? foreach ($this->facetList as $field => $list): ?>
         <div class="col-sm-<?=floor(12/count($this->facetList)) ?>">
-          <? if (trim($this->transEsc($list['label'])) !== ''): ?>
+          <? if (preg_replace( '/[^[:print:]]/', '', trim($this->transEsc($list['label']))) !== ''): ?>
             <label for="limit_<?=$this->escapeHtmlAttr(str_replace(' ', '', $field))?>">
               <?=$this->transEsc($list['label'])?>:
             </label>

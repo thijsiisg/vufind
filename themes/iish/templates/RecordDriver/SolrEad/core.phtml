@@ -1,9 +1,11 @@
 <?
 // Make sure we the Visual Mets stylesheet comes FIRST.
 // It contains Bootstrap 2.x styling, which overrides VuFinds Bootstrap 3.x styling and we don't want that.
-$this->headLink()->offsetSetStylesheet(10, $this->visualmetsUrl . '/resources/css/themes/iisg/style.css?_=2.1');
+$this->headLink()->offsetSetStylesheet(10, $this->visualmetsUrl . '/resources/css/themes/iisg/style.css?_=2.1', 'all');
 // And now make sure our main related stylesheet has a lower offset.
-$this->headLink()->offsetSetStylesheet(20, 'compiled.css');
+$this->headLink()->offsetSetStylesheet(20, 'compiled.css', 'all');
+// Do the same for the print stylesheet.
+$this->headLink()->offsetSetStylesheet(30, 'print.css', 'print');
 
 $this->headScript()->appendFile('navigation.js');
 
@@ -13,7 +15,7 @@ $this->jsobject()->addProps(array(
 ));
 $this->headScript()->appendScript($this->jsobject()->getScript('visualMets'));
 
-/*$this->headScript()->appendFile($this->visualmetsUrl . '/resources/js/mets2viewer.min.js');*/
+/* TODO: $this->headScript()->appendFile($this->visualmetsUrl . '/resources/js/mets2viewer.min.js'); */
 $this->headScript()->appendFile('mets2viewer.min.js');
 
 $this->headScript()->appendFile('visual-mets/' . $this->layout()->userLang . '.lang.js');
@@ -38,7 +40,7 @@ $this->headScript()->appendFile('visual-mets.js');
         <tr>
           <th><?=$this->transEsc('Tags')?>: </th>
           <td>
-            <span class="pull-right">
+            <span class="pull-right hidden-print">
               <i class="fa fa-plus"></i> <a id="tagRecord" class="modal-link" href="<?=$this->recordLink()->getActionUrl($this->driver, 'AddTag')?>" title="<?=$this->transEsc('Add Tag')?>"><?=$this->transEsc('Add Tag')?></a>
             </span>
             <div id="tagList">

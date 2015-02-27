@@ -16,4 +16,11 @@ class Params extends VuFindParams {
         $this->initFacetList('HomePageForArchives', 'HomePage_Settings');
         $this->addFilter('format:Archives');
     }
+
+    /**
+     * Initialize facet settings for the new item search.
+     */
+    public function initNewItemFacets() {
+        $this->addFacet('format', 'Format');
+    }
 }

@@ -11,11 +11,14 @@ if ($this->driver->getDownloadable() && ($this->driver->hasVideo() || $this->dri
 
   <div class="col-sm-5 col-sm-push-7">
     <? if ($this->driver->getDownloadable() && $this->driver->hasVideo()): ?>
-      <div class="video-container">
+      <div class="video-container hidden-print">
         <video controls preload="none" style="width: 100%; height: 100%;" poster="http://hdl.handle.net/10622/<?=$this->driver->getIsShownBy()?>?locatt=view:level2">
           <source src="http://hdl.handle.net/10622/<?=$this->driver->getIsShownBy()?>?locatt=view:level1" type='video/mp4'/>
           <img src="http://hdl.handle.net/10622/<?=$this->driver->getIsShownBy()?>?locatt=view:level2" title="No video playback capabilities"/>
         </video>
+      </div>
+      <div class="visible-print text-center">
+        <img class="recordcover" src="http://hdl.handle.net/10622/<?=$this->driver->getIsShownBy()?>?locatt=view:level2"/>
       </div>
     <? else: ?>
       <div class="text-center">
@@ -510,7 +513,7 @@ if ($this->driver->getDownloadable() && ($this->driver->hasVideo() || $this->dri
         <tr>
           <th><?=$this->transEsc('Tags')?>: </th>
           <td>
-            <span class="pull-right">
+            <span class="pull-right hidden-print">
               <i class="fa fa-plus"></i> <a id="tagRecord" class="modal-link" href="<?=$this->recordLink()->getActionUrl($this->driver, 'AddTag')?>" title="<?=$this->transEsc('Add Tag')?>"><?=$this->transEsc('Add Tag')?></a>
             </span>
             <div id="tagList">
@@ -529,7 +532,7 @@ if ($this->driver->getDownloadable() && ($this->driver->hasVideo() || $this->dri
 </div>
 
 <?php if ($this->driver->getDownloadable() && $this->driver->hasAudio()): ?>
-  <div class="audio-container">
+  <div class="audio-container hidden-print">
     <audio controls preload="none" style="width: 100%;">
       <source src="http://hdl.handle.net/10622/<?=$this->driver->getIsShownBy()?>?locatt=view:level1" type='audio/mp3'/>
     </audio>

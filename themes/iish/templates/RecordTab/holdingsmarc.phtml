@@ -12,7 +12,7 @@
 
         <? $format = strtolower($this->driver->getFormats()[0]); ?>
         <? if (($format === 'books and brochures') || ($format === 'serials')): ?>
-          <div class="state"
+          <div class="state hidden-print"
                data-label="<?=$this->escapeHtmlAttr($this->truncate(preg_replace('/[\'"]/', '`',
                  $this->driver->getShortTitle()), 40))?> - <?=$this->escapeHtmlAttr($holding['j'])?>"
                data-pid="<?=$this->escapeHtmlAttr($this->driver->getIsShownAt())?>"

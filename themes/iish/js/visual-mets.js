@@ -15,7 +15,7 @@
                 }
                 else {
                     $('div .mets-embedded').remove();
-                    $('<div class="mets-embedded"><div class="mets-container mets-hide"></div></div>')
+                    $('<div class="mets-embedded hidden-print"><div class="mets-container mets-hide"></div></div>')
                         .insertAfter(parent)
                         .find('>:first-child')
                         .mets2Viewer({

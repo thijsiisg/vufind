@@ -31,6 +31,22 @@ class SearchController extends VuFindSearchController {
     }
 
     /**
+     * New item search form.
+     *
+     * Override to add format facets.
+     *
+     * @return mixed
+     */
+    public function newitemAction() {
+        $viewModel = parent::newitemAction();
+
+        // New Item facets currently has one facet only
+        $viewModel->formats = $this->getNewItemFacets()->getFacetList()['format'];
+
+        return $viewModel;
+    }
+
+    /**
      * Return a Search Results object containing homepage facet information with archives.
      * This data may come from the cache.
      *
@@ -38,5 +54,15 @@ class SearchController extends VuFindSearchController {
      */
     protected function getHomePageFacetsForArchives() {
         return $this->getFacetResults('initHomePageFacetsForArchives', 'solrSearchHomeFacetsForArchives');
+    }
+
+    /**
+     * Return a Search Results object containing homepage facet information with archives.
+     * This data may come from the cache.
+     *
+     * @return \VuFind\Search\Solr\Results
+     */
+    protected function getNewItemFacets() {
+        return $this->getFacetResults('initNewItemFacets', 'solrSearchNewItemFacets');
     }
 } 

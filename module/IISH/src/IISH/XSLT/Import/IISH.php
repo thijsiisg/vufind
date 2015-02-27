@@ -26,7 +26,7 @@ class IISH extends VuFind {
      * @return string The ID.
      */
     public static function generateID($key, $tag) {
-        $t = isset($tag[0]) ? $tag[0]->nodeValue : '';
+        $t = (is_array($tag) && isset($tag[0])) ? $tag[0]->nodeValue : '';
 
         return 'A' . substr(md5($key . ':' . $t . str_repeat(' ', 10)), 0, 10);
     }

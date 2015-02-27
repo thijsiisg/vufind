@@ -178,7 +178,7 @@
         <tr>
           <th><?=$this->transEsc('Tags')?>: </th>
           <td>
-            <span class="pull-right">
+            <span class="pull-right hidden-print">
               <i class="fa fa-plus"></i> <a id="tagRecord" class="modal-link" href="<?=$this->recordLink()->getActionUrl($this->driver, 'AddTag')?>" title="<?=$this->transEsc('Add Tag')?>"><?=$this->transEsc('Add Tag')?></a>
             </span>
             <div id="tagList">
