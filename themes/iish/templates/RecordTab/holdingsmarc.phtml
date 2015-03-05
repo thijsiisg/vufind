@@ -10,7 +10,7 @@
           <?=$this->escapeHtml($holding['c'])?>
         </div>
 
-        <? $format = strtolower($this->driver->getFormats()[0]); ?>
+        <? $formats = $this->driver->getFormats(); $format = strtolower($formats[0]); ?>
         <? if (($format === 'books and brochures') || ($format === 'serials')): ?>
           <div class="state hidden-print"
                data-label="<?=$this->escapeHtmlAttr($this->truncate(preg_replace('/[\'"]/', '`',
