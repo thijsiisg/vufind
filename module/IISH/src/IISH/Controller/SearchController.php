@@ -41,7 +41,8 @@ class SearchController extends VuFindSearchController {
         $viewModel = parent::newitemAction();
 
         // New Item facets currently has one facet only
-        $viewModel->formats = $this->getNewItemFacets()->getFacetList()['format'];
+        $facetList = $this->getNewItemFacets()->getFacetList();
+        $viewModel->formats = $facetList['format'];
 
         return $viewModel;
     }
