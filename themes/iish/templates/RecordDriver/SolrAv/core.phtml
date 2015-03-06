@@ -7,6 +7,11 @@ if ($this->driver->getDownloadable() && ($this->driver->hasVideo() || $this->dri
 ?>
 
 <div class="row" vocab="http://schema.org/" resource="#record" typeof="<?=$this->driver->getSchemaOrgFormats()?> Product">
+  <div class="visible-print text-center">
+    <? $langClass = ($this->layout()->userLang === 'nl') ? 'nl' : 'en'; ?>
+    <img src="<?=$this->imageLink('IISG-logo-' . $langClass . '.jpg')?>"/>
+  </div>
+
   <h3 property="name"><?=$this->escapeHtml($this->driver->getShortTitleEscaped())?></h3>
 
   <div class="col-sm-5 col-sm-push-7">
@@ -29,7 +34,7 @@ if ($this->driver->getDownloadable() && ($this->driver->hasVideo() || $this->dri
             <img alt="<?=$this->transEsc('Cover Image')?>" class="recordcover" src="<?=$this->escapeHtmlAttr($mediumThumb);?>"/>
           <? if ($largeThumb): ?></a><? endif; ?>
         <? else: ?>
-          <img src="<?=$this->url('cover-unavailable')?>" class="recordcover" alt="<?=$this->transEsc('No Cover Image')?>"/>
+          <img src="<?=$this->url('cover-unavailable')?>" class="recordcover hidden-print" alt="<?=$this->transEsc('No Cover Image')?>"/>
         <? endif; ?>
 
         <? /* Display qrcode if appropriate: */ ?>
