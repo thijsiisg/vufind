@@ -10,6 +10,38 @@ header {
 
   .navbar {
     border-radius: 0;
+
+    .navbar-brand {
+      background: no-repeat center;
+
+      @media (max-width: 350px) {
+        max-width: 100%;
+        background-size: contain;
+      }
+
+      @media (min-width: 351px) and (max-width: @screen-xs-max) {
+        width: 250px;
+        background-size: contain;
+      }
+
+      &.en {
+        background-image: url('../../images/IISG-logo-en.jpg');
+
+        @media (min-width: @screen-sm-min) {
+          width: 314px;
+          background-size: contain;
+        }
+      }
+
+      &.nl {
+        background-image: url('../../images/IISG-logo-nl.jpg');
+
+        @media (min-width: @screen-sm-min) {
+          width: 342px;
+          background-size: contain;
+        }
+      }
+    }
   }
 }
 
@@ -50,13 +82,11 @@ footer {
   border: 1px solid @input-border;
 }
 
-#messageOfTheDay {
-  &,
-  .searchHomeContent {
-    float: none;
-    margin: 3em auto;
-    width: 90%;
-  }
+#messageOfTheDay,
+.searchHomeContent {
+  float: none;
+  margin: 3em auto;
+  width: 90%;
 }
 
 .homeFacets.row {
