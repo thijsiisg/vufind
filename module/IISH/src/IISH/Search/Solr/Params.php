@@ -10,6 +10,22 @@ use VuFind\Search\Solr\Params as VuFindParams;
 class Params extends VuFindParams {
 
     /**
+     * Pull the search parameters.
+     *
+     * Override to add support for changing the facet sorting.
+     *
+     * @param \Zend\StdLib\Parameters $request Parameter object representing user request.
+     */
+    public function initFromRequest($request) {
+        parent::initFromRequest($request);
+
+        $facetSort = $request->get('facetSort');
+        if (($facetSort !== null) && (($facetSort === 'count') || ($facetSort === 'index'))) {
+            $this->setFacetSort($facetSort);
+        }
+    }
+
+    /**
      * Initialize facet settings for archives only for the home page.
      */
     public function initHomePageFacetsForArchives() {

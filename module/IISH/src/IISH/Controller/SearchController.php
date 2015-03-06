@@ -31,6 +31,19 @@ class SearchController extends VuFindSearchController {
     }
 
     /**
+     * Results action.
+     *
+     * Override to make sure the facet sorting is alphabetical rather than the default (number of results).
+     *
+     * @return mixed
+     */
+    public function resultsAction() {
+        $this->getRequest()->getQuery()->set('facetSort', 'index');
+
+        return parent::resultsAction();
+    }
+
+    /**
      * New item search form.
      *
      * Override to add format facets.
