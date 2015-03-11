@@ -1,5 +1,6 @@
 <?php
 namespace IISH\Harvester;
+
 use VuFind\Harvester\OAI as VuFindOAI;
 
 /**
@@ -19,6 +20,11 @@ class OAI extends VuFindOAI
     private $catalog;
 
     /**
+     * Marc validation schema location
+     */
+    private $schema;
+
+    /**
      * Constructor.
      *
      * Override to add support for a catalog document.
@@ -32,8 +38,8 @@ class OAI extends VuFindOAI
     public function __construct($target, $settings, \Zend\Http\Client $client, $from = null, $until = null)
     {
         parent::__construct($target, $settings, $client, $from, $until);
-        $this->lastHarvestFile = $this->basePath . $target . '/last_harvest.txt';
         $this->catalog = $this->basePath . 'catalog.xml';
+        $this->schema = LOCAL_OVERRIDE_DIR . '/harvest/marc21slim_custom.xsd';
     }
 
     /**
@@ -204,7 +210,7 @@ class OAI extends VuFindOAI
 
         $marc = new \DOMDocument();
         if ($marc->loadXML($xml)) {
-            if (!$marc->schemaValidate($this->basePath . 'marc21slim_custom.xsd')) {
+            if (!$marc->schemaValidate($this->schema)) {
                 print("XML not valid for " . $id . "\n");
                 return;
             }
