@@ -169,15 +169,13 @@ class OAI extends VuFindOAI
      *
      * @return void
      */
-    protected function deleteRecord($_oai_id)
+    protected function saveDeletedRecord($_oai_id)
     {
-        $oai_id = explode(':', $_oai_id, 3); // oai:domain:identifier
-        if (count($oai_id) == 3) {
-            $id = explode('/', $oai_id[2], 2); // either id=10622/12345 or id=12345
-            $id = (count($id) == 1) ? $id[0] : $id[1];
-            $delete_by_id = "wget -O /dev/null \"http://localhost:8080/solr/biblio/update?stream.body=<delete><id>" . $id . "</id></delete>\"";
-            echo shell_exec($delete_by_id);
-        }
+        $oai_id = $this->extractID($_oai_id); // from oai:domain:identifier to identifier
+        $id = explode('/', $oai_id[2], 2); // either id=10622/12345 or id=12345
+        $id = (count($id) == 1) ? $id[0] : $id[1];
+        $delete_by_id = "wget -O /dev/null \"http://localhost:8080/solr/biblio/update?stream.body=<delete><id>" . $id . "</id></delete>\"";
+        echo shell_exec($delete_by_id);
     }
 
     /**
@@ -294,7 +292,7 @@ class OAI extends VuFindOAI
             // Save the current record, either as a deleted or as a regular file:
             $attribs = $record->header->attributes();
             if (strtolower($attribs['status']) == 'deleted') {
-                $this->deleteRecord($id);
+                $this->saveDeletedRecord($id);
             } else {
                 $this->saveRecord($id, $record);
             }
