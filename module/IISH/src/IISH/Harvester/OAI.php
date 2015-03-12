@@ -179,7 +179,7 @@ class OAI extends VuFindOAI
     protected function saveDeletedRecord($_oai_id)
     {
         $oai_id = $this->extractID($_oai_id); // from oai:domain:identifier to identifier
-        $id = explode('/', $oai_id[2], 2); // either id=10622/12345 or id=12345
+        $id = explode('/', $oai_id, 2); // either id=10622/12345 or id=12345
         $id = (count($id) == 1) ? $id[0] : $id[1];
         $delete_by_id = "wget -O /dev/null \"http://localhost:8080/solr/biblio/update?stream.body=<delete><id>" . $id . "</id></delete>\"";
         echo shell_exec($delete_by_id);
