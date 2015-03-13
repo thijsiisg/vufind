@@ -1,73 +1,72 @@
 #!/bin/bash
+#
+# harvest-marc.sh
+#
+# Usage: ./harvest-marc.sh set_spec from [optional datestamp YYYY-MM-DD ]
 
-source /usr/local/vufind/custom/config.sh
 
-#############################################################################
-# THe application path
-cd $VUFIND_HOME/harvest
 
-setSpec=$1
-d=$2 
-dir=$SHARE/datasets/$setSpec
-now=$(date +"%Y-%m-%d")
-log=$SHARE/log/$setSpec.$now.log
-echo "Start job $setSpec" > $log
-
-if [ -z "$setSpec" ] ; then
-	echo "No setSpec given as argument." >> $SHARE/log/error.$now.txt 
+set_spec=$1
+if [ -z "$set_spec" ] ; then
+	echo "No setspec given as argument. Usage: ./harvest-marc.sh set_spec from [optional datestamp YYYY-MM-DD ]"
 	exit -1
 fi
 
-# Find a directory younger than three days. If it is there, we assume a job is in progress.
-find $dir -type d -mtime 3 -exec rm -rf {} +
-if [ -d $dir ] ; then
-	echo "Folder $dir exists... skipping..." >> $log
+
+HARVEST_DIRECTORY="/data/datasets/${set_spec}/"
+log="/data/log/${set_spec}.log"
+catalog_file="${HARVEST_DIRECTORY}catalog_file.xml"
+last_harvest="${HARVEST_DIRECTORY}last_harvest.txt"
+
+
+
+# The VuFind harvester sets a last harvest file. But we set our own to have some days overlapping.
+from=$2
+if [ -z "$from" ] ; then
+    year=$(date --date="222 days ago" +"%Y")
+    month=$(date --date="222 days ago" +"%m")
+    day=$(date --date="222 days ago" +"%d")
+    from="${year}-${month}-${day}"
+fi
+
+
+# Find a directory older than three days. If it is there, we assume a job is stale and no longer running.
+find $HARVEST_DIRECTORY -type d -mtime 3 -exec rm -rf {} +
+if [ -d $HARVEST_DIRECTORY ] ; then
+	echo "Folder ${HARVEST_DIRECTORY} exists... skipping..." >> $log
 	exit -1
 fi
 
-echo "Clearing files" >> $log
-rm -rf $dir
-mkdir -p $dir
 
-h=$dir/last_harvest.txt
-if [ ! -z "$d" ] ; then
-    echo "Adding harvest datestamp from $d" >> $log
-    php $VUFIND_HOME/harvest/LastHarvestFile.php "$now" "$d" $h
-    setSpec=`basename $dir`
+mkdir -p $HARVEST_DIRECTORY
+echo $from > $last_harvest
+echo "set_spec=${set_spec}" >> $log
+echo "from=${from}" >> $log 
+echo "Harvest folder: ${HARVEST_DIRECTORY}" >> $log
+
+
+# Begin the harvest
+php /usr/local/vufind/local/harvest_oai.php $set_spec >> $log
+if [ ! -f $catalog_file ] ; then
+    echo "catalog_file not found: ${catalog_file}">> $log
+    exit 1
+fi
+ 
+ 
+# Import the records
+/usr/local/vufind/import-marc.sh -p /usr/local/vufind/local/import/import_$set_spec.properties $f >> $log
+
+
+# Clear the directory
+rm -rf $HARVEST_DIRECTORY
+
+
+# Create PDFs
+fop="/usr/local/vufind/local/import/fop-${set_spec}.sh"
+if [ -f $fop ] ; then
+    $fop
 fi
 
-    cd $VUFIND_HOME/harvest
-    echo "Begin harvest" >> $log
-    rm $setSpec
-    ln -s $dir $setSpec
-    php harvest_oai.php $setSpec >> $log
-    rm $setSpec
-    f=$dir/catalog.xml
-    rm $h
-    cd $VUFIND_HOME/import
-    echo "Begin import into solr" >> $log
-
-        ./import-marc.sh -p import_$setSpec.properties $f
-
-    if [ -f solrmarc.log.1 ] ; then
-        cat solrmarc.log.1 >> $log
-    fi
-
-    if [ -f solrmarc.log ] ; then
-        cat solrmarc.log >> $log
-    fi
-
-    rm solrmarc.lo*
-
-    echo "Creating PDF documents" >> $log
-    ./fop-$setSpec.sh
-
-    echo "Clearing files" >> $log
-    rm -rf $dir
-
-##############################################################################
-# Cache permissions
-chown www-data $SHARE/cache/xml/*
 
 wget -O /tmp/commit.txt "http://localhost:8080/solr/biblio/update?commit=true"
 

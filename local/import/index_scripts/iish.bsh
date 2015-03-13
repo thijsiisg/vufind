@@ -202,6 +202,7 @@ public String getAllSearchableFields(Record record, String fieldSpec) throws Exc
         return " ";
         
     Document document = loadDocument(url);
+    saveDocument(document, new File("/usr/local/vufind/local/cache/pdf/" + getId(record) + ".pdf"));
     return getText(document);
 }
 
@@ -218,24 +219,6 @@ private Document loadDocument(String url) throws Exception {
     return db.parse(url);
 }
 
-private String md5FromString(String text) throws NoSuchAlgorithmException {
-    MessageDigest md = MessageDigest.getInstance("MD5");
-    md.update(text.getBytes());	
-    byte[] mdbytes = md.digest();
-    
-    return getHex(mdbytes);
-}
-
-private String getHex(byte[] mdbytes) {
-    StringBuffer sb = new StringBuffer();
-    for (byte mdbyte : mdbytes) {
-        String hex = Integer.toHexString(0xff & mdbyte);
-        if (hex.length() == 1) sb.append('0');
-        sb.append(hex);
-    }
-    
-    return sb.toString();
-}
 
 private void saveDocument(Document document, File file) throws Exception {
     TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -244,6 +227,7 @@ private void saveDocument(Document document, File file) throws Exception {
     StreamResult result = new StreamResult(file);
     transformer.transform(source, result);
 }
+
 
 private String getText(Document document) throws XPathExpressionException {
     XPathFactory factory = XPathFactory.newInstance();
