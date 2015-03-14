@@ -1,12 +1,12 @@
 <?php
-namespace IISH\PDF;
+namespace IISH\File;
 
 use Zend\Log\LoggerInterface;
 
 /**
  * Asset handler for PDF files
  *
- * @package IISH\PDF
+ * @package IISH\File
  */
 class Loader implements \Zend\Log\LoggerAwareInterface
 {
@@ -37,6 +37,10 @@ class Loader implements \Zend\Log\LoggerAwareInterface
     public function getFile()
     {
         return $this->file;
+    }
+
+    public function hasFile() {
+        return ($this->file);
     }
 
     /**

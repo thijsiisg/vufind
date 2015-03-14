@@ -1,15 +1,15 @@
 <?php
 namespace IISH\Controller;
 
-use IISH\PDF\Loader;
+use IISH\File\Loader;
 use VuFind\Controller\AbstractBase;
 
 /**
- * Generates covers for book entries.
+ * Act as s FileHandler.
  *
  * @package IISH\Controller
  */
-class PDFController extends AbstractBase
+class FileController extends AbstractBase
 {
 
 
@@ -22,15 +22,15 @@ class PDFController extends AbstractBase
 
 
     /**
-     * Get the pdf loader object.
+     * Get the file loader object.
      *
-     * Override to make use of overridden pdf loader object instead.
+     * Override to get a new loader object instead.
      *
-     * @return Loader PDF loader.
+     * @return loader.
      */
     protected function getLoader()
     {
-        // Construct object for loading pdf files if it does not already exist:
+        // Construct object if it does not already exist:
         if (!$this->loader) {
             $this->loader = new Loader(
                 $this->getConfig(),
@@ -48,37 +48,37 @@ class PDFController extends AbstractBase
     }
 
     /**
-     * Send pdf display
+     * Send file
      *
      * @return \Zend\Http\Response
      */
     public function homeAction()
     {
+        $this->writeSession(); // avoid session write timing bug
 
         $this->getLoader()->loadFile($this->params()->fromQuery('id'));
         $response = $this->getResponse();
-        $headers = $response->getHeaders();
-        $headers->addHeaderLine(
-            'Content-type', 'application/pdf'
-        );
 
-        // Send proper caching headers so that the user's browser
-        // is able to cache the cover images and not have to re-request
-        // then on each page load. Default TTL set at 14 days
+        if ($this->getLoader()->hasFile()) {
+            $contentType = $this->params()->fromQuery('contentType', 'application/octet-stream');
+            $headers = $response->getHeaders();
+            $headers->addHeaderLine(
+                'Content-type', $contentType
+            );
 
-        $ttl = $this->getLoader()->getTtl();
-        $headers->addHeaderLine(
-            'Cache-Control', "maxage=" . $ttl
-        );
-        $headers->addHeaderLine(
-            'Pragma', 'public'
-        );
-        $headers->addHeaderLine(
-            'Expires', gmdate('D, d M Y H:i:s', time() + $ttl) . ' GMT'
-        );
-        if ($this->getLoader()->getFile())
+            $ttl = $this->getLoader()->getTtl();
+            $headers->addHeaderLine(
+                'Cache-Control', "maxage=" . $ttl
+            );
+            $headers->addHeaderLine(
+                'Pragma', 'public'
+            );
+            $headers->addHeaderLine(
+                'Expires', gmdate('D, d M Y H:i:s', time() + $ttl) . ' GMT'
+            );
+
             $response->setContent($this->getLoader()->getFile());
-        else
+        } else
             $response->setStatusCode(404);
         return $response;
     }

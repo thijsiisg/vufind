@@ -13,7 +13,8 @@ do
     echo "Creating $pdf from $file"
     fop -c /usr/local/vufind/local/import/fop/fop.xconf -xml $file -xsl /usr/local/vufind/local/import/xsl/ead_complete_fo.xsl -pdf $pdf -param path /usr/local/vufind/local/import/xsl -param sysYear $(date +'%Y')
     if [ -f "$pdf" ] ; then
-	    chown www-data "$pdf"
+	    chown www-data:www-data "$pdf"
+	    chmod 600 "$pdf"
     fi
     rm $file
 done
