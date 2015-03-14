@@ -202,7 +202,7 @@ public String getAllSearchableFields(Record record, String fieldSpec) throws Exc
         return " ";
         
     Document document = loadDocument(url);
-    saveDocument(document, new File("/usr/local/vufind/local/cache/pdf/" + getId(record) + ".pdf"));
+    saveDocument(document, new File("/usr/local/vufind/local/cache/pdf/" + getId(record) + ".xml"));
     return getText(document);
 }
 
