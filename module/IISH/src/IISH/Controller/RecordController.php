@@ -98,7 +98,7 @@ class RecordController extends VuFindRecordController {
     private function exportToPDF() {
         $pdfLink = isset($this->iishConfig->PDF->link) ? $this->iishConfig->PDF->link : 'PDF';
         $driver = $this->loadRecord();
-        $url = $this->url()->fromRoute('home') . $pdfLink . '?id=' . $driver->getUniqueID() . '&contentType=application/pdf';
+        $url = $this->url()->fromRoute('home') . $pdfLink . '?id=' . $driver->getUniqueID() . '.pdf&contentType=application/pdf';
         return $this->redirect()->toUrl($url);
     }
 } 
