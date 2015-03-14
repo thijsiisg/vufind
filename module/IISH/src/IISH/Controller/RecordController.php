@@ -96,11 +96,9 @@ class RecordController extends VuFindRecordController {
      * @return \Zend\Http\Response
      */
     private function exportToPDF() {
-        $pdfLink = isset($this->iishConfig->PDF->link) ? $this->iishConfig->PDF->link : 'pdf/';
-        $md5Identifier = $this->loadRecord()->getMD5Identifier();
-
-        $url = $this->url()->fromRoute('home') . $pdfLink . $md5Identifier . '.pdf';
-
+        $pdfLink = isset($this->iishConfig->PDF->link) ? $this->iishConfig->PDF->link : 'PDF/';
+        $driver = $this->loadRecord();
+        $url = $this->url()->fromRoute('home') . $pdfLink . $driver->getUniqueID();
         return $this->redirect()->toUrl($url);
     }
 } 
