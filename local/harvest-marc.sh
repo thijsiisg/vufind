@@ -91,14 +91,14 @@ rm -rf $HARVEST_DIRECTORY
 #-----------------------------------------------------------------------------------------------------------------------
 # Create PDFs
 #-----------------------------------------------------------------------------------------------------------------------
-fop="/usr/local/vufind/local/import/fop-${set_spec}.sh"
+fop="/usr/local/vufind/local/import/fop/${set_spec}.sh"
 if [ -f $fop ] ; then
-    $fop
+    $fop >> $log
 fi
 
 
 #-----------------------------------------------------------------------------------------------------------------------
-# Commit. Really not neccessary.
+# Commit. Really not neccessary. But we like to be sure all is in the index and not the transaction log.
 #-----------------------------------------------------------------------------------------------------------------------
 wget -O /tmp/commit.txt "http://localhost:8080/solr/biblio/update?commit=true"
 
