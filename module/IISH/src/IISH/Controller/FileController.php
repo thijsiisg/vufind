@@ -56,7 +56,7 @@ class FileController extends AbstractBase
     {
         $this->writeSession(); // avoid session write timing bug
 
-        $this->getLoader()->loadFile($this->params()->fromQuery('id'));
+        $this->getLoader()->setFilename($this->params()->fromQuery('filename'));
         $response = $this->getResponse();
 
         if ($this->getLoader()->hasFile()) {
@@ -80,6 +80,7 @@ class FileController extends AbstractBase
             $response->setContent($this->getLoader()->getFile());
         } else
             $response->setStatusCode(404);
+
         return $response;
     }
 }

@@ -11,7 +11,7 @@ use Zend\Log\LoggerInterface;
 class Loader implements \Zend\Log\LoggerAwareInterface
 {
 
-    private $cache = '/usr/local/vufind/local/cache/pdf/' ;
+    private $cache = '/usr/local/vufind/local/cache/pdf/';
 
     /**
      * Logger (or false for none)
@@ -20,6 +20,17 @@ class Loader implements \Zend\Log\LoggerAwareInterface
      */
     protected $logger = false;
 
+    /**
+     * The filename, without the path.
+     */
+    protected $filename = null;
+
+    public function setFilename($filename)
+    {
+        $this->filename = $filename;
+    }
+
+
     protected $ttl = 86400;
 
     public function getTtl()
@@ -27,28 +38,14 @@ class Loader implements \Zend\Log\LoggerAwareInterface
         return $this->ttl;
     }
 
-    /**
-     * Property for storing raw file data; may be null if the file is unavailable
-     *
-     * @var string
-     */
-    protected $file = null;
-
     public function getFile()
     {
-        return $this->file;
+        return file_get_contents($this->cache . $this->filename);
     }
 
-    public function hasFile() {
-        return ($this->file);
-    }
-
-    /**
-     * Display the default "access closed" graphic and terminate execution.
-     */
-    public function loadFile($id)
+    public function hasFile()
     {
-        $this->file = file_get_contents($this->cache . $id);
+        return file_exists($this->cache . $this->filename);
     }
 
     public function setLogger(LoggerInterface $logger)

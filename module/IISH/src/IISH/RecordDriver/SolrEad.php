@@ -1,6 +1,8 @@
 <?php
 namespace IISH\RecordDriver;
+
 use IISH\OAI\Loader as OAI;
+use IISH\File\Loader as File;
 use IISH\XSLT\Processor as XSLTProcessor;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -9,7 +11,8 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  *
  * @package IISH\RecordDriver
  */
-class SolrEad extends SolrMarc {
+class SolrEad extends SolrMarc
+{
     /**
      * @var \DOMDocument
      */
@@ -29,15 +32,16 @@ class SolrEad extends SolrMarc {
      * Constructor.
      *
      * @param ServiceLocatorInterface $serviceLocator
-     * @param \Zend\Config\Config     $mainConfig     VuFind main configuration. (omit for
+     * @param \Zend\Config\Config $mainConfig VuFind main configuration. (omit for
      *                                                built-in defaults)
-     * @param \Zend\Config\Config     $recordConfig   Record-specific configuration file.
+     * @param \Zend\Config\Config $recordConfig Record-specific configuration file.
      *                                                (omit to use $mainConfig as $recordConfig)
-     * @param \Zend\Config\Config     $searchSettings Search-specific configuration file
-     * @param \Zend\Config\Config     $iishConfig     IISH specific configuration.
+     * @param \Zend\Config\Config $searchSettings Search-specific configuration file
+     * @param \Zend\Config\Config $iishConfig IISH specific configuration.
      */
     public function __construct(ServiceLocatorInterface $serviceLocator, $mainConfig = null, $recordConfig = null,
-                                $searchSettings = null, $iishConfig = null) {
+                                $searchSettings = null, $iishConfig = null)
+    {
         parent::__construct($mainConfig, $recordConfig, $searchSettings, $iishConfig);
         $this->serviceLocator = $serviceLocator;
         $this->siteURL = $serviceLocator->get('VuFind\Config')->get('config')->Site->url;
@@ -48,7 +52,8 @@ class SolrEad extends SolrMarc {
      *
      * @return string|null The period.
      */
-    public function getPeriod() {
+    public function getPeriod()
+    {
         $period = $this->getFieldArray('245', array('g'), false);
         $period = count($period) > 0 ? $period[0] : null;
 
@@ -60,19 +65,23 @@ class SolrEad extends SolrMarc {
      *
      * @return string|null The summary.
      */
-    public function getSummary() {
+    public function getSummary()
+    {
         $summary = parent::getSummary();
 
         return (count($summary) > 0) ? $summary[0] : null;
     }
 
     /**
-     * Get an identifier for this record hashed using the MD5 algorithm.
+     * Check for a pdf. Either it is on file, or it is not.
      *
-     * @return string An MD5 identifier.
+     * @return true or false
      */
-    public function getMD5Identifier() {
-        return md5($this->getUniqueID() . '_ead');
+    public function getPDF()
+    {
+        $fileService = new File();
+        $fileService->setFilename($this->getUniqueID() . '.pdf');
+        return $fileService->getFile();
     }
 
     /**
@@ -80,7 +89,8 @@ class SolrEad extends SolrMarc {
      *
      * @return \DOMDocument The EAD record.
      */
-    public function getEAD() {
+    public function getEAD()
+    {
         if ($this->ead === null) {
             $oai = new OAI($this->serviceLocator);
             $oai->setId($this->getUniqueID());
@@ -100,15 +110,16 @@ class SolrEad extends SolrMarc {
      *
      * @return string The resulting view.
      */
-    public function getViewForXSLT($name) {
+    public function getViewForXSLT($name)
+    {
         $xslt = new XSLTProcessor(
             $this->serviceLocator,
             $this->getEAD(),
             'record-ead-' . $name . '.xsl',
             array(
-                'action'  => $name,
+                'action' => $name,
                 'baseUrl' => $this->siteURL . '/Record/' . $this->getUniqueID(),
-                'title'   => $this->getTitle(),
+                'title' => $this->getTitle(),
             )
         );
 

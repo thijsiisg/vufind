@@ -27,7 +27,7 @@ $config = array(
         ),
         'invokables' => array(
             'cover'      => 'IISH\Controller\CoverController',
-            'file'        => 'IISH\Controller\FileController',
+            'file'       => 'IISH\Controller\FileController',
             'harvest'    => 'IISH\Controller\HarvestController',
             'iish'       => 'IISH\Controller\IISHController',
             'navigation' => 'IISH\Controller\NavigationController',
