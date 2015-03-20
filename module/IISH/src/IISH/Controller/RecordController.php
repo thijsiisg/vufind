@@ -64,7 +64,7 @@ class RecordController extends VuFindRecordController {
                 case 'eci':
                     return $this->exportFromOAI($format);
                 case 'pdf':
-                    return $this->exportToPDF();
+                    break;
             }
         }
 
@@ -89,15 +89,4 @@ class RecordController extends VuFindRecordController {
         return $this->redirect()->toUrl($url);
     }
 
-    /**
-     * Export to PDF.
-     * PDFs are already created, so just create the redirect link to find them.
-     *
-     * @return \Zend\Http\Response
-     */
-    private function exportToPDF() {
-        $driver = $this->loadRecord();
-        $url = $this->url()->fromRoute('home') . 'File?filename=' . $driver->getUniqueID() . '.pdf&contentType=application/pdf';
-        return $this->redirect()->toUrl($url);
-    }
 }
