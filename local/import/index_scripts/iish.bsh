@@ -27,6 +27,9 @@ import java.text.Normalizer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import java.net.URL;
+import java.net.URLConnection;
+
 import org.apache.log4j.Logger;
 
 // define the base level indexer so that its methods can be called from the script.
@@ -211,12 +214,16 @@ public String getAllSearchableFields(Record record, String lowerBoundStr, String
 }
 
 private Document loadDocument(String url) throws Exception {
+    final URL oai_url = new URL(url);
+    final URLConnection connection = oai_url.openConnection();
+    connection.setConnectTimeout(10000); // 10 seconds is long enough
+
     DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     dbf.setIgnoringComments(true);
     dbf.setNamespaceAware(true);
     dbf.setValidating(false);
     DocumentBuilder db = dbf.newDocumentBuilder();
-    return db.parse(url);
+    return db.parse(connection.getInputStream());
 }
 
 
