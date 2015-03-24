@@ -8,9 +8,10 @@
 #-----------------------------------------------------------------------------------------------------------------------
 # Get the setSpec argument
 #-----------------------------------------------------------------------------------------------------------------------
+cd /var/www/vufind/import
 set_spec=$1
 if [ -z "$set_spec" ] ; then
-	echo "No setspec given as argument. Usage: ./harvest-marc.sh set_spec from [optional datestamp YYYY-MM-DD ]"
+	echo "No setspec given as argument. Usage: ./harvest-marc.sh set_spec from [optional datestamp YYYY-MM-DD]"
 	exit -1
 fi
 
