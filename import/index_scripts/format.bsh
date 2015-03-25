@@ -19,6 +19,7 @@ public Set getFormat(Record record){
     Set result = new LinkedHashSet();
     String leader = record.getLeader().toString();
     char leaderBit;
+    char leaderBit;
     ControlField fixedField = (ControlField) record.getVariableField("008");
     DataField title = (DataField) record.getVariableField("245");
     String formatString;

@@ -59,7 +59,7 @@ public Set getFormat(Record record) {
     String leader = record.getLeader().toString();
 
     // example leader
-    // 00427nam a22001330a 45a0
+    // 00620ngm a22     7a 4500
     String format = leader.substring(6, 8).toLowerCase();
     if (format.equals("ab"))
         result.add(AB);
