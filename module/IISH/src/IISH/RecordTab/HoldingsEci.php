@@ -4,7 +4,7 @@ use VuFind\RecordTab\AbstractBase;
 
 /**
  * Holdings tab for ECI records.
- *
+ * 
  * @package IISH\RecordTab
  */
 class HoldingsECI extends AbstractBase {
