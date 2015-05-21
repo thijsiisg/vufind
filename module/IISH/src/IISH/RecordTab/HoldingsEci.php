@@ -7,7 +7,7 @@ use VuFind\RecordTab\AbstractBase;
  *
  * @package IISH\RecordTab
  */
-class HoldingsEci extends AbstractBase {
+class HoldingsECI extends AbstractBase {
 
     /**
      * Get the on-screen description for this tab.
