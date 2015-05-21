@@ -41,7 +41,7 @@
         <? endif; ?>
 
         <? $summDate = $this->driver->getPublicationDates(); if (!empty($summDate)): ?>
-          <?=$this->transEsc('Published') . ' ' . $this->escapeHtml($summDate[0])?>
+          <?=$this->escapeHtml($summDate[0])?>
           <br/>
         <? endif; ?>
       </div>
@@ -107,7 +107,7 @@
 
       <? if ($this->userlist()->getMode() !== 'disabled'): ?>
         <? /* Add to favorites */ ?>
-        <i class="fa fa-heart"></i> <a href="<?=$this->recordLink()->getActionUrl($this->driver, 'Save')?>" class="save-record modal-link" id="<?=$this->driver->getUniqueId() ?>" title="<?=$this->transEsc('Add to favorites')?>"><?=$this->transEsc('Add to favorites')?></a><br/>
+        <a href="<?=$this->recordLink()->getActionUrl($this->driver, 'Save')?>" class="save-record modal-link" id="<?=$this->driver->getUniqueId() ?>" title="<?=$this->transEsc('Add to favorites')?>"><?=$this->transEsc('Add to favorites')?></a><br/>
 
         <? /* Saved lists */ ?>
         <div class="savedLists alert alert-info hidden">
