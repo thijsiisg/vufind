@@ -420,11 +420,10 @@
 
   <requestHandler name="morelikethis" class="solr.MoreLikeThisHandler">
     <lst name="defaults">
-      <str name="mlt.fl">title,title_short,callnumber-label,topic,language,author,publishDate</str>
-      <str name="mlt.qf">
+      <str name="mlt.fl">title,title_short,topic,language,author,publishDate</str> <!--callnumber-label-->
+      <str name="mlt.qf"> <!--callnumber-label^400-->
         title^75
         title_short^100
-        callnumber-label^400
         topic^300
         language^30
         author^75
