@@ -1,7 +1,9 @@
 <?
 // Make sure we the Visual Mets stylesheet comes FIRST.
 // It contains Bootstrap 2.x styling, which overrides VuFinds Bootstrap 3.x styling and we don't want that.
-$this->headLink()->offsetSetStylesheet(10, $this->visualmetsUrl . '/resources/css/themes/iisg/style.css?_=2.1', 'all');
+// $this->headLink()->offsetSetStylesheet(10, $this->visualmetsUrl . '/resources/css/themes/iisg/style.css?_=2.1', 'all');
+// Now make use of the css version without the Bootstrap styling
+$this->headLink()->offsetSetStylesheet(10, 'visualmets.css', 'all');
 // And now make sure our main related stylesheet has a lower offset.
 $this->headLink()->offsetSetStylesheet(20, 'compiled.css', 'all');
 // Do the same for the print stylesheet.
@@ -14,8 +16,6 @@ $this->jsobject()->addProps(array(
   'rows' => $this->visualmetsRows
 ));
 $this->headScript()->appendScript($this->jsobject()->getScript('visualMets'));
-
-/* TODO: $this->headScript()->appendFile($this->visualmetsUrl . '/resources/js/mets2viewer.min.js'); */
 $this->headScript()->appendFile('mets2viewer.min.js');
 
 $this->headScript()->appendFile('visual-mets/' . $this->layout()->userLang . '.lang.js');
