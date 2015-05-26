@@ -140,7 +140,7 @@ $facetListForArchives = is_object($this->resultsForArchives) ? $this->resultsFor
     <div class="search-cloud">
       <? foreach($this->searchStats as $stat): ?>
         <? if ($stat['value'] !== '(empty)'): ?>
-          <a href="" rel="<?=$stat['count']?>"><?=$stat['value']?></a>
+          <a href="<?=$this->url('search-results') . '?lookfor=' . urlencode($stat['value']) ?>" rel="<?=$stat['count']?>"><?=$stat['value']?></a>
         <? endif; ?>
       <? endforeach; ?>
     </div>
