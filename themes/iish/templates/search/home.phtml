@@ -16,6 +16,10 @@
   $advSearch = $options->getAdvancedSearchAction();
 
   $this->layout()->breadcrumbs = false;
+
+  $this->headLink()->appendStylesheet('../vendor/jqcloud2/dist/jqcloud.min.css');
+  $this->headScript()->appendFile('../vendor/jqcloud2/dist/jqcloud.min.js');
+  $this->headScript()->appendFile('home.js');
 ?>
 
 <div class="searchHomeContent">
@@ -85,14 +89,11 @@ $facetListForArchives = is_object($this->resultsForArchives) ? $this->resultsFor
     <? endforeach; ?>
     <? foreach ($facetListForArchives as $field => $details): ?>
       <? $sortedList = $this->sortFacetList($this->resultsForArchives, $field, $details['list'], $basicSearch); ?>
-      <div class="<?=$field=='geographic_facet' ? 'col-sm-6' : 'col-sm-3' ?>">
+      <div class="col-sm-3">
         <p class="lead"><?=$this->transEsc('home_browse_archives') . ' ' . strtolower($this->transEsc($details['label']))?></p>
         <div class="row facetList">
           <?
           $listColClass = 'col-sm-12';
-          if ($field == "geographic_facet") {
-            $listColClass = 'col-sm-6';
-          }
           if ($field == "alphabetical_facet") {
             $listColClass = 'col-xs-6';
           }
@@ -133,5 +134,15 @@ $facetListForArchives = is_object($this->resultsForArchives) ? $this->resultsFor
         </div>
       </div>
   <? endforeach; ?>
+
+  <div class="col-sm-3">
+    <p class="lead"><?=$this->transEsc('Popular searches')?></p>
+    <div class="search-cloud">
+      <? foreach($this->searchStats as $stat): ?>
+        <? if ($stat['value'] !== '(empty)'): ?>
+          <a href="" rel="<?=$stat['count']?>"><?=$stat['value']?></a>
+        <? endif; ?>
+      <? endforeach; ?>
+    </div>
   </div>
 <? endif; ?>

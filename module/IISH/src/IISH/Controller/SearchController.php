@@ -1,5 +1,6 @@
 <?php
 namespace IISH\Controller;
+use IISH\Statistics\SearchStatistics;
 use IISH\MessageOfTheDay\Loader as MOTDLoader;
 use VuFind\Controller\SearchController as VuFindSearchController;
 
@@ -23,6 +24,10 @@ class SearchController extends VuFindSearchController {
         // Obtain the 'message of the day' and add it to the view model
         $motdLoader = new MOTDLoader($this->getServiceLocator());
         $viewModel->messageOfTheDay = $motdLoader->getMessageOfTheDay();
+
+        // Obtain the top searches and add it to the view model
+        $searchStats = new SearchStatistics($this->getServiceLocator());
+        $viewModel->searchStats = $searchStats->getStats();
 
         // Add archives facets
         $viewModel->resultsForArchives = $this->getHomePageFacetsForArchives();

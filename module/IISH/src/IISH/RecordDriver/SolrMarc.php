@@ -36,6 +36,16 @@ class SolrMarc extends VuFindSolrMarc {
     }
 
     /**
+     * Get the main author of the record.
+     * Override to normalize the value.
+     *
+     * @return string
+     */
+    public function getPrimaryAuthor() {
+        return self::normalize(parent::getPrimaryAuthor());
+    }
+
+    /**
      * Get the short (pre-subtitle) title of the record.
      * If the title ends with a single character, remove it. (Usually /)
      *
@@ -145,8 +155,8 @@ class SolrMarc extends VuFindSolrMarc {
      * If a subfield is given, the value is matched with the value of the given subfield.
      * Otherwise the first subfield (a) is used instead.
      *
-     * @param string      $field    The MARC field
-     * @param string|null $value    The value of the given subfield for matching
+     * @param string $field The MARC field
+     * @param string|null $value The value of the given subfield for matching
      * @param string|null $subfield The MARC subfield
      *
      * @return string|null The authority or null if not found
@@ -169,7 +179,7 @@ class SolrMarc extends VuFindSolrMarc {
      * Tries to find the values and the authorities for the specified MARC field.
      * If no subfield is given, the first subfield (a) is used instead.
      *
-     * @param string      $field    The MARC field
+     * @param string $field The MARC field
      * @param string|null $subfield The MARC subfield
      *
      * @return array|null An array with the 'value' and the 'authority'
@@ -607,7 +617,7 @@ class SolrMarc extends VuFindSolrMarc {
     private function normalize($text) {
         $text = trim($text);
         $i = strlen($text) - 1;
-        if ($text[$i] === '.' || $text[$i] === ',') {
+        if (($i >= 0) && (($text[$i] === '.') || ($text[$i] === ','))) {
             $text = substr($text, 0, $i);
         }
 
