@@ -43,7 +43,9 @@ class SearchController extends VuFindSearchController {
      * @return mixed
      */
     public function resultsAction() {
-        $this->getRequest()->getQuery()->set('facetSort', 'index');
+        if ($this->getRequest()->getQuery()->get('facetSort') === null) {
+            $this->getRequest()->getQuery()->set('facetSort', 'index');
+        }
 
         return parent::resultsAction();
     }

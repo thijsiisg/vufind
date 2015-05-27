@@ -2,6 +2,19 @@
 <? if ($results->getResultTotal() > 0): ?>
   <h4><?=$this->transEsc(isset($this->overrideSideFacetCaption) ? $this->overrideSideFacetCaption : 'Narrow Search')?></h4>
 <? endif; ?>
+
+<? if ($results->getUrlQuery() instanceof \IISH\Search\UrlQueryHelper): ?>
+  <button class="btn btn-primary btn-sm <?=$results->getUrlQuery()->getFacetSort() === 'count' ? 'active' : ''?>"
+          onclick="document.location.href='<?=$this->currentPath().$results->getUrlQuery()->setFacetSortCount()?>'">
+    <?=$this->transEsc('FacetSortCount')?>
+  </button>
+
+  <button class="btn btn-primary btn-sm <?=$results->getUrlQuery()->getFacetSort() === 'index' ? 'active' : ''?>"
+          onclick="document.location.href='<?=$this->currentPath().$results->getUrlQuery()->setFacetSortIndex()?>'">
+    <?=$this->transEsc('FacetSortIndex')?>
+  </button>
+<? endif; ?>
+
 <? $checkboxFilters = $results->getParams()->getCheckboxFacets(); if (count($checkboxFilters) > 0): ?>
 <?
   $html = '';

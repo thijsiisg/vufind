@@ -39,4 +39,13 @@ class Params extends VuFindParams {
     public function initNewItemFacets() {
         $this->addFacet('format', 'Format');
     }
+
+    /**
+     * Get Facet Sorting.
+     *
+     * @return string The sorting action value.
+     */
+    public function getFacetSort() {
+        return $this->facetSort;
+    }
 }

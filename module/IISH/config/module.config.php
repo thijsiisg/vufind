@@ -75,6 +75,12 @@ $config = array(
             'search_params'  => array(
                 'abstract_factories' => array('IISH\Search\Params\PluginFactory'),
             ),
+            'search_results' => array(
+                'abstract_factories' => array('IISH\Search\Results\PluginFactory'),
+                'factories' => array(
+                    'solr' => 'IISH\Search\Results\Factory::getSolr',
+                ),
+            ),
         ),
         'recorddriver_tabs' => array(
             'IISH\RecordDriver\SolrMarc' => array(
