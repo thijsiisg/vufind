@@ -1,2 +1,26 @@
 <? $this->headTitle($this->translate('Holdings') . ': ' . $this->driver->getBreadcrumb()); ?>
+
+<? if ($this->usertags()->getMode() !== 'disabled'): ?>
+  <? $tagList = $this->driver->getTags(); ?>
+  <div class="tags">
+    <h4><?=$this->transEsc('Tags')?></h4>
+
+    <div class="row">
+      <div class="col-sm-6">
+        <span class="pull-right hidden-print">
+          <i class="fa fa-plus"></i> <a id="tagRecord" class="modal-link" href="<?=$this->recordLink()->getActionUrl($this->driver, 'AddTag')?>" title="<?=$this->transEsc('Add Tag')?>"><?=$this->transEsc('Add Tag')?></a>
+        </span>
+
+        <div id="tagList">
+          <? if (count($tagList) > 0): ?>
+            <? $i = 0; foreach ($tagList as $tag): ?><?=($i++ == 0)?'':', '?><a href="<?=$this->url('tag-home')?>?lookfor=<?=urlencode($tag->tag)?>"><?=$this->escapeHtml($tag->tag)?></a> (<?=$this->escapeHtml($tag->cnt)?>)<? endforeach; ?>
+          <? else: ?>
+            <?=$this->transEsc('No Tags')?>, <?=$this->transEsc('Be the first to tag this record')?>!
+          <? endif; ?>
+        </div>
+      </div>
+    </div>
+  </div>
+<? endif; ?>
+
 <?=$this->driver->getDetailsViewFromXSLT()?>
