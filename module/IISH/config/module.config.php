@@ -41,6 +41,11 @@ $config = array(
     ),
     'vufind'          => array(
         'plugin_managers'   => array(
+            'auth'           => array(
+                'invokables' => array(
+                    'multiauth' => 'IISH\Auth\MultiAuth'
+                ),
+            ),
             'content_covers' => array(
                 'factories' => array(
                     'iish' => 'IISH\Content\Covers\Factory::getIISH',
