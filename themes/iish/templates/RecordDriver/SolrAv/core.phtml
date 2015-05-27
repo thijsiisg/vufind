@@ -103,8 +103,9 @@ if ($this->driver->getDownloadable() && ($this->driver->hasVideo() || $this->dri
           <tr>
             <th><?=$this->transEsc($role)?>:</th>
             <td>
+              <? $link = trim(strtolower($role)) === 'collector' ? 'collector' : 'author'; ?>
               <? foreach($authorGroup as $author): ?>
-                <a href="<?=$this->record($this->driver)->getLink('author', $author['link'])?>">
+                <a href="<?=$this->record($this->driver)->getLink($link, $author['link'])?>">
                   <?=$this->escapeHtml($author['name'])?>
                 </a>
                 <br/>
@@ -409,41 +410,19 @@ if ($this->driver->getDownloadable() && ($this->driver->hasVideo() || $this->dri
       </tr>
       <? endif; ?>
 
-      <? $coreClassification = $this->driver->getCoreClassification(); if (!empty($coreClassification) && isset($coreClassification[1])): ?>
-        <tr valign="top">
+      <? $classifications = $this->driver->getClassifications(); if (count($classifications) > 0): ?>
+        <tr>
           <th><?=$this->transEsc('Classification')?>: </th>
           <td>
-            <a href="<?=$this->record($this->driver)->getLink('lookfor', $coreClassification[1])?>"><?=$this->escapeHtml($coreClassification[1])?></a>
-          </td>
-        </tr>
-      <? endif; ?>
-
-      <? $collector = $this->driver->getCollector(); if (!empty($collector)): ?>
-        <tr valign="top">
-          <th><?=$this->transEsc('Collector')?>: </th>
-          <td>
-            <? if (is_array($collector)): ?>
-              <? foreach ($collector as $field): ?>
-                <a href="<?=$this->record($this->driver)->getLink('collector', $field)?>"><?=$this->transEsc($field)?></a>
-              <? endforeach; ?>
-            <? else: ?>
-              <a href="<?=$this->record($this->driver)->getLink('collector', $collector)?>"><?=$this->transEsc($collector)?></a>
-            <? endif; ?>
-          </td>
-        </tr>
-      <? endif; ?>
-
-      <? $collector = $this->driver->getCollector(); if (!empty($collector)): ?>
-        <tr valign="top">
-          <th><?=$this->transEsc('Collector')?>: </th>
-          <td>
-            <? if (is_array($collector)): ?>
-              <? foreach ($collector as $field): ?>
-                <a href="<?=$this->record($this->driver)->getLink('collector', $field)?>"><?=$this->escapeHtml($field)?></a>
-              <? endforeach; ?>
-            <? else: ?>
-              <a href="<?=$this->record($this->driver)->getLink('collector', $collector)?>"><?=$this->escapeHtml($collector)?></a>
-            <? endif; ?>
+            <? foreach ($classifications as $classification): ?>
+              <a href="<?=$this->record($this->driver)->getLink('classification', $classification['code'])?>"><?=$this->escapeHtml($classification['code'])?></a>
+              <? if (($this->layout()->userLang === 'nl') && ($classification['dutch'] !== null)): ?>
+                (<?=$classification['dutch']?>)
+              <? elseif ($classification['english'] !== null): ?>
+                (<?=$classification['english']?>)
+              <? endif; ?>
+              <br/>
+            <? endforeach; ?>
           </td>
         </tr>
       <? endif; ?>

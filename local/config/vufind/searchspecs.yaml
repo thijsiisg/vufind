@@ -573,6 +573,18 @@ oclc_num:
       - [oclc_num, ~]
 
 Collector:
+  DismaxFields:
+    - collector^50
+    - collector_facet
   QueryFields:
-    - collector:
+    collector:
+      - [and, 50]
+    collector_facet:
+      - [and, ~]
+
+Classification:
+  DismaxFields:
+     - classification
+  QueryFields:
+    classification:
       - [and, ~]

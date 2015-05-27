@@ -88,7 +88,7 @@ class SolrMarc extends VuFindSolrMarc {
      */
     public function getCollector() {
         if (isset($this->fields['collector'])) {
-            return $this->fields['collector'];
+            return self::normalize($this->fields['collector']);
         }
 
         return null;
@@ -155,8 +155,8 @@ class SolrMarc extends VuFindSolrMarc {
      * If a subfield is given, the value is matched with the value of the given subfield.
      * Otherwise the first subfield (a) is used instead.
      *
-     * @param string $field The MARC field
-     * @param string|null $value The value of the given subfield for matching
+     * @param string      $field    The MARC field
+     * @param string|null $value    The value of the given subfield for matching
      * @param string|null $subfield The MARC subfield
      *
      * @return string|null The authority or null if not found
@@ -179,7 +179,7 @@ class SolrMarc extends VuFindSolrMarc {
      * Tries to find the values and the authorities for the specified MARC field.
      * If no subfield is given, the first subfield (a) is used instead.
      *
-     * @param string $field The MARC field
+     * @param string      $field    The MARC field
      * @param string|null $subfield The MARC subfield
      *
      * @return array|null An array with the 'value' and the 'authority'
@@ -370,32 +370,32 @@ class SolrMarc extends VuFindSolrMarc {
     }
 
     /**
-     * Returns the core classification.
+     * Returns the classifications.
      *
-     * @return array|null The core classification.
+     * @return array|null The classifications.
      */
-    public function getCoreClassification() {
-        $classifications = $this->marcRecord->getFields('690');
-        if ($classifications) {
-            foreach ($classifications as $classification) {
-                // Is there an address in the current field?
-                $marcA = $classification->getSubfield('a');
-                $marcB = $classification->getSubfield('b');
-                if ($marcA != null || $marcB != null) {
-                    $c = array();
-                    if ($marcA) {
-                        $c[] = $marcA->getData();
-                    }
-                    if ($marcB) {
-                        $c[] = $marcB->getData();
-                    }
+    public function getClassifications() {
+        $classifications = array();
 
-                    return $c;
+        $marcClassifications = $this->marcRecord->getFields('690');
+        if ($marcClassifications) {
+            foreach ($marcClassifications as $classification) {
+                // Is there an address in the current field?
+                $code = $classification->getSubfield('a');
+                if ($code !== null) {
+                    $english = $classification->getSubfield('b');
+                    $dutch = $classification->getSubfield('c');
+
+                    $classifications[] = array(
+                        'code'    => $code->getData(),
+                        'english' => ($english !== null) ? $english->getData() : null,
+                        'dutch'   => ($dutch !== null) ? $dutch->getData() : null
+                    );
                 }
             }
         }
 
-        return null;
+        return $classifications;
     }
 
     /**

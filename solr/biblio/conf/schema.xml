@@ -3,12 +3,6 @@
   <types>
     <!-- Define fieldType long as it is needed by the _version_ field required by Solr 4.x -->
     <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>
-    <fieldType name="stringPunctuation" class="solr.TextField" sortMissingLast="true" omitNorms="true">
-      <analyzer>
-        <tokenizer class="solr.KeywordTokenizerFactory"/>
-        <filter class="solr.PatternReplaceFilterFactory" pattern="([,])$" replacement="." replace="first"/>
-      </analyzer>
-    </fieldType>
     <fieldType name="string" class="solr.StrField" sortMissingLast="true" omitNorms="true"/>
     <fieldType name="textFacet" class="solr.TextField" sortMissingLast="true" omitNorms="true">
       <analyzer>
@@ -192,10 +186,13 @@
    <!-- Fields added by the IISH -->
    <field name="pid" type="string" indexed="true" stored="false"/>
    <field name="downloadable" type="boolean" indexed="true" stored="true" multiValued="false"/>
-   <field name="collector" type="string" indexed="true" stored="true"/>
-   <field name="collector_facet" type="stringPunctuation" indexed="true" stored="true"/>
+   <field name="collector" type="textProper" indexed="true" stored="true"/>
+   <field name="classification" type="textProper" indexed="true" stored="true" multiValued="true"/>
+   <field name="collector_facet" type="textFacet" indexed="true" stored="true"/>
    <field name="authority_facet" type="textFacetRaw" indexed="true" stored="true" multiValued="true"/>
    <field name="alphabetical_facet" type="textFacet" indexed="true" stored="true" multiValued="false"/>
+   <field name="av_topic_facet" type="textFacet" indexed="true" stored="true" multiValued="true"/>
+   <field name="archieven_topic_facet" type="textFacet" indexed="true" stored="true" multiValued="true"/>
    <!-- Container fields (i.e. for describing journal containing an article) -->
    <field name="container_title" type="text" indexed="true" stored="true"/>
    <field name="container_volume" type="text" indexed="true" stored="true"/>

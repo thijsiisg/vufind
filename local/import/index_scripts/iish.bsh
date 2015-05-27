@@ -264,7 +264,7 @@ public String getCollector(Record record) {
         Subfield subfield_a = datafield.getSubfield('a');
         Subfield subfield_e = datafield.getSubfield('e');
         
-        if (subfield_a != null && subfield_e != null && subfield_e.getData().equals("collector")) {
+        if (subfield_a != null && subfield_e != null && subfield_e.getData().startsWith("collector")) {
             return subfield_a.getData();
         }
     }
