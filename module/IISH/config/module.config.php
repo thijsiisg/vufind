@@ -26,16 +26,18 @@ $config = array(
             'record' => 'IISH\Controller\Factory::getRecordController',
         ),
         'invokables' => array(
-            'cover'      => 'IISH\Controller\CoverController',
-            'file'       => 'IISH\Controller\FileController',
-            'harvest'    => 'IISH\Controller\HarvestController',
-            'iish'       => 'IISH\Controller\IISHController',
-            'navigation' => 'IISH\Controller\NavigationController',
-            'search'     => 'IISH\Controller\SearchController',
+            'cover'       => 'IISH\Controller\CoverController',
+            'file'        => 'IISH\Controller\FileController',
+            'harvest'     => 'IISH\Controller\HarvestController',
+            'iish'        => 'IISH\Controller\IISHController',
+            'my-research' => 'IISH\Controller\MyResearchController',
+            'navigation'  => 'IISH\Controller\NavigationController',
+            'search'      => 'IISH\Controller\SearchController',
         ),
     ),
     'service_manager' => array(
         'factories' => array(
+            'VuFind\AuthManager'  => 'IISH\Auth\Factory::getManager',
             'VuFind\CacheManager' => 'IISH\Service\Factory::getCacheManager',
         ),
     ),
@@ -77,7 +79,7 @@ $config = array(
             ),
             'search_results' => array(
                 'abstract_factories' => array('IISH\Search\Results\PluginFactory'),
-                'factories' => array(
+                'factories'          => array(
                     'solr' => 'IISH\Search\Results\Factory::getSolr',
                 ),
             ),
