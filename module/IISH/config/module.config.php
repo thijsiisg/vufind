@@ -45,6 +45,7 @@ $config = array(
         'plugin_managers'   => array(
             'auth'           => array(
                 'invokables' => array(
+                    'ldap'      => 'IISH\Auth\LDAP',
                     'multiauth' => 'IISH\Auth\MultiAuth'
                 ),
             ),
