@@ -94,26 +94,29 @@ $facetListForArchives = is_object($this->resultsForArchives) ? $this->resultsFor
         <div class="row facetList">
           <?
           $listColClass = 'col-sm-12';
-          if ($field == "alphabetical_facet") {
+          if ($field === 'alphabetical_facet') {
             $listColClass = 'col-xs-6';
           }
+
+          $listColClassStart = $listColClass;
+          if ($field === 'geographic_facet') {
+            $listColClassStart .= ' show-minimal';
+          }
           ?>
-          <ul class="list-unstyled <?=$listColClass?>">
+          <ul class="list-unstyled <?=$listColClassStart?>">
             <? /* Special case: two columns for geographic facets and alphabetical facet... */ ?>
-            <? if ($field == "geographic_facet" || $field == "alphabetical_facet"): ?>
-            <? $half = ceil(count($sortedList)/2); ?>
-            <? $i = 0; foreach ($sortedList as $url => $value): ?>
-            <? if (!empty($value)): ?>
-              <li><a href="<?=$url?>"><?=$this->escapeHtml($value)?></a></li>
-            <? else: $i--; ?>
-            <? endif; ?>
-            <? if (++$i == $half): ?>
-          </ul>
-          <ul class="list-unstyled col-sm-6">
-            <? endif; ?>
-            <? endforeach; ?>
+            <? if ($field === 'alphabetical_facet'): ?>
+              <? $half = ceil(count($sortedList)/2); ?>
+              <? $i = 0; foreach ($sortedList as $url => $value): ?>
+                <? if (!empty($value)): ?>
+                  <li><a href="<?=$url?>"><?=$this->escapeHtml($value)?></a></li>
+                <? else: $i--; endif; ?>
+                <? if (++$i == $half): ?>
+                  </ul><ul class="list-unstyled col-sm-6">
+                <? endif; ?>
+              <? endforeach; ?>
             <? /* Special case: collections */ ?>
-            <? elseif ($field == 'hierarchy_top_title'): ?>
+            <? elseif ($field === 'hierarchy_top_title'): ?>
               <? $i = 0; foreach ($sortedList as $url => $value): ?>
                 <? if (++$i > 10): ?>
                   <li><a href="<?=$this->url('collections-home')?>"><strong><?=$this->transEsc("More options")?>...</strong></a></li>
@@ -122,18 +125,39 @@ $facetListForArchives = is_object($this->resultsForArchives) ? $this->resultsFor
                   <li><a href="<?=$this->url('collections-bytitle')?>?title=<?=urlencode($value)?>"><?=$this->escapeHtml($value)?></a></li>
                 <? endif; ?>
               <? endforeach; ?>
+            <? /* Special case: browse archives by region */ ?>
+            <? elseif ($field === 'geographic_facet'): ?>
+              <? $i = 0; foreach ($sortedList as $url => $value): ?>
+                <? if (!empty($value)):?>
+                  <li><a href="<?=$url?>"><?=$this->escapeHtml($value)?></a></li>
+                  <? if (++$i > 9): ?>
+                    <br/>
+                    <li><a class="toggle-more" href="#"><strong><?=$this->transEsc('More options')?></strong></a></li>
+                    <? break; ?>
+                  <? endif; ?>
+                <? else: $i--; endif; ?>
+              <? endforeach; ?>
+
+              </ul><ul class="list-unstyled <?=$listColClass?> show-all hidden">
+              <? $i = 0; foreach ($sortedList as $url => $value): ?>
+                <? if (!empty($value)): ?>
+                  <li><a href="<?=$url?>"><?=$this->escapeHtml($value)?></a></li>
+                <? else: $i--; endif; ?>
+              <? endforeach; ?>
+
+              <br/>
+              <li><a class="toggle-less" href="#"><strong><?=$this->transEsc('Less options')?></strong></a></li>
             <? else: ?>
               <? $i = 0; foreach ($sortedList as $url => $value): ?>
                 <? if (!empty($value)): ?>
                   <li><a href="<?=$url?>"><?=$this->escapeHtml($value)?></a></li>
-                <? else: $i--; ?>
-                <? endif; ?>
+                <? else: $i--; endif; ?>
               <? endforeach; ?>
             <? endif; ?>
-          </ul>
+            </ul>
+          </div>
         </div>
-      </div>
-  <? endforeach; ?>
+    <? endforeach; ?>
 
   <div class="col-sm-3">
     <p class="lead"><?=$this->transEsc('Popular searches')?></p>
