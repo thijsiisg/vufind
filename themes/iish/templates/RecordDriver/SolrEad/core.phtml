@@ -38,9 +38,9 @@ $this->headScript()->appendFile('visual-mets.js');
       </div>
     <? endif; ?>
 
-    <?/* Display Main Details */?>
-    <table class="table table-striped" summary="<?=$this->transEsc('Bibliographic Details')?>">
-      <? if ($this->usertags()->getMode() !== 'disabled'): ?>
+    <?/* Display Main Details (Only if tags are enabled) */?>
+    <? if ($this->usertags()->getMode() !== 'disabled'): ?>
+      <table class="table table-striped" summary="<?=$this->transEsc('Bibliographic Details')?>">
         <? $tagList = $this->driver->getTags(); ?>
         <tr>
           <th><?=$this->transEsc('Tags')?>: </th>
@@ -57,8 +57,8 @@ $this->headScript()->appendFile('visual-mets.js');
             </div>
           </td>
         </tr>
-      <? endif; ?>
-    </table>
+      </table>
+    <? endif; ?>
     <?/* End Main Details */?>
   </div>
 </div>
