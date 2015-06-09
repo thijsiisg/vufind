@@ -15,7 +15,7 @@ class ArchiveAppendices extends ArchiveBase {
      * @return string The description.
      */
     public function getDescription() {
-        return 'Appendices';
+        return 'ArchiveAppendices';
     }
 
     /**

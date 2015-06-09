@@ -14,6 +14,6 @@ class ArchiveCollectionSummary extends ArchiveBase {
      * @return string The description.
      */
     public function getDescription() {
-        return 'Collection Summary';
+        return 'ArchiveCollectionSummary';
     }
 }
