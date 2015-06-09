@@ -90,7 +90,7 @@ $facetListForArchives = is_object($this->resultsForArchives) ? $this->resultsFor
     <? foreach ($facetListForArchives as $field => $details): ?>
       <? $sortedList = $this->sortFacetList($this->resultsForArchives, $field, $details['list'], $basicSearch); ?>
       <div class="col-sm-3">
-        <p class="lead <?=$this->layout()->userLang?>"><?=$this->transEsc('home_browse_archives') . ' ' . strtolower($this->transEsc($details['label']))?></p>
+        <p class="lead <?=$this->layout()->userLang?>"><?=$this->transEsc('home_browse_archives') . ' ' . $this->transEsc($details['label'])?></p>
         <div class="row facetList">
           <?
           $listColClass = 'col-sm-12';
