@@ -1,3 +1,5 @@
+<? $this->headTitle($this->translate('About')); ?>
+
 <h2><?= $this->transEsc('About') ?></h2>
 
 <? if ($this->layout()->userLang === 'nl'): ?>
@@ -17,17 +19,35 @@
   <p>
     <b>
       <a href="<?= $this->url('search-results') . '?' .
+      http_build_query(array('type' => 'AllFields', 'filter[]' => 'format:"Archives"')); ?>">Archieven</a></b>
+    – beschrijvingen en
+    inventarissen van alle archiefcollecties van het IISG, NEHA en Persmuseum. <br/>
+    De Nederlandse archieven zijn voorzien van een korte beschrijving in het Nederlands, de buitenlandse
+    archieven hebben alleen een korte beschrijving in het Engels.<br/>
+    Van ruim 1200 archieven is eveneens een inventaris beschikbaar. De taal van de inventaris hangt af van het
+    land van herkomst van het archief en kan Nederlands, Engels, Duits, Frans of
+    Spaans zijn.<br/>
+    Meer informatie over de archieven:
+    <a href="http://socialhistory.org/nl/archieven">socialhistory.org/nl/archieven</a>.
+  </p>
+
+  <p>
+    <b>
+      <a href="<?=
+      $this->url('search-results') . '?' .
       http_build_query(array('type' => 'AllFields', 'filter[]' => 'format:"Articles"')); ?>">Artikelen</a></b>
-    van de volgende tijdschriften zijn online te raadplegen:<br/>
-    International Review of Social History, 1936-1939<br/>
-    Bulletin of the International Institute for Social History, 1937-1955<br/>
-    International Review of Social History, 1956-2009<br/>
-    Economisch-Historisch Jaarboek, 1915-1970<br/>
-    Economisch- en Sociaal-Historisch Jaarboek, 1970-1993<br/>
-    NEHA-Bulletin. Orgaan ten behoeve van de economische geschiedenis in Nederland, 1987-2003<br/>
-    Jaarboek voor de Geschiedenis van Bedrijf en Techniek, 1984-1993<br/>
-    Economic and Social History in the Netherlands, 1989-1996<br/>
-    NEHA-Jaarboek voor economische, bedrijfs- en techniekgeschiedenis, 1994-2003.
+    - van de volgende tijdschriften zijn online te raadplegen:<br/>
+    <ul>
+      <li>International Review of Social History, 1936-1939</li>
+      <li>Bulletin of the International Institute for Social History, 1937-1955</li>
+      <li>International Review of Social History, 1956-2009</li>
+      <li>Economisch-Historisch Jaarboek, 1915-1970</li>
+      <li>Economisch- en Sociaal-Historisch Jaarboek, 1970-1993</li>
+      <li>NEHA-Bulletin. Orgaan ten behoeve van de economische geschiedenis in Nederland, 1987-2003</li>
+      <li>Jaarboek voor de Geschiedenis van Bedrijf en Techniek, 1984-1993</li>
+      <li>Economic and Social History in the Netherlands, 1989-1996</li>
+      <li>NEHA-Jaarboek voor economische, bedrijfs- en techniekgeschiedenis, 1994-2003</li>
+    </ul>
   </p>
 
   <p>
@@ -109,18 +129,21 @@
     More information: <a href="http://socialhistory.org/en/archives">socialhistory.org/en/archives</a>.</p>
 
   <p>
-    <b><a href="<?= $this->url('search-results') . '?' .
+    <b><a href="<?=
+      $this->url('search-results') . '?' .
       http_build_query(array('type' => 'AllFields', 'filter[]' => 'format:"Articles"')); ?>">Articles</a></b>
-    from the following serials are online available:<br/>
-    International Review of Social History, 1936-1939<br/>
-    Bulletin of the International Institute for Social History, 1937-1955<br/>
-    International Review of Social History, 1956-2009<br/>
-    Economisch-Historisch Jaarboek, 1915-1970<br/>
-    Economisch- en Sociaal-Historisch Jaarboek, 1970-1993<br/>
-    NEHA-Bulletin. Orgaan ten behoeve van de economische geschiedenis in Nederland, 1987-2003<br/>
-    Jaarboek voor de Geschiedenis van Bedrijf en Techniek, 1984-1993<br/>
-    Economic and Social History in the Netherlands, 1989-1996<br/>
-    NEHA-Jaarboek voor economische, bedrijfs- en techniekgeschiedenis, 1994-2003.
+    - from the following serials are online available:<br/>
+    <ul>
+      <li>International Review of Social History, 1936-1939</li>
+      <li>Bulletin of the International Institute for Social History, 1937-1955</li>
+      <li>International Review of Social History, 1956-2009</li>
+      <li>Economisch-Historisch Jaarboek, 1915-1970</li>
+      <li>Economisch- en Sociaal-Historisch Jaarboek, 1970-1993</li>
+      <li>NEHA-Bulletin. Orgaan ten behoeve van de economische geschiedenis in Nederland, 1987-2003</li>
+      <li>Jaarboek voor de Geschiedenis van Bedrijf en Techniek, 1984-1993</li>
+      <li>Economic and Social History in the Netherlands, 1989-1996</li>
+      <li>NEHA-Jaarboek voor economische, bedrijfs- en techniekgeschiedenis, 1994-2003</li>
+    </ul>
   </p>
 
   <p>
