@@ -1,0 +1,41 @@
+<?
+    // Set up page title:
+    $this->headTitle($this->translate('User Account'));
+
+    // Set up breadcrumbs:
+    $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Account') . '</li>';
+?>
+<h2><?=$this->transEsc('User Account')?></h2>
+<?=$this->flashmessages()?>
+
+<form method="post" action="" name="accountForm" id="accountForm" class="form-horizontal">
+  <?=$this->auth()->getCreateFields()?>
+  <?=$this->recaptcha()->html($this->useRecaptcha) ?>
+
+  <div class="form-group">
+    <div class="col-sm-9 col-sm-offset-3">
+      <em>
+        <? if ($this->layout()->userLang === 'nl'): ?>
+          Deze website wordt beheerd door het Internationaal Instituut voor Sociale Geschiedenis (IISG).
+          Het IISG respecteert de privacy van alle gebruikers van zijn website en draagt er zorg voor
+          dat de persoonlijke informatie die u ons verschaft vertrouwelijk wordt behandeld.
+          Wij houden alleen gegevens bij voor zover we die nodig hebben om de dienstverlening via de website
+          goed te laten lopen.
+          Het IISG zal de verkregen informatie niet aan derden verstrekken.
+        <? else: ?>
+          This website is maintained by the International Institute of Social History (IISH).
+          The IISH respects the privacy of all users of its site and shall be responsible for ensuring that
+          the personal information you provide us with, remains confidential.
+          We use your data only for a quick and efficient transaction of our services.
+          The IISH shall not disclose the information obtained to third parties.
+        <? endif; ?>
+      </em>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-10 col-sm-offset-3">
+      <input class="btn btn-primary" type="submit" name="submit" value="<?=$this->transEsc('Submit')?>"/>
+    </div>
+  </div>
+</form>

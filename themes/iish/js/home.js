@@ -12,7 +12,7 @@ $(document).ready(function () {
     $('.search-cloud').jQCloud(searchCloud, {
         colors: ['#12538B', '#4074A1', '#6E95B8', '#9CB6CE', '#CAD8E5'],
         fontSize: {
-            from: 0.18,
+            from: 0.12,
             to: 0.05
         }
     });

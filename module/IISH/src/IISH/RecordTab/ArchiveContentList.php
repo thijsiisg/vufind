@@ -15,7 +15,7 @@ class ArchiveContentList extends ArchiveBase {
      * @return string The description.
      */
     public function getDescription() {
-        return 'Content List';
+        return 'ArchiveContentList';
     }
 
     /**

@@ -38,7 +38,7 @@
 </div>
 
 <div id="messageOfTheDay">
-  <p class="lead"><?= $this->messageOfTheDay['title'] ?></p>
+  <p class="lead <?=$this->layout()->userLang?>"><?= $this->messageOfTheDay['title'] ?></p>
   <p><?= $this->messageOfTheDay['content'] ?></p>
 </div>
 
@@ -51,7 +51,7 @@ $facetListForArchives = is_object($this->resultsForArchives) ? $this->resultsFor
     <? foreach ($facetList as $field => $details): ?>
       <? $sortedList = $this->sortFacetList($this->results, $field, $details['list'], $basicSearch); ?>
       <div class="<?=$field=='callnumber-first' ? 'col-sm-6' : 'col-sm-3' ?>">
-        <p class="lead"><?=$this->transEsc('home_browse') . ' ' . strtolower($this->transEsc($details['label']))?></p>
+        <p class="lead <?=$this->layout()->userLang?>"><?=$this->transEsc('home_browse') . ' ' . strtolower($this->transEsc($details['label']))?></p>
         <div class="row facetList">
           <ul class="list-unstyled <?=$field == "callnumber-first" ? 'col-sm-6' : 'col-sm-12' ?>">
           <? /* Special case: two columns for LC call numbers... */ ?>
@@ -90,7 +90,7 @@ $facetListForArchives = is_object($this->resultsForArchives) ? $this->resultsFor
     <? foreach ($facetListForArchives as $field => $details): ?>
       <? $sortedList = $this->sortFacetList($this->resultsForArchives, $field, $details['list'], $basicSearch); ?>
       <div class="col-sm-3">
-        <p class="lead"><?=$this->transEsc('home_browse_archives') . ' ' . strtolower($this->transEsc($details['label']))?></p>
+        <p class="lead <?=$this->layout()->userLang?>"><?=$this->transEsc('home_browse_archives') . ' ' . $this->transEsc($details['label'])?></p>
         <div class="row facetList">
           <?
           $listColClass = 'col-sm-12';
@@ -160,7 +160,7 @@ $facetListForArchives = is_object($this->resultsForArchives) ? $this->resultsFor
     <? endforeach; ?>
 
   <div class="col-sm-3">
-    <p class="lead"><?=$this->transEsc('Popular searches')?></p>
+    <p class="lead <?=$this->layout()->userLang?>"><?=$this->transEsc('Popular searches')?></p>
     <div class="search-cloud">
       <? foreach($this->searchStats as $stat): ?>
         <? if ($stat['value'] !== '(empty)'): ?>

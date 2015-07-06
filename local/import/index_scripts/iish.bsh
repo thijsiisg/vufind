@@ -213,8 +213,58 @@ public String getAllSearchableFields(Record record, String fieldSpec) throws Exc
     return getText(document);
 }
 
-public String getAllSearchableFields(Record record, String lowerBoundStr, String upperBoundStr){
-    return indexer.getAllSearchableFields(record, lowerBoundStr, upperBoundStr) ;
+// Code copied from SolrMarc getAllSearchableFields, but edited to only allow alpha subfields
+public String getAllSearchableFields(Record record, String lowerBoundStr, String upperBoundStr) {
+    StringBuffer buffer = new StringBuffer("");
+    int lowerBound = localParseInt(lowerBoundStr, 100);
+    int upperBound = localParseInt(upperBoundStr, 900);
+
+    for (DataField field : record.getDataFields()) {
+        // Get all fields starting with the 100 and ending with the 839
+        // This will ignore any "code" fields and only use textual fields
+        int tag = localParseInt(field.getTag(), -1);
+        if ((tag >= lowerBound) && (tag < upperBound)) {
+            // Loop through subfields
+            for (Subfield subfield : field.getSubfields()) {
+                if (Character.isLetter(subfield.getCode())) {
+                    if (buffer.length() > 0) {
+                        buffer.append(" ");
+                    }
+                    buffer.append(subfield.getData());
+                }
+            }
+        }
+    }
+
+    return buffer.toString();
+}
+
+// Code copied from SolrMarc getAllSearchableFieldsAsSet, but edited to only allow alpha subfields
+public Set getAllSearchableFieldsAsSet(Record record, String lowerBoundStr, String upperBoundStr) {
+    Set result = new LinkedHashSet();
+    int lowerBound = localParseInt(lowerBoundStr, 100);
+    int upperBound = localParseInt(upperBoundStr, 900);
+
+    for (DataField field : record.getDataFields()) {
+        // Get all fields starting with the 100 and ending with the 839
+        // This will ignore any "code" fields and only use textual fields
+        int tag = localParseInt(field.getTag(), -1);
+        if ((tag >= lowerBound) && (tag < upperBound)) {
+            // Loop through subfields
+            StringBuffer buffer = new StringBuffer("");
+            for (Subfield subfield : field.getSubfields()) {
+                if (Character.isLetter(subfield.getCode())) {
+                    if (buffer.length() > 0) {
+                        buffer.append(" ");
+                    }
+                    buffer.append(subfield.getData());
+                }
+            }
+            result.add(buffer.toString());
+        }
+    }
+
+    return result;
 }
 
 private Document loadDocument(String url) throws Exception {
@@ -519,3 +569,15 @@ private Subfield subfield(Object o) {
     return ((o instanceof List) ? ((List) o).get(0) : o);
 }
 
+// Copied from SolrMarc
+private int localParseInt(String str, int defValue) {
+    int value = defValue;
+    try {
+        value = Integer.parseInt(str);
+    }
+    catch (NumberFormatException nfe) {
+        // provided value is not valid numeric string
+        // Ignoring it and moving happily on.
+    }
+    return (value);
+}

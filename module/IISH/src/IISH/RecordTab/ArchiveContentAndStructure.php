@@ -15,7 +15,7 @@ class ArchiveContentAndStructure extends ArchiveBase {
      * @return string The description.
      */
     public function getDescription() {
-        return 'Content and Context';
+        return 'ArchiveContentAndStructure';
     }
 
     /**

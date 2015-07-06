@@ -15,7 +15,7 @@ class ArchiveSubjects extends ArchiveBase {
      * @return string The description.
      */
     public function getDescription() {
-        return 'Subjects';
+        return 'ArchiveSubjects';
     }
 
     /**

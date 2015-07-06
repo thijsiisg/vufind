@@ -14,6 +14,6 @@ class ArchiveAccessAndUse extends ArchiveBase {
      * @return string The description.
      */
     public function getDescription() {
-        return 'Access and Use';
+        return 'ArchiveAccessAndUse';
     }
 }

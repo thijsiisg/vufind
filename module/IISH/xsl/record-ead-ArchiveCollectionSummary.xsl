@@ -214,7 +214,7 @@
     <xsl:if test="$digital_items>0">
       <xsl:variable name="value">
         <xsl:value-of select="$digital_items"/>
-        <xsl:text></xsl:text>
+        <xsl:text>&#032;</xsl:text>
         <xsl:call-template name="language">
           <xsl:with-param name="key" select="'ArchiveCollectionSummary.digitalform.items'"/>
         </xsl:call-template>

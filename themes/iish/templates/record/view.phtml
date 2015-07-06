@@ -13,7 +13,10 @@
   }
 
   // Set up breadcrumbs:
-  $this->layout()->breadcrumbs = '<li>' . $this->getLastSearchLink($this->transEsc('Search'), '', '</li> ') .
+  $options = $this->searchOptions($this->searchClassId);
+  $this->layout()->breadcrumbs =
+    '<li><a href="' . $this->url($options->getSearchAction()) . '">' . $this->transEsc('New Search') . '</a></li> ' .
+    '<li>' . $this->getLastSearchLink($this->transEsc('Search Results'), '', '</li> ') .
     '<li class="active">' . $this->recordLink()->getBreadcrumb($this->driver) . '</li> ';
   $this->layout()->title = $this->driver->getShortTitle();
 ?>
