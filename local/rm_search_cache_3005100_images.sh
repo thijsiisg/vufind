@@ -1,8 +1,6 @@
 #!/bin/bash
 
-source /usr/local/vufind/custom/config.sh
-
-find $SHARE/cache/large    -name '*.jpg' -delete
-find $SHARE/cache/medium   -name '*.jpg' -delete
-find $SHARE/cache/small    -name '*.jpg' -delete
-rm $SHARE/cache/xml/*
+find $VUFIND_SHARE/cache/large    -name '*.jpg' -delete
+find $VUFIND_SHARE/cache/medium   -name '*.jpg' -delete
+find $VUFIND_SHARE/cache/small    -name '*.jpg' -delete
+rm $VUFIND_SHARE/cache/xml/*
