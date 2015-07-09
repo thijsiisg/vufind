@@ -37,6 +37,7 @@ class OAI extends VuFindOAI
      */
     public function __construct($target, $settings, \Zend\Http\Client $client, $from = null, $until = null)
     {
+        $client->setOptions(array('sslverifypeer' => false));
         parent::__construct($target, $settings, $client, $from, $until);
         $this->catalog = $this->basePath . 'catalog.xml';
         $this->schema = LOCAL_OVERRIDE_DIR . '/harvest/marc21slim_custom.xsd';
