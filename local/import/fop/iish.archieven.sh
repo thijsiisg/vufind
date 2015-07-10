@@ -6,7 +6,7 @@
 
 
 pdf_folder="${VUFIND_CACHE_CACHE_DIR}/pdf"
-for file in "$pdf_folder"/*.xml
+for file in "$pdf_folder"/ARCH*.xml
 do
     filename=$(basename $file)
     pdf="${pdf_folder}/${filename:0:9}.pdf"
@@ -15,6 +15,6 @@ do
     if [ -f "$pdf" ] ; then
         chown www-data:www-data "$pdf"
         chmod 400 "$pdf"
-        rm $file
     fi
+    rm $file
 done
