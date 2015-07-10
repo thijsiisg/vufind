@@ -74,6 +74,7 @@ fi
 #-----------------------------------------------------------------------------------------------------------------------
 # Import the records
 #-----------------------------------------------------------------------------------------------------------------------
+cd /usr/local/vufind
 /usr/local/vufind/import-marc.sh -p /usr/local/vufind/local/import/import_$set_spec.properties $catalog_file >> $log
 if [[ $? != 0 ]] ; then
     subject="Error while indexing: ${catalog_file}"
