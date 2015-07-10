@@ -5,7 +5,7 @@
 # Invoke fop to create PDF files
 
 
-pdf_folder="${SHARE}/cache/pdf"
+pdf_folder="${VUFIND_CACHE_CACHE_DIR}/pdf"
 for file in "$pdf_folder"/*.xml
 do
     filename=$(basename $file)
