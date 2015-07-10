@@ -4,14 +4,12 @@ namespace IISH\File;
 use Zend\Log\LoggerInterface;
 
 /**
- * Asset handler for PDF files
+ * Asset handler for files
  *
  * @package IISH\File
  */
 class Loader implements \Zend\Log\LoggerAwareInterface
 {
-
-    private $cache = '/usr/local/vufind/local/cache/pdf/';
 
     /**
      * Logger (or false for none)
@@ -24,6 +22,7 @@ class Loader implements \Zend\Log\LoggerAwareInterface
      * The filename, without the path.
      */
     protected $filename = null;
+
 
     public function setFilename($filename)
     {
@@ -40,12 +39,12 @@ class Loader implements \Zend\Log\LoggerAwareInterface
 
     public function getFile()
     {
-        return file_get_contents($this->cache . $this->filename);
+        return file_get_contents($this->filename);
     }
 
     public function hasFile()
     {
-        return file_exists($this->cache . $this->filename);
+        return file_exists($this->$this->filename);
     }
 
     public function setLogger(LoggerInterface $logger)

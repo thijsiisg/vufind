@@ -29,6 +29,11 @@ class SolrEad extends SolrMarc
     private $siteURL;
 
     /**
+     * @var string
+     */
+    private $cache_dir;
+
+    /**
      * Constructor.
      *
      * @param ServiceLocatorInterface $serviceLocator
@@ -45,6 +50,7 @@ class SolrEad extends SolrMarc
         parent::__construct($mainConfig, $recordConfig, $searchSettings, $iishConfig);
         $this->serviceLocator = $serviceLocator;
         $this->siteURL = $serviceLocator->get('VuFind\Config')->get('config')->Site->url;
+        $this->cache_dir = $serviceLocator->get('VuFind\Config')->get('config')->Cache->cache_dir;
     }
 
     /**
@@ -80,7 +86,7 @@ class SolrEad extends SolrMarc
     public function getPDF()
     {
         $fileService = new File();
-        $fileService->setFilename($this->getUniqueID() . '.pdf');
+        $fileService->setFilename($this->cache_dir . '/' . $this->getUniqueID() . '.pdf');
         return $fileService->getFile();
     }
 
