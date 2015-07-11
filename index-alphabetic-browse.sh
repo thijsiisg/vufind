@@ -28,9 +28,9 @@ function locate_index
     eval $targetVar="$indexDir/$subDir"
 }
 
-locate_index "bib_index" "${VUFIND_SHARE}/solr/${HOSTNAME}/biblio"
+locate_index "bib_index"  "${VUFIND_SHARE}/solr/${HOSTNAME}/biblio"
 locate_index "auth_index" "${VUFIND_SHARE}/solr/${HOSTNAME}/authority"
-index_dir="../solr/alphabetical_browse"
+index_dir="${VUFIND_SHARE}/solr/${HOSTNAME}/alphabetical_browse"
 
 mkdir -p "$index_dir"
 
