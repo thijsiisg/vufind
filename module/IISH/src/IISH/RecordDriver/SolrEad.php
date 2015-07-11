@@ -86,7 +86,7 @@ class SolrEad extends SolrMarc
     public function getPDF()
     {
         $fileService = new File();
-        $fileService->setFilename($this->cache_dir . '/' . $this->getUniqueID() . '.pdf');
+        $fileService->setFilename($this->cache_dir . '/pdf/' . $this->getUniqueID() . '.pdf');
         return $fileService->getFile();
     }
 
