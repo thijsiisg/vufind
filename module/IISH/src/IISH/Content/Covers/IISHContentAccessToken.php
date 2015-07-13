@@ -54,7 +54,6 @@ class IISHContentAccessToken {
      */
     private function hasAccess() {
         $clientIP = self::getClientIP();
-        $clientIP = '10.24.9.28';
         foreach ($this->audienceInternal as $network) {
             if (self::checkNetwork($network, $clientIP) === true) {
                 return true;
