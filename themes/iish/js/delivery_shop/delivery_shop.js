@@ -488,7 +488,7 @@ function show_delivery_page(pids)
 {
     var url;
     
-    url  = "http://" + DeliveryProps.getDeliveryHost();
+    url  = window.location.protocol + "//" + DeliveryProps.getDeliveryHost();
     url += "/reservation/createform/";
     url += encodeURIComponent(pids);
     url += "?locale=" + DeliveryProps.getLanguage();
@@ -500,7 +500,7 @@ function show_permission_page(pids)
 {
     var url;
     
-    url  = "http://" + DeliveryProps.getDeliveryHost();
+    url  = window.location.protocol + "//" + DeliveryProps.getDeliveryHost();
     url += "/permission/createform/";
     url += encodeURIComponent(pids);
     url += "?locale=" + DeliveryProps.getLanguage();
@@ -536,7 +536,7 @@ function get_json_data(reqtype, url, pars)
     {
         $.ajax({
             type:        reqtype,
-            url:         "http://" + url,
+            url:         window.location.protocol + "//" + url,
             dataType:    'jsonp',
             crossDomain: true,
             cache:       true,
@@ -553,7 +553,7 @@ function get_json_data(reqtype, url, pars)
     {
         $.jsonp({
             type:              reqtype,
-            url:               "http://" + url,
+            url:               window.location.protocol + "//" + url,
             callbackParameter: "callback",
             cache:             true,
             timeout:           10000,
