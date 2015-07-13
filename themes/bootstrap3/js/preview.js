@@ -151,7 +151,7 @@ function getBookPreviews() {
 
     // fetch OpenLibrary preview if enabled
     if ($('.previewOL').length > 0) {
-        script = 'http://openlibrary.org/api/books?bibkeys='
+        script = 'https://openlibrary.org/api/books?bibkeys='
             + bibkeys.join(',') + '&callback=processOLBookInfo';
         $.getScript(script);
     }

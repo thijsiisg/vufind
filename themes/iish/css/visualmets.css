@@ -692,7 +692,7 @@ div.mets-container .mets-toolbar .mets-bar .mets-button-wrapper .mets-button:hov
     background-color: #2e4662 \9;
 }
 div.mets-container .mets-toolbar .mets-bar .mets-button-wrapper .mets-button:hover i {
-    background-image: url('http://visualmets.socialhistory.org/rest/resources/css/themes/iisg/mets_icon_template_20x20_hover.png');
+    background-image: url('https://visualmets.socialhistory.org/rest/resources/css/themes/iisg/mets_icon_template_20x20_hover.png');
 }
 div.mets-container .mets-toolbar .mets-bar .mets-button-wrapper .mets-button-focus {
     -webkit-box-shadow: inset 1px 1px 4px #304d6b;
@@ -729,7 +729,7 @@ div.mets-container .mets-toolbar .mets-bar .mets-button-wrapper .mets-button-foc
     background-color: #385b7f \9;
 }
 div.mets-container .mets-toolbar .mets-bar .mets-button-wrapper .mets-button-focus i {
-    background-image: url('http://visualmets.socialhistory.org/rest/resources/css/themes/iisg/mets_icon_template_20x20_hover.png');
+    background-image: url('https://visualmets.socialhistory.org/rest/resources/css/themes/iisg/mets_icon_template_20x20_hover.png');
 }
 div.mets-container .mets-toolbar .mets-bar .mets-button-wrapper .mets-button-focus:hover {
     color: #ffffff;
@@ -957,7 +957,7 @@ div.mets-container .mets-toolbar .mets-breadgrumb li i.mets-arrow {
     height: 10px;
     width: 10px;
     display: inline-block;
-    background-image: url('http://visualmets.socialhistory.org/rest/resources/css/themes/iisg/mets_icon_template_20x20.png');
+    background-image: url('https://visualmets.socialhistory.org/rest/resources/css/themes/iisg/mets_icon_template_20x20.png');
     background-position: -64px -45px;
     margin-right: 8px;
 }
@@ -1023,7 +1023,7 @@ div.mets-container .mets-canvas .mets-loader-frame .mets-loader .mets-loader-img
     margin: 0 auto;
     width: 128px;
     height: 128px;
-    background: url('http://visualmets.socialhistory.org/rest/resources/css/themes/iisg/loader.gif') top center no-repeat;
+    background: url('https://visualmets.socialhistory.org/rest/resources/css/themes/iisg/loader.gif') top center no-repeat;
 }
 div.mets-container .mets-canvas .mets-notice-icon {
     display: block;
@@ -1116,7 +1116,7 @@ div.mets-container .mets-canvas .mets-logo-holder {
     right: 5px;
     width: 156px;
     height: 30px;
-    background: url('http://visualmets.socialhistory.org/rest/resources/css/themes/iisg/logo.png') no-repeat;
+    background: url('https://visualmets.socialhistory.org/rest/resources/css/themes/iisg/logo.png') no-repeat;
     background-size: 156px 30px;
 }
 div.mets-container .mets-message {
@@ -1280,7 +1280,7 @@ div.mets-container .mets-success.active {
     line-height: 20px;
     width: 20px;
     text-align: center;
-    background-image: url('http://visualmets.socialhistory.org/rest/resources/css/themes/iisg/mets_icon_template_20x20.png');
+    background-image: url('https://visualmets.socialhistory.org/rest/resources/css/themes/iisg/mets_icon_template_20x20.png');
     background-repeat: no-repeat;
 }
 .mets-bar i.blank {
