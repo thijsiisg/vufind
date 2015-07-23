@@ -65,9 +65,9 @@ class OrderController extends AbstractBase {
      * @throws \VuFind\Exception\RecordMissing
      */
     private function placeOrder() {
-        $id = $this->params()->fromQuery('id');
-        $email = $this->params()->fromQuery('email');
-        $name = $this->params()->fromQuery('name');
+        $id = $this->params()->fromPost('id');
+        $email = $this->params()->fromPost('email');
+        $name = $this->params()->fromPost('name');
 
         // Obtain the record in question
         $driver = $this->getRecordLoader()->load($id, 'solr');

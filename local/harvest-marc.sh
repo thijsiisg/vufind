@@ -66,7 +66,7 @@ php /usr/local/vufind/harvest/harvest_oai.php $set_spec >> $log
 if [ ! -f "$catalog_file" ] ; then
     subject="Catalog not found: ${catalog_file}"
     echo $subject >> $log
-    /usr/bin/sendmail --body "$log" --from "$MAIL_FROM" --to "$MAIL_TO" --subject "$subject" --mail_relay "$MAIL_RELAY" --mail_user "$MAIL_USER" --mail_password "$MAIL_PASSWORD"
+    /usr/bin/sendmail --body "$log" --from "$MAIL_FROM" --to "$MAIL_TO" --subject "$subject" --mail_relay "$VUFIND_MAIL_HOST" --mail_user "$MAIL_USER" --mail_password "$MAIL_PASSWORD"
     exit 1
 fi
  
@@ -79,7 +79,7 @@ cd /usr/local/vufind
 if [[ $? != 0 ]] ; then
     subject="Error while indexing: ${catalog_file}"
     echo $subject >> $log
-    /usr/bin/sendmail --body "$log" --from "$MAIL_FROM" --to "$MAIL_TO" --subject "$subject" --mail_relay "$MAIL_RELAY" --mail_user "$MAIL_USER" --mail_password "$MAIL_PASSWORD"
+    /usr/bin/sendmail --body "$log" --from "$MAIL_FROM" --to "$MAIL_TO" --subject "$subject" --mail_relay "$VUFIND_MAIL_HOST" --mail_user "$MAIL_USER" --mail_password "$MAIL_PASSWORD"
     exit 1
 fi
 
