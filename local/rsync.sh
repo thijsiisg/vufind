@@ -10,5 +10,5 @@ do
     host=$slave.iisg.net
     echo "Rsync to ${host}" >> $log
     sudo -u vufind rsync -av --progress "${VUFIND_SHARE}/solr/${HOSTNAME}/alphabetical_browse" "${host}:/${VUFIND_SHARE}/solr/${slave}/" >> $log
-    sudo -u vufind rsync -av --progress "${VUFIND_CACHE_CACHE_DIR}/pdf/"*.pdf "${host}:/${VUFIND_CACHE_CACHE_DIR}/pdf" >> $log
+    sudo -u vufind rsync -av --progress --include '*.pdf' "${VUFIND_CACHE_CACHE_DIR}/pdf/" "${host}:/${VUFIND_CACHE_CACHE_DIR}/pdf" >> $log
 done
