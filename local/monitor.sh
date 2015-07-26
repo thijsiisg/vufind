@@ -11,22 +11,27 @@ if [ -z "$f" ] ; then
     exit 1
 fi
 
-
+s=/opt/status.txt
 q="http://localhost:8080/solr/biblio/select"
 O=/tmp/status.txt
 wget --spider -T 3 -t 3 -O $O $q
 rc=$?
 if [[ $rc == 0 ]] ; then
     touch $f
-    cp /opt/status.txt $f
+    cp $s $f
     exit 0
 else
     rm -f $f
-	echo "$(date): Invalid response ${rc}" >> /opt/status.txt
+	echo "$(date): Invalid response ${rc}" >> $s
 	service vufind stop
     sleep 15
 	killall java
 	sleep 5
 	service vufind start
 	sleep 15
+
+	subject="Automatic restart in ${HOSTNAME}"
+    /usr/bin/sendmail --body "$s" --from "search@${HOSTNAME}" --to "$MAIL_TO" --subject "$subject" --mail_relay "$VUFIND_MAIL_HOST"
+    exit 1
+
 fi
