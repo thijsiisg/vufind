@@ -17,8 +17,7 @@ O=/tmp/status.txt
 wget --spider -T 3 -t 3 -O $O $q
 rc=$?
 if [[ $rc == 0 ]] ; then
-    touch $f
-    cp $s $f
+    echo "$(date)">$f
     exit 0
 else
     rm -f $f
