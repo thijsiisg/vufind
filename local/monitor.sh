@@ -29,8 +29,8 @@ else
 	service vufind start
 	sleep 15
 
-	subject="Automatic restart in ${HOSTNAME}"
-    /usr/bin/sendmail --body "$s" --from "search@${HOSTNAME}" --to "$MAIL_TO" --subject "$subject" --mail_relay "$VUFIND_MAIL_HOST"
+	subject="Automatic restart by ${0}"
+    /usr/bin/sendmail --body "$s" --from "search@${HOSTNAME}" --to "$VUFIND_SITE_EMAIL" --subject "$subject" --mail_relay "$VUFIND_MAIL_HOST"
     exit 1
 
 fi
