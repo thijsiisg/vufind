@@ -10,8 +10,12 @@ use Zend\Config\Config;
  */
 class IISHContentAccessToken {
 
-    private static $headers = array(
-        'X-FORWARD-FOR',
+    /**
+     * @var array
+     * Header keys of forwarded values
+     */
+    private static $X_FORWARD_HEADERS = array(
+        'X-FORWARDED-FOR',
         'HTTP_CLIENT_IP',
         'HTTP_X_FORWARDED_FOR',
         'HTTP_X_FORWARDED',
@@ -21,11 +25,13 @@ class IISHContentAccessToken {
 
     /**
      * @var string|null
+     * The access token
      */
     private $accessToken;
 
     /**
      * @var string[]
+     * A List of IP addresses and ranges.
      */
     private $audienceInternal;
 
@@ -70,23 +76,23 @@ class IISHContentAccessToken {
                 return true;
             }
         }
-
         return false;
     }
 
     /**
-     * Returns the users IP address.
+     * Returns the forwarded IP address value.
      *
-     * @return string|null The users IP address.
+     * @return string|null of an IP address.
      */
     private static function getClientIP() {
-        foreach (self::$headers as $header) {
+        foreach (self::$X_FORWARD_HEADERS as $header) {
             if (isset($_SERVER[$header])) {
                 $ip_list = explode(',', $_SERVER[$header]);
                 if (count($ip_list) > 0)
-                    return $ip_list[0];
+                    return trim($ip_list[0]);
             }
         }
+        return null;
     }
 
     /**
