@@ -163,9 +163,7 @@ $facetListForArchives = is_object($this->resultsForArchives) ? $this->resultsFor
     <p class="lead <?=$this->layout()->userLang?>"><?=$this->transEsc('Popular searches')?></p>
     <div class="search-cloud">
       <? foreach($this->searchStats as $stat): ?>
-        <? if ($stat['value'] !== '(empty)'): ?>
-          <a href="<?=$this->url('search-results') . '?lookfor=' . urlencode($stat['value']) ?>" rel="<?=$stat['count']?>"><?=$stat['value']?></a>
-        <? endif; ?>
+        <a href="<?=$this->url('search-results') . '?lookfor=' . urlencode($stat['value']) ?>" rel="<?=$stat['count']?>"><?=$stat['value']?></a>
       <? endforeach; ?>
     </div>
   </div>

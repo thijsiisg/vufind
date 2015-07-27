@@ -1,8 +1,12 @@
 <?php
 namespace IISH\Statistics;
+
 use IISH\Cache\Cacheable;
-use VuFind\Statistics\Search as SearchStats;
 use Zend\ServiceManager\ServiceLocatorInterface;
+
+use Zend\Db\Sql\Select;
+use Zend\Db\Sql\Expression;
+use Zend\Db\Sql\Predicate\Predicate;
 
 /**
  * Obtain cached search statistics.
@@ -11,9 +15,9 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class SearchStatistics extends Cacheable {
     /**
-     * @var SearchStats
+     * @var \VuFind\Db\Table\UserStatsFields
      */
-    private $searchStats;
+    private $userStatsFields;
 
     /**
      * Constructor.
@@ -23,7 +27,9 @@ class SearchStatistics extends Cacheable {
      */
     public function __construct(ServiceLocatorInterface $serviceLocator) {
         parent::__construct($serviceLocator, 'SearchStatistics');
-        $this->searchStats = $serviceLocator->get('VuFind\SearchStats');
+
+        $tableManager = $serviceLocator->get('VuFind\DbTablePluginManager');
+        $this->userStatsFields = $tableManager->get('UserStatsFields');
     }
 
     /**
@@ -47,10 +53,28 @@ class SearchStatistics extends Cacheable {
     /**
      * Creates a new instance, ready to be cached.
      *
-     * @return mixed The instance to cache.
+     * @return array The instance to cache.
      */
     protected function create() {
-        $stats = $this->searchStats->getStatsSummary(10, false);
-        return $stats['top'];
+        $resultSet = $this->userStatsFields->select(function (Select $select) {
+            $select->columns(array(
+                'value',
+                'count' => new Expression('count(value)')
+            ));
+
+            $predicate = new Predicate();
+            $select->where(
+                $predicate
+                    ->equalTo('field', 'phrase')
+                    ->AND
+                    ->notEqualTo('value', '')
+            );
+
+            $select->group('value');
+            $select->order('count desc');
+            $select->limit(10);
+        });
+
+        return $resultSet->toArray();
     }
 }
