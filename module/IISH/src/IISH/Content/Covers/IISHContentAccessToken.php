@@ -1,5 +1,6 @@
 <?php
 namespace IISH\Content\Covers;
+
 use Zend\Config\Config;
 
 /**
@@ -8,6 +9,16 @@ use Zend\Config\Config;
  * @package IISH\Content\Covers
  */
 class IISHContentAccessToken {
+
+    private static $headers = array(
+        'X-FORWARD-FOR',
+        'HTTP_CLIENT_IP',
+        'HTTP_X_FORWARDED_FOR',
+        'HTTP_X_FORWARDED',
+        'HTTP_FORWARDED_FOR',
+        'HTTP_FORWARDED'
+    );
+
     /**
      * @var string|null
      */
@@ -69,23 +80,12 @@ class IISHContentAccessToken {
      * @return string|null The users IP address.
      */
     private static function getClientIP() {
-        if (isset($_SERVER['HTTP_CLIENT_IP'])) {
-            return trim($_SERVER['HTTP_CLIENT_IP']);
-        }
-        else if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            return trim($_SERVER['HTTP_X_FORWARDED_FOR']);
-        }
-        else if (isset($_SERVER['HTTP_X_FORWARDED'])) {
-            return trim($_SERVER['HTTP_X_FORWARDED']);
-        }
-        else if (isset($_SERVER['HTTP_FORWARDED_FOR'])) {
-            return trim($_SERVER['HTTP_FORWARDED_FOR']);
-        }
-        else if (isset($_SERVER['HTTP_FORWARDED'])) {
-            return trim($_SERVER['HTTP_FORWARDED']);
-        }
-        else {
-            return null;
+        foreach (self::$headers as $header) {
+            if (isset($_SERVER[$header])) {
+                $ip_list = explode(',', $_SERVER[$header]);
+                if (count($ip_list) > 0)
+                    return $ip_list[0];
+            }
         }
     }
 
@@ -93,7 +93,7 @@ class IISHContentAccessToken {
      * Check if the IP is part of the given network.
      *
      * @param string $network The network.
-     * @param string $ip      The IP address.
+     * @param string $ip The IP address.
      *
      * @return bool Whether the IP is part of the given network.
      */
@@ -115,14 +115,11 @@ class IISHContentAccessToken {
             $network = str_replace('*', '0', $network);
             if ($nCount === 1) {
                 $network .= '/24';
-            }
-            else if ($nCount === 2) {
+            } else if ($nCount === 2) {
                 $network .= '/16';
-            }
-            else if ($nCount === 3) {
+            } else if ($nCount === 3) {
                 $network .= '/8';
-            }
-            else if ($nCount > 3) {
+            } else if ($nCount > 3) {
                 return true; // if *.*.*.*, then all, so matched
             }
         }
@@ -143,8 +140,7 @@ class IISHContentAccessToken {
             $ip_long = ip2long($ip);
 
             return (($ip_long & $mask) === ($network_long & $mask));
-        }
-        else {
+        } else {
             $from = trim(ip2long(substr($network, 0, $d)));
             $to = trim(ip2long(substr($network, $d + 1)));
             $ip_long = ip2long($ip);
