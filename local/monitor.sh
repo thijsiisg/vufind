@@ -5,6 +5,14 @@
 # Purpose: place a status file in the root of the web application if all is well.
 # If not: replace the file and try to restart the applications.
 
+
+if pgrep "monitor.sh" > /dev/null
+then
+    echo "Already running"
+    exit 1
+fi
+
+
 f=$1
 if [ -z "$f" ] ; then
     echo "Warning. No file parameter found. Usage: ./monitor.sh /path/to/root/of/the/webapplication"
@@ -23,11 +31,10 @@ else
     rm -f $f
 	echo "$(date): Invalid response ${rc}" >> $s
 	service vufind stop
-    sleep 15
+    sleep 5
 	killall java
 	sleep 5
 	service vufind start
-	sleep 15
 
 	subject="Automatic restart by ${0}"
     /usr/bin/sendmail --body "$s" --from "search@${HOSTNAME}" --to "$VUFIND_SITE_EMAIL" --subject "$subject" --mail_relay "$VUFIND_MAIL_HOST"
