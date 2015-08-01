@@ -6,8 +6,9 @@
 # If not: replace the file and try to restart the applications.
 
 
-if pgrep "monitor.sh" > /dev/null
-then
+if (( $(pgrep -c "monitor.sh") == 1 )) ; then
+    echo "Self"
+else
     echo "Already running"
     exit 1
 fi
@@ -35,9 +36,10 @@ else
 	killall java
 	sleep 5
 	service vufind start
+    sleep 20
 
 	subject="Automatic restart by ${0}"
     /usr/bin/sendmail --body "$s" --from "search@${HOSTNAME}" --to "$VUFIND_SITE_EMAIL" --subject "$subject" --mail_relay "$VUFIND_MAIL_HOST"
-    exit 1
 
+    exit 1
 fi
