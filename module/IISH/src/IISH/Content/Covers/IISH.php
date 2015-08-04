@@ -50,12 +50,9 @@ class IISH extends AbstractCover implements ResizableCover, AccessClosedCover {
                 $imageIndex = 'level3';
                 break;
             case 'large':
-                $imageIndex = 'level2';
-                break;
             case 'medium':
             default :
                 $imageIndex = 'level2';
-                break;
         }
 
         // If we have obtained an access token, append it to the URL
