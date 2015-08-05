@@ -1,5 +1,6 @@
 <?php
 namespace IISH\RecordTab;
+
 use IISH\RecordDriver\SolrEad;
 
 /**
@@ -29,10 +30,9 @@ class ArchiveContentAndStructure extends ArchiveBase {
             $xml = simplexml_import_dom($driver->getEAD());
             $xml->registerXPathNamespace('ead', 'urn:isbn:1-931666-22-9');
             $match = $xml->xpath('//ead:ead/ead:archdesc/ead:descgrp[@type=\'context\']/ead:bioghist|' .
-                'ead:archdesc/ead:descgrp[@type=\'content_and_structure\']' .
-                '[scopecontent|arrangement|processinfo|altformavail|originalsloc|' .
-                'relatedmaterial]');
-
+                '//ead:ead/ead:archdesc/ead:descgrp[@type=\'content_and_structure\']' .
+                '[ead:scopecontent|ead:arrangement|ead:processinfo|ead:altformavail|ead:originalsloc|' .
+                'ead:relatedmaterial]');
             return (($match !== false) && (count($match) > 0));
         }
 
