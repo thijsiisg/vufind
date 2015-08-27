@@ -106,9 +106,14 @@ class Loader extends Cacheable {
      * @return array The message of the day.
      */
     private function createMessage($title, $content, $lang) {
+        $content = str_replace('.', '. ', $content);
+
+        // fix broken url
+	    $content = preg_replace("/([A-z\d_\-]{2,}\.)\s([A-z]{2,3}([^A-z\d]+.*)?)$/", '$1$2', $content);
+
         return array(
             'title'   => $title,
-            'content' => str_replace('.', '. ', $content),
+            'content' => $content,
             'lang'    => $lang
         );
     }
