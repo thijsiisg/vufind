@@ -21,7 +21,7 @@ var DeliveryProps = (function() {
     var host             = "localhost/delivery";
     var language         = "en";
     var max_items        = 3;
-    var url_search       = "http://hdl.handle.net";
+    var url_search       = window.location.protocol + "//hdl.handle.net";
     var cart_div         = null;
     var showhide_buttons = true;
     var onLoad = function() {};
@@ -70,8 +70,6 @@ var DeliveryProps = (function() {
         getCartStyle: function() {
             return cartStyle;
         }
-        
-        
     };
 })();
 
@@ -122,26 +120,39 @@ var Rsrc = (function() {
     };
 })();
 
+var reservationCart = {
+    cart: null,
+    className: "reservationCart",
+    isReservationCart: true
+};
+
+var reproductionCart = {
+    cart: null,
+    className: "reproductionCart",
+    isReservationCart: false
+};
+
+var shoppingCarts = [reservationCart, reproductionCart];
 
 // Public functions
 
 /**
  * Initialize the Delivery shopping cart API
- * 
+ *
  * An object with the following properties can be passed:
  * { 
  *      host:             "localhost/delivery",    // The delivery host and context
  *      language:         "en",                    // The language
  *      max_items:        3,                       // The maximum entries in the shopping cart
  *      cart_div:         "#delivery_cart",        // The html div where the shopping cart is displayed
- *      url_search:       "http://hdl.handle.net", // The url (host) to the holding information  
+ *      url_search:       window.location.protocol + "//hdl.handle.net", // The url (host) to the holding information  
  *      showhide_buttons: true                     // Flag if the cart buttons should be hidden with empty cart
  * }
  *
  * @param {object} props     the delivery properties
  * @returns {undefined}
  */
-function initDelivery(props) 
+function initDelivery(props)
 {
     var html;
 
@@ -151,78 +162,106 @@ function initDelivery(props)
 
     if (DeliveryProps.getShoppingCartDiv() !== null)
     {
-        simpleCart({
-            // array representing the format and columns of the cart
-            cartColumns: [
-                { attr: "name",   label: Rsrc.getString('cart_title')},
-                { attr: "pid",    label: Rsrc.getString('cart_pid')},
-                { view: "remove", label: Rsrc.getString('cart_remove'), text: Rsrc.getString('cart_button_remove')}
-            ],
-            // "div" or "table"
-            cartStyle: DeliveryProps.getCartStyle(), 
-            // how simpleCart should checkout
-            checkout: { 
-                type: "SendForm", 
-                url:  "javascript:sendReservation();" 
-            },
-            load: function() {
-                show_hide_cart_buttons();
-                // Call custom load function.
-                DeliveryProps.getLoadFunction()();
-                
-            },
-            update: function() {
-                show_hide_cart_buttons();
-                // Call Custom update function.
-                DeliveryProps.getUpdateFunction()();
-            },
-            currency: "EUR"
+        shoppingCarts.forEach(function (shoppingCart) {
+            shoppingCart.cart = simpleCart.copy(shoppingCart.className);
+            shoppingCart.cart({
+                // array representing the format and columns of the cart
+                cartColumns: [
+                    { attr: "name",   label: Rsrc.getString('cart_title')},
+                    { attr: "pid",    label: Rsrc.getString('cart_pid')},
+                    { view: "remove", label: Rsrc.getString('cart_remove'), text: Rsrc.getString('cart_button_remove')}
+                ],
+                // "div" or "table"
+                cartStyle: DeliveryProps.getCartStyle(),
+                // how simpleCart should checkout
+                checkout: {
+                    type: "SendForm",
+                    url:  shoppingCart.isReservationCart
+                        ? "javascript:sendRequest(reservationCart);"
+                        : "javascript:sendRequest(reproductionCart);"
+                },
+                load: function() {
+                    show_hide_cart_buttons(this);
+                    // Call custom load function.
+                    DeliveryProps.getLoadFunction()(this);
+                },
+                update: function() {
+                    show_hide_cart_buttons(this);
+                    // Call Custom update function.
+                    DeliveryProps.getUpdateFunction()(this);
+                },
+                currency: "EUR"
+            });
         });
 
-        html  = "<div class=\"simpleCart_items\"></div>";
-        html += "<div id=\"deliveryCartButtons\">";
-        html += "<button type=\"submit\" class=\"simpleCart_checkout\" value=\"";
-        html += Rsrc.getString('cart_button_reserve');
+        html  = "<div class=\"reservationCart\">";
+        html += "<div class=\"reservationCart_header\"><h5>" + Rsrc.getString('reservation_header') + "</h5></div>";
+        html += "<div class=\"reservationCart_items\"></div>";
+        html += "<div class=\"deliveryCartButtons\">";
+        html += "<button type=\"submit\" class=\"reservationCart_checkout\" value=\"";
+        html += Rsrc.getString('cart_button_request');
         html += "\" name=\"Reserve\" onclick=\"javascript:;\" >";
-        html += Rsrc.getString('cart_button_reserve');
+        html += Rsrc.getString('cart_button_request');
         html += "<\/button>";
         html += "&nbsp;";
-        html += "<button type=\"submit\" class=\"simpleCart_empty\" value=\"";
+        html += "<button type=\"submit\" class=\"reservationCart_empty\" value=\"";
         html += Rsrc.getString('cart_button_empty');
         html += "\" name=\"Empty\" onclick=\"javascript:;\" >";
         html += Rsrc.getString('cart_button_empty');
         html += "<\/button>";
-        html += "</div>";
+        html += "</div></div>";
+        html += "<div class=\"reproductionCart\">";
+        html += "<div class=\"reproductionCart_header\"><h5>" + Rsrc.getString('reproduction_header') + "</h5></div>";
+        html += "<div class=\"reproductionCart_items\"></div>";
+        html += "<div class=\"deliveryCartButtons\">";
+        html += "<button type=\"submit\" class=\"reproductionCart_checkout\" value=\"";
+        html += Rsrc.getString('cart_button_request');
+        html += "\" name=\"Reproduction\" onclick=\"javascript:;\" >";
+        html += Rsrc.getString('cart_button_request');
+        html += "<\/button>";
+        html += "&nbsp;";
+        html += "<button type=\"submit\" class=\"reproductionCart_empty\" value=\"";
+        html += Rsrc.getString('cart_button_empty');
+        html += "\" name=\"Empty\" onclick=\"javascript:;\" >";
+        html += Rsrc.getString('cart_button_empty');
+        html += "<\/button>";
+        html += "</div></div>";
         $(DeliveryProps.getShoppingCartDiv()).html(html);
     }
 } /* initDelivery */
 
 (function($) {
     /**
-     * Function displays the reservation button or status text for the holding
-     * 
-     * @param {string}  label       the label tobe displayed uin shopping cart, if null record title is displayed
-     * @param {string}  pid         the holding pid
-     * @param {string}  signature   the holding signature (call number)
-     * @param {boolean} directflag  if true the button jumps direct to the reservation page and skips shopping cart 
+     * Function displays the reservation button and/or reproduction button or status text for the holding
+     *
+     * @param {string}  label               the label tobe displayed uin shopping cart,
+     *                                      if null record title is displayed
+     * @param {string}  pid                 the holding pid
+     * @param {string}  signature           the holding signature (call number)
+     * @param {boolean} directflag          if true the button jumps direct to the reservation/reproduction page
+     *                                      and skips shopping cart
+     * @param {boolean} show_reservation    whether tho show a reservation button
+     * @param {boolean} show_reproduction   whether tho show a reproduction button
      */
-    $.fn.determineReservationButton = function(label, pid, signature, directflag) {
-        var pars = { 
-            label:     label, 
-            pid:       $.trim(pid), 
-            signature: $.trim(signature), 
-            direct:    directflag, 
-            field:     $(this), 
-            result:    button_callback 
+    $.fn.determineButtons = function(label, pid, signature, directflag, show_reservation, show_reproduction) {
+        var pars = {
+            label:             label,
+            pid:               $.trim(pid),
+            signature:         $.trim(signature),
+            direct:            directflag,
+            field:             $(this),
+            show_reservation:  (show_reservation || (show_reservation === undefined)),
+            show_reproduction: (show_reproduction || (show_reproduction === undefined)),
+            result:            button_callback
         };
         get_json_data("GET", "record/" + encodeURIComponent(pars.pid), pars);
-    }; /* determineReservationButton */
-    
+    }; /* determineButtons */
+
     /**
      * Empty the shopping cart
      */
-    $.fn.emptyShoppingCart = function() {
-        simpleCart.empty();
+    $.fn.emptyShoppingCart = function(shoppingCart) {
+        shoppingCart.cart.empty();
     }; /* emptyShoppingCart */
 
     /**
@@ -243,7 +282,7 @@ function initDelivery(props)
     /**
      * Show the record response from the delivery REST API
      * For debugging only!
-     *  
+     *
      * @param {string} pid          the holding pid
      * @param {string} signature    the holding signature
      */
@@ -260,37 +299,38 @@ function initDelivery(props)
 })(jQuery);
 
 /**
- * Add the reservation to the shopping cart or jump to reservation page if direct request
+ * Add the holding to the shopping cart or jump to reservation/reproduction page if direct request
  * This function is called by the "Request Item" button
- * 
+ *
+ * @param {object} shoppingCart the shopping cart
  * @param {string} label        text (link) displayed in shopping card
  * @param {string} pid          the holding pid
  * @param {string} signature    the holding signature
  * @param {string} direct       the direct flag
  * @returns {undefined}
  */
-function requestReservation(label, pid, signature, direct)
+function makeRequest(shoppingCart, label, pid, signature, direct)
 {
     var item = pid + "^" + signature;
-    
+
     if (direct === true)
     {
-        show_delivery_page(item);
+        show_delivery_page(item, shoppingCart.isReservationCart);
     }
     else
     {
         if (DeliveryProps.getShoppingCartDiv() !== null)
         {
-            if (simpleCart.find({pid: item}).length === 0)
+            if (shoppingCart.cart.find({pid: item}).length === 0)
             {
-                if (simpleCart.quantity() >= DeliveryProps.getMaxItems())
+                if (shoppingCart.isReservationCart && (shoppingCart.cart.quantity() >= DeliveryProps.getMaxItems()))
                 {
                     alert(Rsrc.getString('alert_max', DeliveryProps.getMaxItems()));
                 }
                 else
-                {   
+                {
                     label = "<a href=\"" + DeliveryProps.getSearchURL() + "/" + encodeURIComponent(pid) + "\">" + label + "</a>";
-                    simpleCart.add({ 
+                    shoppingCart.cart.add({
                         name:     label,
                         pid:      item,
                         quantity: 1
@@ -300,40 +340,40 @@ function requestReservation(label, pid, signature, direct)
         }
         else
         {
-            show_delivery_page(item);
+            show_delivery_page(item, shoppingCart.isReservationCart);
         }
     }
-} /* requestReservation */
+} /* makeRequest */
 
 /**
  * Send the holdings in the shopping cart to delivery
  * This function is called by the cart "Reserve" button
- * 
+ *
  * @returns {undefined}
  */
-function sendReservation()
+function sendRequest(shoppingCart)
 {
     var pids = "";
 
-    if (simpleCart.quantity() > 0)
+    if (shoppingCart.cart.quantity() > 0)
     {
-        simpleCart.each(function(item, x) {
+        shoppingCart.cart.each(function(item, x) {
             if (pids.length > 0) pids += ",";
             pids += item.get('pid');
         });
-        show_delivery_page(pids);
-        simpleCart.empty();
+        show_delivery_page(pids, shoppingCart.isReservationCart);
+        shoppingCart.cart.empty();
     }
     else
     {
         alert(Rsrc.getString('alert_noitems'));
     }
-} /* sendReservation */
+} /* sendRequest */
 
 /**
  * Goto the delivery request permission page
  * This function is called by the "Request Permission" button
- * 
+ *
  * @param {string} pid          the holding pid
  * @param {string} signature    the holding signature
  * @returns {undefined}
@@ -341,7 +381,7 @@ function sendReservation()
 function requestPermission(pid, signature)
 {
     var item = pid + "^" + signature;
-    
+
     show_permission_page(item);
 } /* requestPermission */
 
@@ -349,8 +389,8 @@ function requestPermission(pid, signature)
 
 function button_callback(pars, data, holding)
 {
-    var html;
-    
+    var html = "";
+
     syslog("button_callback: field=" + pars.field + " data=" + data);
     if (data === null)
     {
@@ -360,12 +400,13 @@ function button_callback(pars, data, holding)
             title:           pars.pid,
             // embargo:         "2013-03-20",
             restrictionType: 'OPEN',
+            publicationStatus: 'CLOSED',
             holdings: [
                 {
                     signature:        pars.signature,
                     status:           'AVAILABLE',
                     usageRestriction: 'OPEN'
-                }  
+                }
             ]
         };
         holding = data.holdings[0];
@@ -378,54 +419,87 @@ function button_callback(pars, data, holding)
     }
     else
     {
+        var createButtonsHtml = function (isReservation)
+        {
+            var html;
+            var btnText = isReservation
+                ? Rsrc.getString('button_request_reservation')
+                : Rsrc.getString('button_request_reproduction');
+
+            html  = "<button type=\"submit\" class=\"deliveryReserveButton\" value=\"" + btnText + "\" ";
+            html += "name=\"RequestItem\" onclick=\"makeRequest(";
+            html += isReservation ? 'reservationCart' : 'reproductionCart';
+            html += ", '";
+            if (pars.label === null)
+            {
+                html += data.title;
+            }
+            else
+            {
+                html += pars.label;
+            }
+            html += "', '";
+            html += pars.pid;
+            html += "', '";
+            html += pars.signature;
+            html += "', ";
+            html += pars.direct;
+            html += ");\" >";
+            html += btnText;
+            html += "<\/button>";
+
+            return html;
+        };
+        var createReservationButtonHtml = function () { return createButtonsHtml(true); };
+        var createReproductionButtonHtml = function () { return createButtonsHtml(false); };
+
         if (data.restrictionType === 'OPEN')
         {
             if (holding.usageRestriction === 'OPEN')
             {
-                if (holding.status === 'AVAILABLE')
+                if (pars.show_reservation)
                 {
-                    html  = "<button type=\"submit\" class=\"deliveryReserveButton\" value=\"";
-                    html += Rsrc.getString('button_request');
-                    html += "\" name=\"RequestItem\" onclick=\"requestReservation('";
-                    if (pars.label === null)
+                    if (holding.status === 'AVAILABLE')
                     {
-                        html += data.title;
+                        html += createReservationButtonHtml();
                     }
                     else
                     {
-                        html += pars.label;
+                        html += "<span class=\"deliveryResponseText deliveryStatReserved\">";
+                        html += Rsrc.getString('stat_open_reserved');
+                        html += " ";
+                        html += "<a href=\"mailto:";
+                        html += Rsrc.getString('email_office');
+                        html += "\">";
+                        html += Rsrc.getString('email_office');
+                        html += "</a>";
+                        html += ".</span>";
                     }
-                    html += "', '";
-                    html += pars.pid;
-                    html += "', '";
-                    html += pars.signature;
-                    html += "', ";
-                    html += pars.direct;
-                    html += ");\" >";
-                    html += Rsrc.getString('button_request');
-                    html += "<\/button>";
                 }
-                else
+
+                if (pars.show_reproduction)
                 {
-                    html  = "<span class=\"deliveryResponseText deliveryStatReserved\">";
-                    html += Rsrc.getString('stat_open_reserved');
-                    html += " ";
-                    html += "<a href=\"mailto:";
-                    html += Rsrc.getString('email_office');
-                    html += "\">";
-                    html += Rsrc.getString('email_office');
-                    html += "</a>";
-                    html += ".</span>";
+                    if ((data.copyright === undefined) || (data.copyright === null) || (data.copyright.length === 0) ||
+						(data.publicationStatus !== 'MINIMAL' && data.publicationStatus !== 'CLOSED'))
+                    {
+                        html += createReproductionButtonHtml();
+                    }
+                    else
+                    {
+                        html += "<span class=\"deliveryResponseText deliveryStatPublicationStatus\">";
+                        html += Rsrc.getString('stat_open_publication_status');
+                        html += ".</span>";
+                    }
                 }
             }
-            else
+            else if (pars.show_reservation || pars.show_reproduction)
             {
-                html  = "<span class=\"deliveryResponseText deliveryStatUsageRestriction\">";
+                html += "<span class=\"deliveryResponseText deliveryStatUsageRestriction\">";
                 html += Rsrc.getString('stat_open_restricted');
                 html += ".</span>";
             }
         }
-        else if (data.restrictionType === 'RESTRICTED')
+        else if (pars.show_reservation && (data.restrictionType === 'RESTRICTED'))
         {
             html  = "<span class=\"deliveryResponseText deliveryStatRestricted\">";
             html += Rsrc.getString('stat_restricted');
@@ -441,9 +515,9 @@ function button_callback(pars, data, holding)
             html += "<\/button>";
             html += ".</span>";
         }
-        else // CLOSED
+        else if (pars.show_reservation || pars.show_reproduction) // CLOSED
         {
-            html = "<span class=\"deliveryResponseText deliveryStatClosed\">";
+            html += "<span class=\"deliveryResponseText deliveryStatClosed\">";
             if (!!data.embargo)
             {
                 html += Rsrc.getString('stat_closed_embargo', formatted_date(data.embargo));
@@ -461,7 +535,7 @@ function button_callback(pars, data, holding)
 function record_callback(pars, data, holding)
 {
     var rec;
-    
+
     syslog("record_callback: field=" + pars.field);
     rec  = "<i>Response:<br />";
     if (data === null)
@@ -478,18 +552,19 @@ function record_callback(pars, data, holding)
         if (!!data.embargo) rec += "embargo=" + data.embargo + "<br />";
         rec += "restrictionType=" + data.restrictionType + "<br />";
         rec += "usageRestriction=" + holding.usageRestriction + "<br />";
-        rec += "status=" + holding.status + "<br />";        
+        rec += "publicationStatus=" + data.publicationStatus + "<br />";
+        rec += "status=" + holding.status + "<br />";
     }
     rec += "</i>";
     $(pars.field).html(rec);
 } /* record_callback */
 
-function show_delivery_page(pids)
+function show_delivery_page(pids, isReservation)
 {
     var url;
-    
+
     url  = window.location.protocol + "//" + DeliveryProps.getDeliveryHost();
-    url += "/reservation/createform/";
+    url += isReservation ? "/reservation/createform/" : "/reproduction/createform/";
     url += encodeURIComponent(pids);
     url += "?locale=" + DeliveryProps.getLanguage();
     // window.location = url;
@@ -499,7 +574,7 @@ function show_delivery_page(pids)
 function show_permission_page(pids)
 {
     var url;
-    
+
     url  = window.location.protocol + "//" + DeliveryProps.getDeliveryHost();
     url += "/permission/createform/";
     url += encodeURIComponent(pids);
@@ -508,11 +583,11 @@ function show_permission_page(pids)
     window.open(url);
 } /* show_permission_page */
 
-function show_hide_cart_buttons()
+function show_hide_cart_buttons(cart)
 {
     if (DeliveryProps.getShowHideButtons() === true)
     {
-        if (simpleCart.quantity() > 0)
+        if (cart.quantity() > 0)
         {
             $("#deliveryCartButtons").show();
         }
@@ -560,13 +635,13 @@ function get_json_data(reqtype, url, pars)
             success:           function(data, stat, xhr) {handle_complete(data, stat, xhr, pars);},
             error:             function(xhr, stat, err)  {handle_error(xhr, stat, err, pars);}
             // complete:          function(xhr, stat) {syslog("Complete " + xhr + " stat=" + stat);},
-        });    
+        });
     }
 } /* get_json_data */
 
 function handle_complete(data, stat, xhr, pars)
 {
-    syslog("handle_complete: stat=" + stat);    
+    syslog("handle_complete: stat=" + stat);
     syslog("handle_complete: pid=" + data[0].pid);
     for(var hld in data[0].holdings)
     {
@@ -583,7 +658,7 @@ function handle_error(xhr, stat, err, pars)
     var msg = stat;
     if (err !== "") msg += ": " + err;
     if (xhr.status !== 0) msg += " (" + xhr.status + ")";
-    syslog("handle_error: msg=" + msg);    
+    syslog("handle_error: msg=" + msg);
     syslog("handle_error: pid=" + pars.pid);
     pars.error = stat;
     pars.result(pars, null, null);

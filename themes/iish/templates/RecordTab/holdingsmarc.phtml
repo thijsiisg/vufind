@@ -11,14 +11,14 @@
         </div>
 
         <? $formats = $this->driver->getFormats(); $format = strtolower($formats[0]); ?>
-        <? if (($format === 'books and brochures') || ($format === 'serials')): ?>
-          <div class="state hidden-print"
-               data-label="<?=$this->escapeHtmlAttr($this->truncate(preg_replace('/[\'"]/', '`',
-                 $this->driver->getShortTitle()), 40))?> - <?=$this->escapeHtmlAttr($holding['j'])?>"
-               data-pid="<?=$this->escapeHtmlAttr($this->driver->getIsShownAt())?>"
-               data-signature="<?=$this->escapeHtmlAttr($holding['j'])?>">
-          </div>
-        <? endif; ?>
+        <div class="state hidden-print"
+             data-label="<?=$this->escapeHtmlAttr($this->truncate(preg_replace('/[\'"]/', '`',
+               $this->driver->getShortTitle()), 40))?> - <?=$this->escapeHtmlAttr($holding['j'])?>"
+             data-pid="<?=$this->escapeHtmlAttr($this->driver->getIsShownAt())?>"
+             data-signature="<?=$this->escapeHtmlAttr($holding['j'])?>"
+             data-show-reservation="<?=var_export(true || ($format === 'books and brochures') || ($format === 'serials'))?>"
+             data-show-reproduction="true">
+        </div>
 
         <? if (isset($holding['note'])): ?>
           <div class="note">

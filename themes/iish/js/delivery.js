@@ -1,21 +1,38 @@
 (function ($) {
     var openCloseWrapper = function () {
-        if (simpleCart.quantity() > 0) {
-            $('#delivery_cart_wrapper').show();
+        var deliveryCartWrapper = $('#delivery_cart_wrapper');
+        if ((reservationCart.cart.quantity() > 0) || (reproductionCart.cart.quantity() > 0)) {
+            deliveryCartWrapper.show();
+
+            if (reservationCart.cart.quantity() > 0) {
+                deliveryCartWrapper.find('.reservationCart').show();
+            }
+            else {
+                deliveryCartWrapper.find('.reservationCart').hide();
+            }
+
+            if (reproductionCart.cart.quantity() > 0) {
+                deliveryCartWrapper.find('.reproductionCart').show();
+            }
+            else {
+                deliveryCartWrapper.find('.reproductionCart').hide();
+            }
         }
         else {
-            $('#delivery_cart_wrapper').hide();
+            deliveryCartWrapper.hide();
         }
     };
 
-    var determineHoldingReservations = function () {
+    var determineHoldingButtons = function () {
         $('#holdings .state').each(function () {
             var holdingState = $(this);
-            holdingState.determineReservationButton(
+            holdingState.determineButtons(
                 holdingState.data('label'),
                 holdingState.data('pid'),
                 holdingState.data('signature'),
-                false
+                false,
+                holdingState.data('show-reservation'),
+                holdingState.data('show-reproduction')
             );
         });
     };
@@ -30,9 +47,26 @@
             onUpdate : openCloseWrapper
         });
 
-        determineHoldingReservations();
+        determineHoldingButtons();
         $('ul.recordTabs a').on('shown.bs.tab', function (e) {
-            determineHoldingReservations();
-        })
+            determineHoldingButtons();
+        });
+
+		if ($('#holdings').hasClass('online-content-available')) {
+			reproductionCart.cart.bind('afterAdd', function (item) {
+				var itemElem = $(document.getElementById('cartItem_' + item.id()));
+
+				itemElem.popover({
+					content: delivery.warningOnlineContent,
+					placement: 'left',
+					trigger: 'manual'
+				});
+				itemElem.popover('show');
+
+				setTimeout(function () {
+					itemElem.popover('hide');
+				}, 8000);
+			});
+		}
     });
 })($);
