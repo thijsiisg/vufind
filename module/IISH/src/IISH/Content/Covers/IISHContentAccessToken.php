@@ -20,7 +20,8 @@ class IISHContentAccessToken {
         'HTTP_X_FORWARDED_FOR',
         'HTTP_X_FORWARDED',
         'HTTP_FORWARDED_FOR',
-        'HTTP_FORWARDED'
+        'HTTP_FORWARDED',
+        'REMOTE_ADDR'
     );
 
     /**
