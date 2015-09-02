@@ -20,6 +20,7 @@ if [ -z "$f" ] ; then
     exit 1
 fi
 
+body=/tmp/body.txt
 s=/opt/status.txt
 q="http://localhost:8080/solr/biblio/select"
 O=/tmp/status.txt
@@ -29,6 +30,7 @@ if [[ $rc == 0 ]] ; then
     echo "$(date)">$f
     exit 0
 else
+
     rm -f $f
     echo "$(date): Invalid response ${rc}" >> $s
     service vufind stop
@@ -38,8 +40,10 @@ else
     service vufind start
     sleep 30
 
+    cp "$s" "$body"
+    top -b -n 1 >> "$body"
     subject="${HOSTNAME} - Automatic restart by ${0}"
-    /usr/bin/sendmail --body "$s" --from "search@${HOSTNAME}" --to "$MAIL_TO" --subject "$subject" --mail_relay "$VUFIND_MAIL_HOST"
+    /usr/bin/sendmail --body "$body" --from "search@${HOSTNAME}" --to "$MAIL_TO" --subject "$subject" --mail_relay "$VUFIND_MAIL_HOST"
 
     exit 1
 fi
