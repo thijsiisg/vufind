@@ -248,14 +248,16 @@ private String getTextFromPlain(InputStream inputStream) throws Exception {
 
 private void indexFullText(SolrServer solrServer, String record, String item, String page, String fulltext) {
     try {
-        SolrInputDocument document = new SolrInputDocument();
-        document.addField("record", record);
-        document.addField("fulltext", fulltext);
-        if (item != null)
-            document.addField("item", item);
-        if (page != null)
-            document.addField("page", page);
-        solrServer.add(document);
+        if (!fulltext.trim().isEmpty()) {
+            SolrInputDocument document = new SolrInputDocument();
+            document.addField("record", record);
+            document.addField("fulltext", fulltext);
+            if (item != null)
+                document.addField("item", item);
+            if (page != null)
+                document.addField("page", page);
+            solrServer.add(document);
+        }
     }
     catch (SolrServerException e) {
         throw new SolrRuntimeException("SolrserverException", e);
