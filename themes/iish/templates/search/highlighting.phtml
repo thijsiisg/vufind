@@ -1,0 +1,37 @@
+<div class="text-search-results">
+  <? if (count($this->results) === 0): ?>
+    <div class="result-item">
+      <?= $this->transEsc('nohit_heading') ?>
+    </div>
+  <? endif; ?>
+
+  <? foreach ($this->results as $result): ?>
+    <div class="result-item">
+      <? $item = $result->getItem();
+      $page = $result->getPage(); ?>
+
+      <? if (($item !== null) || ($page !== null)): ?>
+        <h5>
+          <?= $this->transEsc('Found') ?>
+          <? if ($page !== null): ?>
+            <?= $this->transEsc('on page') . ' ' . $page ?>
+          <? endif; ?>
+          <? if ($item !== null): ?>
+            <?= $this->transEsc('for item') . ' ' . $item ?>
+          <? endif; ?>
+          <?= ':' ?>
+        </h5>
+      <? endif; ?>
+
+      <ul class="result-item-text list-unstyled">
+        <? foreach ($result->getHighlightedText() as $text): ?>
+          <?
+          $text = str_replace($this->tagPre, '<mark>', $text);
+          $text = str_replace($this->tagPost, '</mark>', $text);
+          ?>
+          <li><?= $text ?></li>
+        <? endforeach; ?>
+      </ul>
+    </div>
+  <? endforeach; ?>
+</div>

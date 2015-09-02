@@ -19,11 +19,6 @@ class SolrEad extends SolrMarc
     private $ead;
 
     /**
-     * @var \Zend\ServiceManager\ServiceLocatorInterface
-     */
-    private $serviceLocator;
-
-    /**
      * @var string
      */
     private $siteURL;
@@ -47,8 +42,7 @@ class SolrEad extends SolrMarc
     public function __construct(ServiceLocatorInterface $serviceLocator, $mainConfig = null, $recordConfig = null,
                                 $searchSettings = null, $iishConfig = null)
     {
-        parent::__construct($mainConfig, $recordConfig, $searchSettings, $iishConfig);
-        $this->serviceLocator = $serviceLocator;
+        parent::__construct($serviceLocator, $mainConfig, $recordConfig, $searchSettings, $iishConfig);
         $this->siteURL = $serviceLocator->get('VuFind\Config')->get('config')->Site->url;
         $this->cache_dir = $serviceLocator->get('VuFind\Config')->get('config')->Cache->cache_dir;
     }
@@ -125,10 +119,48 @@ class SolrEad extends SolrMarc
             array(
                 'action' => $name,
                 'baseUrl' => $this->siteURL . '/Record/' . $this->getUniqueID(),
-                'title' => $this->getTitle(),
+                'title' => $this->getTitle()
             )
         );
 
         return $xslt->process();
+    }
+
+    public function getItems() {
+        if (isset($this->fields['items'])) {
+            return $this->fields['items'];
+        }
+        return array();
+    }
+
+    public function getFullTextItems() {
+        if (isset($this->fields['fulltext_items'])) {
+            return $this->fields['fulltext_items'];
+        }
+        return array();
+    }
+
+    public function getFullTextPerItem() {
+        return array_combine($this->getItems(), $this->getFullTextItems());
+    }
+
+    public function countItems($search) {
+        $fullTextMatch = array();
+        if (strlen(trim($search)) > 0) {
+            $keywords = explode(' ', $search);
+
+            foreach ($this->getFullTextPerItem() as $item => $fulltext) {
+                $count = 0;
+                foreach ($keywords as $keyword) {
+                    if (strpos($fulltext, $keyword) !== false) {
+                        $count++;
+                    }
+                }
+                if ($count > 0) {
+                    $fullTextMatch[$item] = $count;
+                }
+            }
+        }
+        return $fullTextMatch;
     }
 } 

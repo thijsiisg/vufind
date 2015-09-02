@@ -16,6 +16,7 @@ class Factory {
      */
     public static function getSolrMarc(ServiceManager $sm) {
         $driver = new SolrMarc(
+            $sm->getServiceLocator(),
             $sm->getServiceLocator()->get('VuFind\Config')->get('config'),
             null,
             $sm->getServiceLocator()->get('VuFind\Config')->get('searches'),
@@ -40,6 +41,7 @@ class Factory {
      */
     public static function getSolrAv(ServiceManager $sm) {
         $driver = new SolrAv(
+            $sm->getServiceLocator(),
             $sm->getServiceLocator()->get('VuFind\Config')->get('config'),
             null,
             $sm->getServiceLocator()->get('VuFind\Config')->get('searches'),
@@ -103,5 +105,20 @@ class Factory {
         );
 
         return $driver;
+    }
+
+    /**
+     * Factory for SolrFullText record driver.
+     *
+     * @param ServiceManager $sm Service manager.
+     *
+     * @return SolrFullText
+     */
+    public static function getSolrFullText(ServiceManager $sm) {
+        return new SolrFullText(
+            $sm->getServiceLocator()->get('VuFind\Config')->get('config'),
+            null,
+            null
+        );
     }
 } 

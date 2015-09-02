@@ -1,5 +1,6 @@
 <?php
 namespace IISH\RecordDriver;
+use Zend\ServiceManager\ServiceLocatorInterface;
 use VuFind\RecordDriver\SolrMarc as VuFindSolrMarc;
 
 /**
@@ -9,6 +10,11 @@ use VuFind\RecordDriver\SolrMarc as VuFindSolrMarc;
  */
 class SolrMarc extends VuFindSolrMarc {
     /**
+     * @var \Zend\ServiceManager\ServiceLocatorInterface
+     */
+    protected $serviceLocator;
+
+    /**
      * @var \Zend\Config\Config
      */
     protected $iishConfig;
@@ -16,6 +22,7 @@ class SolrMarc extends VuFindSolrMarc {
     /**
      * Constructor.
      *
+     * @param ServiceLocatorInterface $serviceLocator
      * @param \Zend\Config\Config $mainConfig     VuFind main configuration. (omit for
      *                                            built-in defaults)
      * @param \Zend\Config\Config $recordConfig   Record-specific configuration file.
@@ -23,8 +30,10 @@ class SolrMarc extends VuFindSolrMarc {
      * @param \Zend\Config\Config $searchSettings Search-specific configuration file
      * @param \Zend\Config\Config $iishConfig     IISH specific configuration.
      */
-    public function __construct($mainConfig = null, $recordConfig = null, $searchSettings = null, $iishConfig = null) {
+    public function __construct(ServiceLocatorInterface $serviceLocator, $mainConfig = null, $recordConfig = null,
+                                $searchSettings = null, $iishConfig = null) {
         parent::__construct($mainConfig, $recordConfig, $searchSettings);
+        $this->serviceLocator = $serviceLocator;
         $this->iishConfig = $iishConfig;
     }
 
@@ -582,6 +591,17 @@ class SolrMarc extends VuFindSolrMarc {
         }
 
         return $thumbnail;
+    }
+
+    /**
+     * Whether this record driver also has text indexed.
+     *
+     * @return bool Whether this record driver also has text indexed.
+     */
+    public function hasTextIndexed() {
+        $searchService = $this->serviceLocator->get('VuFind\Search');
+        $highlighting = new \IISH\Search\Highlighting($searchService, $this);
+        return $highlighting->hasTextIndexed();
     }
 
     /**
