@@ -79,6 +79,7 @@ $config = array(
             ),
             'search_backend' => array(
                 'factories' => array(
+                    'Solr'         => 'IISH\Search\Factory\SolrDefaultBackendFactory',
                     'SolrFullText' => 'IISH\Search\Factory\SolrFullTextBackendFactory',
                 ),
             ),
