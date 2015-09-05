@@ -21,21 +21,45 @@ if [ -z "$f" ] ; then
 fi
 
 body=/tmp/body.txt
+content=/tmp/content.txt
+headers=/tmp/headers.txt
 s=/opt/status.txt
 q="http://localhost:8080/solr/biblio/select"
-O=/tmp/status.txt
-wget -S -T 5 -t 3 -O $O $q 2>"$body"
+
+rm -f $content $headers $body
+wget -S -T 5 -t 3 -O $content $q 2>$headers
 rc=$?
 if [[ $rc == 0 ]] ; then
     echo "$(date)">$f
     exit 0
 else
-    # Monitor data:
-    cat "$s" >> "$body"
-    top -b -n 1 >> "$body"
-
     rm -f $f
     echo "$(date): Invalid response ${rc}" >> $s
+
+    # Headers
+    if [ ! -f $headers ]
+    then
+        echo "There is no headers file." > $headers
+    fi
+
+    # Content
+    if [ ! -f $content ]
+    then
+        echo "There is no content file." > $O
+    fi
+
+    echo "Headers:" > $body
+    cat $headers >> "$body"
+
+    echo "Content:" >> $body
+    cat $content >> "$body"
+
+    echo "Top:" >> $body
+    top -b -n 1 >> "$body"
+
+    echo "Restart event history:"
+    cat $s >> "$body"
+
     service vufind stop
     sleep 7
     killall java
