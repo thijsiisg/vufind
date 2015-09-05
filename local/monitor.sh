@@ -16,7 +16,7 @@ fi
 
 f=$1
 if [ -z "$f" ] ; then
-    echo "Warning. No file parameter found. Usage: ./monitor.sh /path/to/root/of/the/webapplication"
+    echo "Warning. No file parameter found. Usage: ./monitor.sh /path/to/root/of/the/webapplication/status.txt"
     exit 1
 fi
 
@@ -30,6 +30,9 @@ if [[ $rc == 0 ]] ; then
     echo "$(date)">$f
     exit 0
 else
+    # Monitor data:
+    cp "$s" "$body"
+    top -b -n 1 >> "$body"
 
     rm -f $f
     echo "$(date): Invalid response ${rc}" >> $s
@@ -40,8 +43,6 @@ else
     service vufind start
     sleep 30
 
-    cp "$s" "$body"
-    top -b -n 1 >> "$body"
     subject="${HOSTNAME} - Automatic restart by ${0}"
     /usr/bin/sendmail --body "$body" --from "search@${HOSTNAME}" --to "$MAIL_TO" --subject "$subject" --mail_relay "$VUFIND_MAIL_HOST"
 
