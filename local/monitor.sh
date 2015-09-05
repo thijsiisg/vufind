@@ -49,11 +49,11 @@ else
     fi
 
     echo "Headers:
-    $headers
+    $(cat headers)
     " >> "$body"
 
     echo "Content:
-    $content
+    $(cat content)
     " >> "$body"
 
     echo "Top:
@@ -61,7 +61,7 @@ else
     " >> "$body"
 
     echo "Restart event history:
-    $s
+    $(cat s)
     " >> "$body"
 
     service vufind stop
