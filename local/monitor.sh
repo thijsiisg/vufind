@@ -48,17 +48,21 @@ else
         echo "There is no content file." > $O
     fi
 
-    echo "Headers:" > $body
-    cat $headers >> "$body"
+    echo "Headers:
+    $headers
+    " >> "$body"
 
-    echo "Content:" >> $body
-    cat $content >> "$body"
+    echo "Content:
+    $content
+    " >> "$body"
 
-    echo "Top:" >> $body
-    top -b -n 1 >> "$body"
+    echo "Top:
+    $(top -b -n 1)
+    " >> "$body"
 
-    echo "Restart event history:"
-    cat $s >> "$body"
+    echo "Restart event history:
+    $s
+    " >> "$body"
 
     service vufind stop
     sleep 7
