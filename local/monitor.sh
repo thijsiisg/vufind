@@ -24,14 +24,14 @@ body=/tmp/body.txt
 s=/opt/status.txt
 q="http://localhost:8080/solr/biblio/select"
 O=/tmp/status.txt
-wget --spider -T 5 -t 3 -O $O $q
+wget -S -T 5 -t 3 -O $O $q 2>"$body"
 rc=$?
 if [[ $rc == 0 ]] ; then
     echo "$(date)">$f
     exit 0
 else
     # Monitor data:
-    cp "$s" "$body"
+    cat "$s" >> "$body"
     top -b -n 1 >> "$body"
 
     rm -f $f
