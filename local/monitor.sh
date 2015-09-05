@@ -26,7 +26,7 @@ headers=/tmp/headers.txt
 s=/opt/status.txt
 q="http://localhost:8080/solr/biblio/select"
 
-rm -f $content $headers $body
+rm -f $content $headers
 wget -S -T 5 -t 3 -O $content $q 2>$headers
 rc=$?
 if [[ $rc == 0 ]] ; then
@@ -45,24 +45,23 @@ else
     # Content
     if [ ! -f $content ]
     then
-        echo "There is no content file." > $O
+        echo "There is no content file." > $content
     fi
 
-    echo "Headers:
-    $(cat headers)
-    " >> "$body"
+    echo "Headers:" > $body
+    cat $headers >> $body
+    echo "" >> $body
 
-    echo "Content:
-    $(cat content)
-    " >> "$body"
+    echo "Content:" >> $body
+    cat $content >> $body
+    echo "" >> $body
 
-    echo "Top:
-    $(top -b -n 1)
-    " >> "$body"
+    echo "Top:" >> $body
+    top -b -n 1 >> $body
+    echo "" >> $body
 
-    echo "Restart event history:
-    $(cat s)
-    " >> "$body"
+    echo "Restart event history:" >> $body
+    cat $s >> $body
 
     service vufind stop
     sleep 7
