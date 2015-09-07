@@ -24,7 +24,7 @@ body=/tmp/body.txt
 content=/tmp/content.txt
 headers=/tmp/headers.txt
 s=/opt/status.txt
-q="http://localhost:8080/solr/biblio/select"
+q="http://127.0.0.1:8080/solr/biblio/select"
 
 rm -f $content $headers
 wget -S -T 5 -t 3 -O $content $q 2>$headers
