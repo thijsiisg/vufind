@@ -159,12 +159,12 @@ $facetListForArchives = is_object($this->resultsForArchives) ? $this->resultsFor
         </div>
     <? endforeach; ?>
 
-  <div class="col-sm-3">
-    <p class="lead <?=$this->layout()->userLang?>"><?=$this->transEsc('Popular searches')?></p>
+  <!--<div class="col-sm-3">
+    <p class="lead <?/*=$this->layout()->userLang*/?>"><?/*=$this->transEsc('Popular searches')*/?></p>
     <div class="search-cloud">
-      <? foreach($this->searchStats as $stat): ?>
-        <a href="<?=$this->url('search-results') . '?lookfor=' . urlencode($stat['value']) ?>" rel="<?=$stat['count']?>"><?=$stat['value']?></a>
-      <? endforeach; ?>
+      <?/* foreach($this->searchStats as $stat): */?>
+        <a href="<?/*=$this->url('search-results') . '?lookfor=' . urlencode($stat['value']) */?>" rel="<?/*=$stat['count']*/?>"><?/*=$stat['value']*/?></a>
+      <?/* endforeach; */?>
     </div>
-  </div>
+  </div>-->
 <? endif; ?>

@@ -26,8 +26,8 @@ class SearchController extends VuFindSearchController {
         $viewModel->messageOfTheDay = $motdLoader->getMessageOfTheDay();
 
         // Obtain the top searches and add it to the view model
-        $searchStats = new SearchStatistics($this->getServiceLocator());
-        $viewModel->searchStats = $searchStats->getStats();
+        //$searchStats = new SearchStatistics($this->getServiceLocator());
+        //$viewModel->searchStats = $searchStats->getStats();
 
         // Add archives facets
         $viewModel->resultsForArchives = $this->getHomePageFacetsForArchives();
