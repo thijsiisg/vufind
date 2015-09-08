@@ -68,6 +68,7 @@ else
     killall java
     sleep 7
     service vufind start
+    service apache2 restart
     sleep 30
 
     subject="${HOSTNAME} - Automatic restart by ${0}"
