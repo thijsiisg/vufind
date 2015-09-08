@@ -91,6 +91,7 @@ class RecordController extends VuFindRecordController {
         $viewModel->tagPre = $highlighting::TAG_PRE;
         $viewModel->tagPost = $highlighting::TAG_POST;
         $viewModel->results = $results;
+        $viewModel->recordDriver = $driver;
 
         // If called via AJAX, use the Lightbox layout
         if ($this->getRequest()->isXmlHttpRequest()) {

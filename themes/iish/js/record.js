@@ -196,19 +196,26 @@ $(document).ready(function(){
 
   $('#record-tabs').on('click', 'a', function (e) {
     var href = $(this).attr('href');
-    href = (href.indexOf('#') > 0) ? href.substr(0, href.indexOf('#')) : href;
+    var fragment = null;
+    if (href.indexOf('#') > 0) {
+      fragment = href.substr(href.indexOf('#') + 1);
+      href = href.substr(0, href.indexOf('#'));
+    }
 
     var found = false;
     $('ul.recordTabs a').each(function () {
       var tabHref = $(this).attr('href');
       tabHref = (tabHref.indexOf('#') > 0) ? tabHref.substr(0, tabHref.indexOf('#')) : tabHref;
-      if ((href.indexOf(tabHref) > 0) || (tabHref.indexOf(href) > 0)) {
+      if ((href.indexOf(tabHref) >= 0) || (tabHref.indexOf(href) >= 0)) {
         onTabClick($(this));
         found = true;
       }
     });
 
     if (found) {
+      if (fragment != null) {
+        window.location.hash = fragment;
+      }
       return false;
     }
   });
