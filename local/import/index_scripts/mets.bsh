@@ -42,22 +42,19 @@ public String getTextFromMarc(Record record) {
     String recordId = getId(record);
     List metsItemUrls = new ArrayList();
 
-    final List fields = record.getVariableFields("852");
-    if (fields != null) {
-        final Iterator fieldsIter = fields.iterator();
-        while (fieldsIter.hasNext()) {
-            final DataField field = (DataField) fieldsIter.next();
-            final List subfields = field.getSubfields('p');
-            if (subfields != null) {
-                final Iterator subfieldsIter = subfields.iterator();
-                while (subfieldsIter.hasNext()) {
-                    final Subfield subfield = subfieldsIter.next();
-                    final String data = subfield.getData().toLowerCase().trim();
+    List fields = record.getVariableFields("852");
+    for (DataField datafield : fields) {
+        Subfield callNumber = datafield.getSubfield('j');
+        Subfield barcode = datafield.getSubfield('p');
 
-                    String metsUrl = "http://hdl.handle.net/10622/" + data + "?locatt=view:mets";
-                    metsItemUrls.add(new String[] {null, metsUrl});
-                }
+        if (barcode != null) {
+            String cn = null;
+            if (callNumber != null) {
+                cn = callNumber.getData();
             }
+
+            String metsUrl = "http://hdl.handle.net/10622/" + barcode.getData() + "?locatt=view:mets";
+            metsItemUrls.add(new String[] {cn, metsUrl});
         }
     }
 
