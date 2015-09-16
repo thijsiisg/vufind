@@ -821,67 +821,6 @@
         ]
     },
     {
-        "name": "oyejorge/less.php",
-        "version": "v1.7.0.5",
-        "version_normalized": "1.7.0.5",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/oyejorge/less.php.git",
-            "reference": "4385036b1dbfaf37f5380bd26a1e6006fc43149f"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/oyejorge/less.php/zipball/4385036b1dbfaf37f5380bd26a1e6006fc43149f",
-            "reference": "4385036b1dbfaf37f5380bd26a1e6006fc43149f",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3"
-        },
-        "time": "2015-07-13 20:34:18",
-        "bin": [
-            "bin/lessc"
-        ],
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Less": "lib/"
-            },
-            "classmap": [
-                "lessc.inc.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "Apache-2.0"
-        ],
-        "authors": [
-            {
-                "name": "Matt Agar",
-                "homepage": "https://github.com/agar"
-            },
-            {
-                "name": "Martin Jantošovič",
-                "homepage": "https://github.com/Mordred"
-            },
-            {
-                "name": "Josh Schmidt",
-                "homepage": "https://github.com/oyejorge"
-            }
-        ],
-        "description": "PHP port of the Javascript version of LESS http://lesscss.org",
-        "homepage": "http://lessphp.gpeasy.com",
-        "keywords": [
-            "css",
-            "less",
-            "less.js",
-            "lesscss",
-            "php",
-            "stylesheet"
-        ]
-    },
-    {
         "name": "pear-pear.php.net/File_MARC",
         "version": "1.1.2",
         "version_normalized": "1.1.2.0",
@@ -1197,5 +1136,66 @@
             "source": "https://github.com/Jasig/phpCAS/tree/master",
             "issues": "https://github.com/Jasig/phpCAS/issues"
         }
+    },
+    {
+        "name": "oyejorge/less.php",
+        "version": "v1.7.0.6",
+        "version_normalized": "1.7.0.6",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/oyejorge/less.php.git",
+            "reference": "29140fadbcae80f920d86bf91104c78f83cc223b"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/oyejorge/less.php/zipball/29140fadbcae80f920d86bf91104c78f83cc223b",
+            "reference": "29140fadbcae80f920d86bf91104c78f83cc223b",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3"
+        },
+        "time": "2015-09-15 20:13:20",
+        "bin": [
+            "bin/lessc"
+        ],
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Less": "lib/"
+            },
+            "classmap": [
+                "lessc.inc.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Apache-2.0"
+        ],
+        "authors": [
+            {
+                "name": "Matt Agar",
+                "homepage": "https://github.com/agar"
+            },
+            {
+                "name": "Martin Jantošovič",
+                "homepage": "https://github.com/Mordred"
+            },
+            {
+                "name": "Josh Schmidt",
+                "homepage": "https://github.com/oyejorge"
+            }
+        ],
+        "description": "PHP port of the Javascript version of LESS http://lesscss.org",
+        "homepage": "http://lessphp.gpeasy.com",
+        "keywords": [
+            "css",
+            "less",
+            "less.js",
+            "lesscss",
+            "php",
+            "stylesheet"
+        ]
     }
 ]
