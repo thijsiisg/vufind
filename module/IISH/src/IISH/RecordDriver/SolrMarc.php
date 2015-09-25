@@ -388,8 +388,8 @@ class SolrMarc extends VuFindSolrMarc {
 
                     $classifications[] = array(
                         'code'    => $code->getData(),
-                        'english' => ($english !== null) ? $english->getData() : null,
-                        'dutch'   => ($dutch !== null) ? $dutch->getData() : null
+                        'english' => ($english == null) ? null : $english->getData(),
+                        'dutch'   => ($dutch == null) ?  null : $dutch->getData()
                     );
                 }
             }
