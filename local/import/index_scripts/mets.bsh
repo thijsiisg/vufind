@@ -28,9 +28,19 @@ import org.marc4j.marc.Subfield;
 import org.solrmarc.solr.SolrProxy;
 import org.solrmarc.solr.SolrCoreLoader;
 
+import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.common.SolrInputDocument;
+import org.apache.solr.client.solrj.util.ClientUtils;
+
+// Give ourselves the ability to import other BeanShell scripts
+String vufindHome = System.getenv("VUFIND_HOME");
+String vufindLocal = System.getenv("VUFIND_LOCAL_DIR");
+addClassPath(vufindHome + "/import");
+if (vufindLocal != null) {
+    addClassPath(vufindLocal + "/import");
+}
+importCommands("index_scripts");
 
 // define the base level indexer so that its methods can be called from the script.
 // note that the SolrIndexer code will set this value before the script methods are called.
@@ -61,6 +71,19 @@ public String getTextFromMarc(Record record) {
     return getTextFromMetsItemsUrls(recordId, metsItemUrls);
 }
 
+public String getTextFromMarcAndParser(Record record, String parserFieldSpec, String parserExtension) {
+    String metsText = getTextFromMarc(record);
+    String parserText = getFulltext(record, parserFieldSpec, parserExtension);
+
+    SolrProxy solrProxy = getSolrProxy();
+    SolrServer solrServer = solrProxy.getSolrServer();
+    indexFullText(solrServer, getId(record), null, null, parserText);
+    solrProxy.commit(false);
+    solrProxy.close();
+
+    return (metsText + " " + parserText).trim();
+}
+
 public String getTextFromEAD(Record record) {
     String recordId = getId(record);
     String url = indexer.getFirstFieldVal(record, "856u");
@@ -85,12 +108,11 @@ public String getTextFromEAD(Record record) {
 }
 
 private String getTextFromMetsItemsUrls(String recordId, List urls) {
-    String solrFullTextUrl = "http://localhost:8080/solr/fulltext/update";
-    SolrProxy solrProxy = SolrCoreLoader.loadRemoteSolrServer(solrFullTextUrl, true, false);
+    SolrProxy solrProxy = getSolrProxy();
     SolrServer solrServer = solrProxy.getSolrServer();
 
     try {
-        solrServer.deleteByQuery("record:"+recordId);
+        solrServer.deleteByQuery("record:\""+ClientUtils.escapeQueryChars(recordId)+"\"");
     }
     catch (SolrServerException e) {
         throw new SolrRuntimeException("SolrserverException", e);
@@ -262,6 +284,11 @@ private void indexFullText(SolrServer solrServer, String record, String item, St
 }
 
 /* UTILS */
+
+private SolrProxy getSolrProxy() {
+    String solrFullTextUrl = "http://localhost:8080/solr/fulltext/update";
+    return SolrCoreLoader.loadRemoteSolrServer(solrFullTextUrl, true, false);
+}
 
 private InputStream getInputStreamfromUrl(String url) throws Exception {
     URLConnection urlConnection = new URL(url).openConnection();
