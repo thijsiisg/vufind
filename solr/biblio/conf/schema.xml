@@ -186,6 +186,7 @@
    <!-- Fields added by the IISH -->
    <field name="pid" type="string" indexed="true" stored="false"/>
    <field name="downloadable" type="boolean" indexed="true" stored="true" multiValued="false"/>
+   <field name="no_text" type="boolean" indexed="true" stored="true" multiValued="false" />
    <field name="collector" type="textProper" indexed="true" stored="true"/>
    <field name="classification" type="textProper" indexed="true" stored="true" multiValued="true"/>
    <field name="collector_facet" type="textFacet" indexed="true" stored="true"/>
@@ -259,6 +260,8 @@
  <!-- CopyFields for All Fields -->
  <copyField source="format"    dest="allfields"/>
  <copyField source="format"    dest="allfields_unstemmed"/>
+ <!-- CopyFields workaround to determine whether there is text -->
+ <copyField source="fulltext" dest="no_text"/>
  <!-- Default Boolean Operator -->
  <solrQueryParser defaultOperator="AND"/>
 </schema>

@@ -350,6 +350,106 @@ AllFields:
     - geographic^300
     - genre^300
     - allfields_unstemmed^10
+    - allfields
+    - description
+    - isbn
+    - issn
+  QueryFields:
+    0:
+      0:
+        - OR
+        - 50
+      title_short:
+        - [onephrase, 750]
+      title_full_unstemmed:
+        - [onephrase, 600]
+        - [and, 500]
+      title_full:
+        - [onephrase, 400]
+      title:
+        - [onephrase, 300]
+        - [and, 250]
+      title_alt:
+        - [and, 200]
+      title_new:
+        - [and, 100]
+    series:
+      - [and, 50]
+    series2:
+      - [and, 30]
+    author:
+      - [onephrase, 300]
+      - [and, 250]
+    author_fuller:
+      - [onephrase, 150]
+      - [and, 125]
+    author2:
+      - [and, 50]
+    author_additional:
+      - [and, 50]
+    contents:
+      - [and, 10]
+    topic_unstemmed:
+      - [onephrase, 550]
+      - [and, 500]
+    topic:
+      - [onephrase, 500]
+    geographic:
+      - [onephrase, 300]
+    genre:
+      - [onephrase, 300]
+    allfields_unstemmed:
+      - [or, 10]
+    allfields:
+      - [or, ~]
+    description:
+      - [or, ~]
+    isbn:
+      - [onephrase, ~]
+    issn:
+      - [onephrase, ~]
+#  ExactSettings:
+#    DismaxFields:
+#      - title_full_unstemmed^600
+#      - topic_unstemmed^550
+#      - allfields_unstemmed^10
+#      - fulltext_unstemmed^10
+#      - isbn
+#      - issn
+#    QueryFields:
+#      title_full_unstemmed:
+#        - [onephrase, 600]
+#        - [and, 500]
+#      topic_unstemmed:
+#        - [onephrase, 550]
+#        - [and, 500]
+#      allfields_unstemmed:
+#        - [or, 10]
+#      fulltext_unstemmed:
+#        - [or, 10]
+#      isbn:
+#        - [onephrase, ~]
+#      issn:
+#        - [onephrase, ~]
+
+AllFieldsFullText:
+  DismaxFields:
+    - title_short^750
+    - title_full_unstemmed^600
+    - title_full^400
+    - title^500
+    - title_alt^200
+    - title_new^100
+    - series^50
+    - series2^30
+    - author^300
+    - author_fuller^150
+    - contents^10
+    - topic_unstemmed^550
+    - topic^500
+    - geographic^300
+    - genre^300
+    - allfields_unstemmed^10
     - fulltext_unstemmed^10
     - allfields
     - fulltext

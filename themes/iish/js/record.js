@@ -172,6 +172,9 @@ $(document).ready(function(){
   registerTabEvents();
 
   var onTabClick = function (tab) {
+    if (tab.attr('id') === undefined) {
+      return;
+    }
     if(tab.parents('li.active').length > 0) {
       window.location.href = tab.attr('href');
       return;

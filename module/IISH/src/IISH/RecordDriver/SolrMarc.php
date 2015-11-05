@@ -89,6 +89,18 @@ class SolrMarc extends VuFindSolrMarc {
     }
 
     /**
+     * True if we have full text indexed.
+     *
+     * @return bool
+     */
+    public function hasFullText() {
+        if (isset($this->fields['no_text'])) {
+            return !$this->fields['no_text'];
+        }
+        return false;
+    }
+
+    /**
      * TODO: Previously used field 'callnumber-a'.
      *
      * Returns the collector.

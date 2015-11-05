@@ -15,7 +15,7 @@ class TextSearch extends AbstractBase {
      * @return string The description.
      */
     public function getDescription() {
-        return 'Text search';
+        return 'Search';
     }
 
     /**

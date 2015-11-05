@@ -32,8 +32,8 @@ class SolrDefaultBackendFactory extends VuFindSolrDefaultBackendFactory {
             ->set('fl', 'id,fullrecord,marc_error,spelling*,institution,' .
                 'collection,building,language,format,author*,title*,physical,publish*,edition,description,' .
                 'contents,url,thumbnail,lccn,ctrlnum,isbn,issn,oclc_num,callnumber*,dewey*,date*,series*,' .
-                'topic*,genre*,geographic*,era*,illustrated,long_lat,downloadable,collector*,classification,' .
-                '*facet,container*,*hierarchy*,recordtype,*indexed,score');
+                'topic*,genre*,geographic*,era*,illustrated,long_lat,downloadable,no_text,collector*,' .
+                'classification,*facet,container*,*hierarchy*,recordtype,*indexed,score');
         return parent::createBackend($connector);
     }
 }
