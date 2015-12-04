@@ -88,6 +88,16 @@
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:template name="acquisition">
+    <xsl:call-template name="row">
+      <xsl:with-param name="key" select="'ArchiveContentAndStructure.acquisition'"/>
+      <xsl:with-param name="value">
+        <xsl:apply-templates
+         select="ead:archdesc/ead:descgrp[@type='context']/ead:acqinfo/*"/>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
   <xsl:template name="altformavail">
     <xsl:call-template name="row">
       <xsl:with-param name="key" select="'ArchiveContentAndStructure.altformavail'"/>
