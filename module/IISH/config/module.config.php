@@ -22,7 +22,6 @@ $config = array(
     ),
     'controllers'     => array(
         'factories'  => array(
-            'order'  => 'IISH\Controller\Factory::getOrderController',
             'record' => 'IISH\Controller\Factory::getRecordController',
         ),
         'invokables' => array(
