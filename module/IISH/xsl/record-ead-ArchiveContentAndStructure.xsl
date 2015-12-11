@@ -31,6 +31,7 @@
         <xsl:call-template name="custodhist"/>
         <xsl:call-template name="arrangement"/>
         <xsl:call-template name="content"/>
+        <xsl:call-template name="acquisition"/>
         <xsl:call-template name="processinfo"/>
         <xsl:call-template name="altformavail"/>
         <xsl:call-template name="originalsloc"/>
