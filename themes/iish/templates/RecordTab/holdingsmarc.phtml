@@ -16,8 +16,8 @@
                $this->driver->getShortTitle()), 40))?> - <?=$this->escapeHtmlAttr($holding['j'])?>"
              data-pid="<?=$this->escapeHtmlAttr($this->driver->getIsShownAt())?>"
              data-signature="<?=$this->escapeHtmlAttr($holding['j'])?>"
-             data-show-reservation="<?=var_export(true || ($format === 'books and brochures') || ($format === 'serials'))?>"
-             data-show-reproduction="true">
+             data-show-reservation="<?=var_export(($format === 'books and brochures') || ($format === 'serials'))?>"
+             data-show-reproduction="<?=var_export(($format !== 'articles') && ($format !== 'other'))?>">
         </div>
 
         <? if (isset($holding['note'])): ?>
