@@ -258,7 +258,7 @@ private String getTextFromPlain(InputStream inputStream) throws Exception {
     StringBuilder builder = new StringBuilder();
     Scanner sc = new Scanner(inputStream);
     while (sc.hasNextLine()) {
-        builder.append(sc.next());
+        builder.append(sc.nextLine());
         builder.append(" ");
     }
     sc.close();
