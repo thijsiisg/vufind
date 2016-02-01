@@ -170,6 +170,18 @@ class SolrMarc extends VuFindSolrMarc {
     }
 
     /**
+     * Which barcodes of this record have METS?
+     *
+     * @return string[] All barcodes with METS.
+     */
+    public function getBarcodesWithMets() {
+        if (isset($this->fields['mets_barcodes'])) {
+            return $this->fields['mets_barcodes'];
+        }
+        return array();
+    }
+
+    /**
      * Tries to find the authority for the specified MARC field.
      * If a value is given, the authority for that value is returned if found.
      * Otherwise the first found authority is returned instead.
@@ -356,6 +368,7 @@ class SolrMarc extends VuFindSolrMarc {
             if ($tag == '852') {
                 $subfieldc = $datafield->getSubfield('c');
                 $subfieldj = $datafield->getSubfield('j');
+                $subfieldp = $datafield->getSubfield('p');
                 $subfield = null;
 
                 if ($subfieldc && $subfieldj) {
@@ -372,6 +385,9 @@ class SolrMarc extends VuFindSolrMarc {
                     $holdings[$key]['c'] = $subfield;
                     if ($subfieldj) {
                         $holdings[$key]['j'] = $subfieldj->getData();
+                    }
+                    if ($subfieldp && in_array($subfieldp->getData(), $this->getBarcodesWithMets(), true)) {
+                        $holdings[$key]['p'] = $subfieldp->getData();
                     }
                 }
             }
