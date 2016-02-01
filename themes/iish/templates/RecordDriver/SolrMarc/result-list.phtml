@@ -137,7 +137,7 @@
       <?=$this->record($this->driver)->getPreviews()?>
     </div>
     <div class="col-xs-3 right hidden-print">
-      <? if ($this->driver->getDownloadable()) : ?>
+      <? if ($this->driver->getDownloadable() || $this->driver->hasFullText()) : ?>
         <div class="labels">
           <? if ($this->driver->getDownloadable()) : ?>
               <span class="label label-info"><?=$this->transEsc('Downloadable content');?></span>
