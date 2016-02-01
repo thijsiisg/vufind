@@ -649,6 +649,11 @@ class SolrMarc extends VuFindSolrMarc {
             }
         }
 
+        $barcodes = $this->getBarcodesWithMets();
+        if (isset($barcodes[0])) {
+            return $barcodes[0];
+        }
+
         return false;
     }
 
