@@ -14,7 +14,7 @@ class SolrAv extends SolrMarc {
      * @return array The subject person field.
      */
     public function getSubjectPerson() {
-        return $this->getFieldArray('600', array('a'));
+        return self::normalize($this->getFieldArray('600', array('a')));
     }
 
     /**
@@ -23,7 +23,7 @@ class SolrAv extends SolrMarc {
      * @return array The subject corporation field.
      */
     public function getSubjectCorporation() {
-        return $this->getFieldArray('610', array('a'));
+        return self::normalize($this->getFieldArray('610', array('a')));
     }
 
     /**
@@ -32,7 +32,7 @@ class SolrAv extends SolrMarc {
      * @return array The subject meeting field.
      */
     public function getSubjectMeeting() {
-        return $this->getFieldArray('611', array('a', 'e', 'n', 'd', 'c'));
+        return self::normalize($this->getFieldArray('611', array('a', 'e', 'n', 'd', 'c')));
     }
 
     /**
@@ -41,7 +41,7 @@ class SolrAv extends SolrMarc {
      * @return array The subject field.
      */
     public function getSubject() {
-        return $this->getFieldArray('650', array('a'));
+        return self::normalize($this->getFieldArray('650', array('a')));
     }
 
     /**
@@ -50,7 +50,7 @@ class SolrAv extends SolrMarc {
      * @return array The subject location field.
      */
     public function getSubjectLocation() {
-        return $this->getFieldArray('651', array('a'));
+        return self::normalize($this->getFieldArray('651', array('a')));
     }
 
     /**
@@ -59,7 +59,7 @@ class SolrAv extends SolrMarc {
      * @return string The barcode of the visual document.
      */
     public function getBarcode() {
-        return $this->getFirstFieldValue('852', array('p'));
+        return self::normalize($this->getFirstFieldValue('852', array('p')));
     }
 
     /**
@@ -68,7 +68,7 @@ class SolrAv extends SolrMarc {
      * @return array The period.
      */
     public function getPeriod() {
-        return $this->getFieldArray('648');
+        return self::normalize($this->getFieldArray('648'));
     }
 
     /**
@@ -83,7 +83,7 @@ class SolrAv extends SolrMarc {
             $retval[] = array($g);
         }
 
-        return $retval;
+        return self::normalize($retval);
     }
 
     /**
