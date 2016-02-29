@@ -167,7 +167,7 @@ class SolrMarc extends VuFindSolrMarc {
 
         foreach ($fields as $f) {
             $subfieldValues = $this->getSubfieldArray($f, $subfields, false);
-            if (($value == null) || (($value != null) && ($subfieldValues[0] == $value))) {
+            if (($value == null) || (isset($subfieldValues[0]) && ($subfieldValues[0] == $value))) {
                 return isset($subfieldValues[1]) ? $subfieldValues[1] : null;
             }
         }
@@ -372,7 +372,7 @@ class SolrMarc extends VuFindSolrMarc {
     /**
      * Returns the classifications.
      *
-     * @return array|null The classifications.
+     * @return array The classifications.
      */
     public function getClassifications() {
         $classifications = array();
@@ -382,14 +382,14 @@ class SolrMarc extends VuFindSolrMarc {
             foreach ($marcClassifications as $classification) {
                 // Is there an address in the current field?
                 $code = $classification->getSubfield('a');
-                if ($code !== null) {
+                if ($code) {
                     $english = $classification->getSubfield('b');
                     $dutch = $classification->getSubfield('c');
 
                     $classifications[] = array(
                         'code'    => $code->getData(),
-                        'english' => ($english == null) ? null : $english->getData(),
-                        'dutch'   => ($dutch == null) ?  null : $dutch->getData()
+                        'english' => $english ? $english->getData() : null,
+                        'dutch'   => $dutch ? $dutch->getData() : null
                     );
                 }
             }
