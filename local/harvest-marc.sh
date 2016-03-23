@@ -102,7 +102,8 @@ fi
 #-----------------------------------------------------------------------------------------------------------------------
 # Commit. Really not neccessary. But we like to be sure all is in the index and not the transaction log.
 #-----------------------------------------------------------------------------------------------------------------------
-wget -O /tmp/commit.txt "http://localhost:8080/solr/biblio/update?commit=true"
+wget -O /tmp/commit-biblio.txt "http://localhost:8080/solr/biblio/update?commit=true"
+wget -O /tmp/commit-fulltext.txt "http://localhost:8080/solr/fulltext/update?commit=true"
 
 
 #-----------------------------------------------------------------------------------------------------------------------

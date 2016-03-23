@@ -1,7 +1,8 @@
 <?php
 namespace IISH\Controller;
-use VuFind\Controller\RecordController as VuFindRecordController;
 use Zend\Config\Config;
+use IISH\Search\Highlighting;
+use VuFind\Controller\RecordController as VuFindRecordController;
 
 /**
  * Record Controller.
@@ -69,6 +70,35 @@ class RecordController extends VuFindRecordController {
         }
 
         return parent::exportAction();
+    }
+
+    /**
+     * Search action -- Performs a full text search within a specific record.
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function searchAction() {
+        $driver = $this->loadRecord();
+        $searchService = $this->getServiceLocator()->get('VuFind\Search');
+        $highlighting = new Highlighting($searchService, $driver);
+
+        $lookfor = $this->params()->fromPost('lookfor');
+        $results = $highlighting->getResultsFor($lookfor);
+
+        $viewModel = $this->createViewModel();
+        $viewModel->setTemplate('search/highlighting.phtml');
+
+        $viewModel->tagPre = $highlighting::TAG_PRE;
+        $viewModel->tagPost = $highlighting::TAG_POST;
+        $viewModel->results = $results;
+        $viewModel->recordDriver = $driver;
+
+        // If called via AJAX, use the Lightbox layout
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->layout()->setTemplate('layout/lightbox');
+        }
+
+        return $viewModel;
     }
 
     /**

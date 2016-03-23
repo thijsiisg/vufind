@@ -7,7 +7,7 @@
             $(a).click(function (event) {
                 event.preventDefault();
 
-                var parent = $(this).parents('.vfile, .vitem');
+                var parent = $(this).parents('.vfile, .vitem, .holding');
                 var div = $(parent).next();
 
                 if ($(div).hasClass('mets-embedded')) {

@@ -1,4 +1,24 @@
 <?
+// Make sure we the Visual Mets stylesheet comes FIRST.
+// It contains Bootstrap 2.x styling, which overrides VuFinds Bootstrap 3.x styling and we don't want that.
+// $this->headLink()->offsetSetStylesheet(10, $this->visualmetsUrl . '/resources/css/themes/iisg/style.css?_=2.1', 'all');
+// Now make use of the css version without the Bootstrap styling
+$this->headLink()->offsetSetStylesheet(10, 'visualmets.css', 'all');
+// And now make sure our main related stylesheet has a lower offset.
+$this->headLink()->offsetSetStylesheet(20, 'compiled.css', 'all');
+// Do the same for the print stylesheet.
+$this->headLink()->offsetSetStylesheet(30, 'print.css', 'print');
+
+$this->jsobject()->addProps(array(
+  'url'  => $this->visualmetsUrl,
+  'rows' => $this->visualmetsRows
+));
+$this->headScript()->appendScript($this->jsobject()->getScript('visualMets'));
+$this->headScript()->appendFile('mets2viewer.min.js');
+
+$this->headScript()->appendFile('visual-mets/' . $this->layout()->userLang . '.lang.js');
+$this->headScript()->appendFile('visual-mets.js');
+
 if ($this->driver->getDownloadable() && ($this->driver->hasVideo() || $this->driver->hasAudio())) {
   $this->headLink()->appendStylesheet('../vendor/mediaelement/build/mediaelementplayer.css');
   $this->headScript()->appendFile('../vendor/mediaelement/build/mediaelement-and-player.min.js');

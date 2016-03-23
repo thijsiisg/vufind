@@ -1,5 +1,6 @@
 <?php
 namespace IISH\RecordDriver;
+use Zend\ServiceManager\ServiceLocatorInterface;
 use VuFind\RecordDriver\SolrMarc as VuFindSolrMarc;
 
 /**
@@ -9,6 +10,11 @@ use VuFind\RecordDriver\SolrMarc as VuFindSolrMarc;
  */
 class SolrMarc extends VuFindSolrMarc {
     /**
+     * @var \Zend\ServiceManager\ServiceLocatorInterface
+     */
+    protected $serviceLocator;
+
+    /**
      * @var \Zend\Config\Config
      */
     protected $iishConfig;
@@ -16,6 +22,7 @@ class SolrMarc extends VuFindSolrMarc {
     /**
      * Constructor.
      *
+     * @param ServiceLocatorInterface $serviceLocator
      * @param \Zend\Config\Config $mainConfig     VuFind main configuration. (omit for
      *                                            built-in defaults)
      * @param \Zend\Config\Config $recordConfig   Record-specific configuration file.
@@ -23,8 +30,10 @@ class SolrMarc extends VuFindSolrMarc {
      * @param \Zend\Config\Config $searchSettings Search-specific configuration file
      * @param \Zend\Config\Config $iishConfig     IISH specific configuration.
      */
-    public function __construct($mainConfig = null, $recordConfig = null, $searchSettings = null, $iishConfig = null) {
+    public function __construct(ServiceLocatorInterface $serviceLocator, $mainConfig = null, $recordConfig = null,
+                                $searchSettings = null, $iishConfig = null) {
         parent::__construct($mainConfig, $recordConfig, $searchSettings);
+        $this->serviceLocator = $serviceLocator;
         $this->iishConfig = $iishConfig;
     }
 
@@ -76,6 +85,18 @@ class SolrMarc extends VuFindSolrMarc {
             return $this->fields['downloadable'];
         }
 
+        return false;
+    }
+
+    /**
+     * True if we have full text indexed.
+     *
+     * @return bool
+     */
+    public function hasFullText() {
+        if (isset($this->fields['no_text'])) {
+            return !$this->fields['no_text'];
+        }
         return false;
     }
 
@@ -146,6 +167,18 @@ class SolrMarc extends VuFindSolrMarc {
      */
     public function hasVideo() {
         return (strpos($this->getFirstFieldValue('856', array('q')), 'video') === 0);
+    }
+
+    /**
+     * Which barcodes of this record have METS?
+     *
+     * @return string[] All barcodes with METS.
+     */
+    public function getBarcodesWithMets() {
+        if (isset($this->fields['mets_barcodes'])) {
+            return $this->fields['mets_barcodes'];
+        }
+        return array();
     }
 
     /**
@@ -335,6 +368,7 @@ class SolrMarc extends VuFindSolrMarc {
             if ($tag == '852') {
                 $subfieldc = $datafield->getSubfield('c');
                 $subfieldj = $datafield->getSubfield('j');
+                $subfieldp = $datafield->getSubfield('p');
                 $subfield = null;
 
                 if ($subfieldc && $subfieldj) {
@@ -351,6 +385,9 @@ class SolrMarc extends VuFindSolrMarc {
                     $holdings[$key]['c'] = $subfield;
                     if ($subfieldj) {
                         $holdings[$key]['j'] = $subfieldj->getData();
+                    }
+                    if ($subfieldp && in_array($subfieldp->getData(), $this->getBarcodesWithMets(), true)) {
+                        $holdings[$key]['p'] = $subfieldp->getData();
                     }
                 }
             }
@@ -585,6 +622,17 @@ class SolrMarc extends VuFindSolrMarc {
     }
 
     /**
+     * Whether this record driver also has text indexed.
+     *
+     * @return bool Whether this record driver also has text indexed.
+     */
+    public function hasTextIndexed() {
+        $searchService = $this->serviceLocator->get('VuFind\Search');
+        $highlighting = new \IISH\Search\Highlighting($searchService, $this);
+        return $highlighting->hasTextIndexed();
+    }
+
+    /**
      * Extract the barcode or PID from the URLs for this record.
      *
      * @return bool|string The barcode or PID, if found.
@@ -599,6 +647,11 @@ class SolrMarc extends VuFindSolrMarc {
 
                 return ($pos) ? substr($tmp, 0, $pos) : $tmp;
             }
+        }
+
+        $barcodes = $this->getBarcodesWithMets();
+        if (isset($barcodes[0])) {
+            return $barcodes[0];
         }
 
         return false;

@@ -9,7 +9,8 @@ return array(
     'favicon' => 'favicon.ico',
     'helpers' => array(
         'factories'  => array(
-            'deliveryinit' => 'IISH\View\Helper\IISH\Factory::getDeliveryInit'
+            'deliveryinit' => 'IISH\View\Helper\IISH\Factory::getDeliveryInit',
+            'searchbox'    => 'IISH\View\Helper\IISH\Factory::getSearchBox'
         ),
         'invokables' => array(
             'jsobject' => 'IISH\View\Helper\IISH\JsObject'

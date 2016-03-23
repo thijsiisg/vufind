@@ -44,18 +44,17 @@ header {
     }
   }
 
-  .navbar-form {
-    .radio,
-    .checkbox {
-      display: block;
-      margin: 12px 0 0 3px;
-    }
-  }
-
   .sub-header {
     margin-top: 8px;
     font-weight: bold;
     color: @iish-logo-color;
+  }
+}
+
+.navbar-form {
+  .radio,
+  .checkbox {
+    margin: 12px 2px 0 3px;
   }
 }
 
@@ -242,7 +241,8 @@ h2,
     display: inline;
   }
 
-  .state {
+  .state,
+  .mets {
     display: inline;
     margin-left: 10px;
   }
@@ -279,7 +279,7 @@ h2,
 }
 
 .result {
-  .downloadable {
+  .labels {
     margin-bottom: 10px;
   }
 
@@ -313,4 +313,48 @@ h2,
   color: red;
   content: "*";
   margin-left: 5px;
+}
+
+#fulltextSearchForm {
+  padding: 0;
+  margin: 6px 8px 8px;
+
+  input[type=text] {
+    max-width: none;
+    font-size: 14px;
+    height: 32px;
+    padding: 5px 8px;
+  }
+
+  .btn {
+    font-size: 14px;
+    height: 32px;
+    padding: 5px 8px;
+  }
+}
+
+#fulltextSearchResults {
+  padding: 0;
+  margin: 20px 8px 8px;
+}
+
+.text-search-results {
+  .result-item {
+    margin-bottom: 15px;
+
+    h5 {
+      margin: 0;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .result-item-text {
+      list-style: square;
+      padding-left: 30px;
+
+      li {
+        font-style: italic;
+      }
+    }
+  }
 }

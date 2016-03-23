@@ -56,10 +56,11 @@ $config = array(
             ),
             'recorddriver'   => array(
                 'factories' => array(
-                    'solrmarc' => 'IISH\RecordDriver\Factory::getSolrMarc',
-                    'solrav'   => 'IISH\RecordDriver\Factory::getSolrAv',
-                    'solread'  => 'IISH\RecordDriver\Factory::getSolrEad',
-                    'solreci'  => 'IISH\RecordDriver\Factory::getSolrEci',
+                    'solrmarc'     => 'IISH\RecordDriver\Factory::getSolrMarc',
+                    'solrav'       => 'IISH\RecordDriver\Factory::getSolrAv',
+                    'solread'      => 'IISH\RecordDriver\Factory::getSolrEad',
+                    'solreci'      => 'IISH\RecordDriver\Factory::getSolrEci',
+                    'solrfulltext' => 'IISH\RecordDriver\Factory::getSolrFullText',
                 ),
             ),
             'recordtab'      => array(
@@ -73,6 +74,13 @@ $config = array(
                     'archiveappendices'          => 'IISH\RecordTab\ArchiveAppendices',
                     'holdingseci'                => 'IISH\RecordTab\HoldingsECI',
                     'staffvieweci'               => 'IISH\RecordTab\StaffViewECI',
+                    'textsearch'                 => 'IISH\RecordTab\TextSearch',
+                ),
+            ),
+            'search_backend' => array(
+                'factories' => array(
+                    'Solr'         => 'IISH\Search\Factory\SolrDefaultBackendFactory',
+                    'SolrFullText' => 'IISH\Search\Factory\SolrFullTextBackendFactory',
                 ),
             ),
             'search_params'  => array(
@@ -96,6 +104,7 @@ $config = array(
                     'Excerpt'       => 'Excerpt',
                     'HierarchyTree' => 'HierarchyTree',
                     'Map'           => 'Map',
+                    'TextSearch'    => 'TextSearch',
                     'Details'       => 'StaffViewMARC',
                 ),
                 'defaultTab' => 'HoldingsMarc',
@@ -110,6 +119,7 @@ $config = array(
                     'Excerpt'       => 'Excerpt',
                     'HierarchyTree' => 'HierarchyTree',
                     'Map'           => 'Map',
+                    'TextSearch'    => 'TextSearch',
                     'Details'       => 'StaffViewMARC',
                 ),
                 'defaultTab' => 'HoldingsAv',
@@ -119,8 +129,9 @@ $config = array(
                     'ArchiveCollectionSummary'   => 'ArchiveCollectionSummary',
                     'ArchiveContentList'         => 'ArchiveContentList',
                     'ArchiveContentAndStructure' => 'ArchiveContentAndStructure',
-                    'ArchiveSubjects'            => 'ArchiveSubjects',
+                    'TextSearch'                 => 'TextSearch',
                     'ArchiveAccessAndUse'        => 'ArchiveAccessAndUse',
+                    'ArchiveSubjects'            => 'ArchiveSubjects',
                     'ArchiveAppendices'          => 'ArchiveAppendices',
                     'Holdings'                   => null,
                     'Description'                => null,
@@ -172,5 +183,20 @@ foreach ($staticRoutes as $route) {
         )
     );
 }
+
+$config['router']['routes']['record-search'] = array(
+    'type'    => 'Zend\Mvc\Router\Http\Segment',
+    'options' => array(
+        'route'       => '/Record/[:id]/Search',
+        'constraints' => array(
+            'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+            'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+        ),
+        'defaults'    => array(
+            'controller' => 'Record',
+            'action'     => 'Search',
+        )
+    )
+);
 
 return $config;

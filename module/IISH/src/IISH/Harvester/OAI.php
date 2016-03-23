@@ -184,8 +184,12 @@ class OAI extends VuFindOAI
     {
         $id = explode('/', $id, 2); // either id="prefix/identifier" or "identifier"
         $id = (count($id) == 1) ? $id[0] : $id[1];
+
         $delete_by_id = "wget -O /dev/null \"http://localhost:8080/solr/biblio/update?stream.body=<delete><id>" . $id . "</id></delete>\"";
         echo shell_exec($delete_by_id);
+
+        $delete_fulltext = "wget -O /dev/null \"http://localhost:8080/solr/fulltext/update?stream.body=<delete><query>record:" . $id . "</query></delete>\"";
+        echo shell_exec($delete_fulltext);
     }
 
     /**

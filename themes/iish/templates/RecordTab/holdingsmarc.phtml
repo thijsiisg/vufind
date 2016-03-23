@@ -10,6 +10,22 @@
           <?=$this->escapeHtml($holding['c'])?>
         </div>
 
+        <? if (isset($holding['p'])): ?>
+          <div class="mets hidden-print">
+            [
+            <a href="http://hdl.handle.net/10622/<?=$holding['p']?>?locatt=view:pdf" target="_blank">
+              <?=$this->transEsc('ArchiveContentList.pdf')?>
+            </a>
+            <span class="hidden-xs hidden-ms">
+              |
+              <span class="m" title="http://hdl.handle.net/10622/<?=$holding['p']?>?locatt=view:mets">
+                <?=$this->transEsc('ArchiveContentList.view')?>
+              </span>
+            </span>
+            ]
+          </div>
+        <? endif; ?>
+
         <? $formats = $this->driver->getFormats(); $format = strtolower($formats[0]); ?>
         <? if (($format === 'books and brochures') || ($format === 'serials')): ?>
           <div class="state hidden-print"
