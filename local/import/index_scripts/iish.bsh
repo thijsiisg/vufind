@@ -272,6 +272,7 @@ private Document loadDocument(String url) throws Exception {
     final URL oai_url = new URL(url);
     final URLConnection connection = oai_url.openConnection();
     connection.setConnectTimeout(10000); // 10 seconds is long enough
+    connection.setReadTimeout(10000); // 10 seconds is long enough
 
     DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     dbf.setIgnoringComments(true);
