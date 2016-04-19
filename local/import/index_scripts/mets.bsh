@@ -27,6 +27,7 @@ import org.marc4j.marc.Subfield;
 
 import org.solrmarc.solr.SolrProxy;
 import org.solrmarc.solr.SolrCoreLoader;
+import org.solrmarc.solr.SolrRuntimeException;
 
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.client.solrj.SolrServer;
@@ -293,6 +294,7 @@ private SolrProxy getSolrProxy() {
 private InputStream getInputStreamfromUrl(String url) throws Exception {
     URLConnection urlConnection = new URL(url).openConnection();
     urlConnection.setConnectTimeout(10000); // 10 seconds is long enough
+    urlConnection.setReadTimeout(10000); // 10 seconds is long enough
     return urlConnection.getInputStream();
 }
 
