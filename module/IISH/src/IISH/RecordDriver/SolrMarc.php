@@ -507,13 +507,13 @@ class SolrMarc extends VuFindSolrMarc {
      */
     public function getLargestPossibleSize($largestSize = 'large') {
         switch ($this->getPublicationStatus()) {
-            case 'closed':
-                return $largestSize;
             case 'minimal':
+            case 'pictoright':
                 return 'small';
+            case 'closed':
             case 'restricted':
             default:
-                return ($largestSize === 'small') ? $largestSize : 'medium';
+                return $largestSize;
         }
     }
 
