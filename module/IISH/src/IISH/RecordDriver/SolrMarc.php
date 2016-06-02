@@ -2,6 +2,7 @@
 namespace IISH\RecordDriver;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use VuFind\RecordDriver\SolrMarc as VuFindSolrMarc;
+use IISH\Content\Covers\IISHContentAccessToken;
 
 /**
  * Model for MARC records in Solr.
@@ -20,6 +21,11 @@ class SolrMarc extends VuFindSolrMarc {
     protected $iishConfig;
 
     /**
+     * @var \IISH\Content\Covers\IISHContentAccessToken
+     */
+    protected $contentAccessToken;
+
+    /**
      * Constructor.
      *
      * @param ServiceLocatorInterface $serviceLocator
@@ -35,6 +41,7 @@ class SolrMarc extends VuFindSolrMarc {
         parent::__construct($mainConfig, $recordConfig, $searchSettings);
         $this->serviceLocator = $serviceLocator;
         $this->iishConfig = $iishConfig;
+        $this->contentAccessToken= new IISHContentAccessToken($this->iishConfig);
     }
 
     /**
@@ -506,14 +513,19 @@ class SolrMarc extends VuFindSolrMarc {
      * @return string The largest possible image size.
      */
     public function getLargestPossibleSize($largestSize = 'large') {
+        // If access to the images is granted, the largest size is always available
+        if ($this->contentAccessToken->hasAccess()) {
+            return $largestSize;
+        }
+
         switch ($this->getPublicationStatus()) {
-            case 'closed':
-                return $largestSize;
             case 'minimal':
+            case 'pictoright':
                 return 'small';
+            case 'closed':
             case 'restricted':
             default:
-                return ($largestSize === 'small') ? $largestSize : 'medium';
+                return $largestSize;
         }
     }
 

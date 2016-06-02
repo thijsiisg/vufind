@@ -70,7 +70,7 @@ class IISHContentAccessToken {
      *
      * @return bool Whether access is granted.
      */
-    private function hasAccess() {
+    public function hasAccess() {
         $clientIP = self::getClientIP();
         foreach ($this->audienceInternal as $network) {
             if (self::checkNetwork($network, $clientIP) === true) {
