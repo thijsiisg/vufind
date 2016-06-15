@@ -116,7 +116,8 @@ private String getTextFromMetsItemsUrls(String recordId, List urls) {
         solrServer.deleteByQuery("record:\""+ClientUtils.escapeQueryChars(recordId)+"\"");
     }
     catch (SolrServerException e) {
-        throw new SolrRuntimeException("SolrserverException", e);
+        indexer.getLogger().error("Cannot deleteByQuery " + recordId + ": " + e.getMessage());
+        e.printStackTrace();
     }
 
     StringBuilder stringBuilder = new StringBuilder();
@@ -131,6 +132,8 @@ private String getTextFromMetsItemsUrls(String recordId, List urls) {
             stringBuilder.append(" ");
         } catch (Exception e) {
             // Ignore failures for the current METS, just continue
+            indexer.getLogger().error("Cannot obtain full text from " + recordId + ": " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -280,7 +283,8 @@ private void indexFullText(SolrServer solrServer, String record, String item, St
         }
     }
     catch (SolrServerException e) {
-        throw new SolrRuntimeException("SolrserverException", e);
+        indexer.getLogger().error("Cannot index full text for " + record + ": " + e.getMessage());
+        e.printStackTrace();
     }
 }
 
