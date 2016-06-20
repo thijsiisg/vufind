@@ -47,6 +47,8 @@ importCommands("index_scripts");
 // note that the SolrIndexer code will set this value before the script methods are called.
 org.solrmarc.index.SolrIndexer indexer = null;
 
+SolrProxy solrProxy = null;
+
 /* MARC / EAD */
 
 public String getTextFromMarc(Record record) {
@@ -76,10 +78,8 @@ public String getTextFromMarcAndParser(Record record, String parserFieldSpec, St
     String metsText = getTextFromMarc(record);
     String parserText = getFulltext(record, parserFieldSpec, parserExtension);
 
-    SolrProxy solrProxy = getSolrProxy();
-    SolrServer solrServer = solrProxy.getSolrServer();
+    SolrServer solrServer = getSolrServer();
     indexFullText(solrServer, getId(record), null, null, parserText);
-    solrProxy.close();
 
     return (metsText + " " + parserText).trim();
 }
@@ -108,8 +108,7 @@ public String getTextFromEAD(Record record) {
 }
 
 private String getTextFromMetsItemsUrls(String recordId, List urls) {
-    SolrProxy solrProxy = getSolrProxy();
-    SolrServer solrServer = solrProxy.getSolrServer();
+    SolrServer solrServer = getSolrServer();
 
     try {
         solrServer.deleteByQuery("record:\""+ClientUtils.escapeQueryChars(recordId)+"\"");
@@ -135,8 +134,6 @@ private String getTextFromMetsItemsUrls(String recordId, List urls) {
             e.printStackTrace();
         }
     }
-
-    solrProxy.close();
 
     return stringBuilder.toString().trim();
 }
@@ -288,9 +285,12 @@ private void indexFullText(SolrServer solrServer, String record, String item, St
 
 /* UTILS */
 
-private SolrProxy getSolrProxy() {
-    String solrFullTextUrl = "http://localhost:8080/solr/fulltext/update";
-    return SolrCoreLoader.loadRemoteSolrServer(solrFullTextUrl, true, false);
+private SolrServer getSolrServer() {
+    if (solrProxy == null {
+        String solrFullTextUrl = "http://localhost:8080/solr/fulltext/update";
+        solrProxy = SolrCoreLoader.loadRemoteSolrServer(solrFullTextUrl, true, false);
+    }
+    return solrProxy.getSolrServer();
 }
 
 private InputStream getInputStreamfromUrl(String url) throws Exception {
