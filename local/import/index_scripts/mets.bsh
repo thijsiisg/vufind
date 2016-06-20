@@ -289,6 +289,7 @@ private SolrServer getSolrServer() {
     if (solrProxy == null {
         String solrFullTextUrl = "http://localhost:8080/solr/fulltext/update";
         solrProxy = SolrCoreLoader.loadRemoteSolrServer(solrFullTextUrl, true, false);
+        indexer.getLogger().error("Created a Solr connection to the fulltext index");
     }
     return solrProxy.getSolrServer();
 }
