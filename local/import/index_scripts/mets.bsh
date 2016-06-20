@@ -25,10 +25,6 @@ import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
 
-import org.solrmarc.solr.SolrProxy;
-import org.solrmarc.solr.SolrCoreLoader;
-import org.solrmarc.solr.SolrRuntimeException;
-
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -46,8 +42,6 @@ importCommands("index_scripts");
 // define the base level indexer so that its methods can be called from the script.
 // note that the SolrIndexer code will set this value before the script methods are called.
 org.solrmarc.index.SolrIndexer indexer = null;
-
-SolrProxy solrProxy = null;
 
 /* MARC / EAD */
 
@@ -78,7 +72,7 @@ public String getTextFromMarcAndParser(Record record, String parserFieldSpec, St
     String metsText = getTextFromMarc(record);
     String parserText = getFulltext(record, parserFieldSpec, parserExtension);
 
-    SolrServer solrServer = getSolrServer();
+    SolrServer solrServer = indexer.getSolrServer();
     indexFullText(solrServer, getId(record), null, null, parserText);
 
     return (metsText + " " + parserText).trim();
@@ -108,7 +102,7 @@ public String getTextFromEAD(Record record) {
 }
 
 private String getTextFromMetsItemsUrls(String recordId, List urls) {
-    SolrServer solrServer = getSolrServer();
+    SolrServer solrServer = indexer.getSolrServer();
 
     try {
         solrServer.deleteByQuery("record:\""+ClientUtils.escapeQueryChars(recordId)+"\"");
@@ -284,15 +278,6 @@ private void indexFullText(SolrServer solrServer, String record, String item, St
 }
 
 /* UTILS */
-
-private SolrServer getSolrServer() {
-    if (solrProxy == null {
-        String solrFullTextUrl = "http://localhost:8080/solr/fulltext/update";
-        solrProxy = SolrCoreLoader.loadRemoteSolrServer(solrFullTextUrl, true, false);
-        indexer.getLogger().error("Created a Solr connection to the fulltext index");
-    }
-    return solrProxy.getSolrServer();
-}
 
 private InputStream getInputStreamfromUrl(String url) throws Exception {
     URLConnection urlConnection = new URL(url).openConnection();
