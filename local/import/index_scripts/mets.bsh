@@ -79,7 +79,6 @@ public String getTextFromMarcAndParser(Record record, String parserFieldSpec, St
     SolrProxy solrProxy = getSolrProxy();
     SolrServer solrServer = solrProxy.getSolrServer();
     indexFullText(solrServer, getId(record), null, null, parserText);
-    solrProxy.commit(false);
     solrProxy.close();
 
     return (metsText + " " + parserText).trim();
@@ -137,7 +136,6 @@ private String getTextFromMetsItemsUrls(String recordId, List urls) {
         }
     }
 
-    solrProxy.commit(false);
     solrProxy.close();
 
     return stringBuilder.toString().trim();
