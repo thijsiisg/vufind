@@ -41,7 +41,7 @@ importCommands("index_scripts");
 
 // define the base level indexer so that its methods can be called from the script.
 // note that the SolrIndexer code will set this value before the script methods are called.
-org.solrmarc.index.SolrIndexer indexer = null;
+org.solrmarc.index.VuFindIndexer indexer = null;
 
 /* MARC / EAD */
 
