@@ -101,7 +101,7 @@
       <td>
         <xsl:variable name="colid" select="ead:archdesc/ead:did/ead:unitid"/>
         <xsl:variable name="identifier" select="ead:eadheader/ead:eadid/@identifier"/>
-        <div id="holdings">
+        <div id="holdings-container">
           <xsl:attribute name="class">
             <xsl:choose>
               <xsl:when test="$digital_items>0">archive online-content-available</xsl:when>

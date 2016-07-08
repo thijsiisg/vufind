@@ -24,7 +24,7 @@
     };
 
     var determineHoldingButtons = function () {
-        $('#holdings .state').each(function () {
+        $('#holdings-container').find('.state').each(function () {
             var holdingState = $(this);
             holdingState.determineButtons(
                 holdingState.data('label'),
@@ -52,7 +52,7 @@
             determineHoldingButtons();
         });
 
-		if ($('#holdings').hasClass('online-content-available')) {
+		if ($('#holdings-container').hasClass('online-content-available')) {
 			reproductionCart.cart.bind('afterAdd', function (item) {
 				var itemElem = $(document.getElementById('cartItem_' + item.id()));
 
@@ -68,5 +68,13 @@
 				}, 8000);
 			});
 		}
+    });
+    
+    $(document).on('mouseover', '.reservationBtn, .reproductionBtn', function (e) {
+        var elem = $(e.target);
+        if (elem.data('tooltipLoaded') === true) return;
+        
+        var title = elem.hasClass('reservationBtn') ? delivery.reservationTooltip : delivery.reproductionTooltip;        
+        elem.data('tooltipLoaded', true).tooltip({title: title}).trigger('mouseover');
     });
 })($);

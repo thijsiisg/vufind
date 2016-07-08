@@ -1,9 +1,9 @@
-#holdings button {
+#holdings-container button {
     margin-left: 5px;
 }
 
-#holdings.archive,
-#holdings.archive .holding {
+#holdings-container.archive,
+#holdings-container.archive .holding {
     margin: 0;
     display: inline;
 }

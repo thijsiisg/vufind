@@ -3,7 +3,7 @@
 <? $holdings = $this->driver->getHoldings(); if (!empty($holdings)): ?>
   <h4><?=$this->transEsc('Holding')?></h4>
 
-  <div id="holdings">
+  <div id="holdings-container">
     <? foreach ($holdings as $counter => $holding): ?>
       <div class="holding">
         <div class="callnumber">

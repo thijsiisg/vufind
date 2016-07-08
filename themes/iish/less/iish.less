@@ -314,3 +314,28 @@ h2,
   content: "*";
   margin-left: 5px;
 }
+
+.tooltip {
+  .tooltip-inner {
+    color: #000;
+    background-color: #fff;
+    border: 2px solid #06C;
+    border-radius: 3px;
+  }
+
+  &.left .tooltip-arrow {
+    border-left-color: #06C;
+  }
+
+  &.right .tooltip-arrow {
+    border-right-color: #06C;
+  }
+
+  &.top .tooltip-arrow {
+    border-top-color: #06C;
+  }
+
+  &.bottom .tooltip-arrow {
+    border-bottom-color: #06C;
+  }
+}

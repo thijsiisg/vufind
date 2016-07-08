@@ -426,17 +426,19 @@ function button_callback(pars, data, holding)
                 ? Rsrc.getString('button_request_reservation')
                 : Rsrc.getString('button_request_reproduction');
 
-            html  = "<button type=\"submit\" class=\"deliveryReserveButton\" value=\"" + btnText + "\" ";
+            html  = "<button type=\"submit\" class=\"deliveryReserveButton ";
+            html += isReservation ? 'reservationBtn' : 'reproductionBtn';            
+            html += "\" value=\"" + btnText + "\" ";
             html += "name=\"RequestItem\" onclick=\"makeRequest(";
             html += isReservation ? 'reservationCart' : 'reproductionCart';
             html += ", '";
             if (pars.label === null)
             {
-                html += data.title;
+                html += data.title.replace(/\"/g, "&quot;");
             }
             else
             {
-                html += pars.label;
+                html += pars.label.replace(/\"/g, "&quot;");
             }
             html += "', '";
             html += pars.pid;
