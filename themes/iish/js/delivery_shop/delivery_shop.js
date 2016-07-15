@@ -481,8 +481,7 @@ function button_callback(pars, data, holding)
 
                 if (pars.show_reproduction)
                 {
-                    if ((data.copyright === undefined) || (data.copyright === null) || (data.copyright.length === 0) ||
-						(data.publicationStatus !== 'MINIMAL' && data.publicationStatus !== 'CLOSED'))
+                    if (data.publicationStatus !== 'MINIMAL' && data.publicationStatus !== 'CLOSED')
                     {
                         html += createReproductionButtonHtml();
                     }
