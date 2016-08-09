@@ -70,7 +70,7 @@ public String getTextFromMarc(Record record) {
 
 public String getTextFromMarcAndParser(Record record, String parserFieldSpec, String parserExtension) {
     String metsText = getTextFromMarc(record);
-    String parserText = getFulltext(record, parserFieldSpec, parserExtension);
+    String parserText = indexer.getFulltext(record, parserFieldSpec, parserExtension);
 
     SolrServer solrServer = indexer.getSolrServer();
     indexFullText(solrServer, getId(record), null, null, parserText);
