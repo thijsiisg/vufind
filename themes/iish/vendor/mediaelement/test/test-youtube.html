@@ -59,25 +59,17 @@
 <form>
 
 
-<h2>MP3 audio (as src)</h2>
-
-<audio id="player2" src="../media/test.mp3" preload="none" type="audio/mp3" controls="controls">
-	<p>Your browser leaves much to be desired.</p>			
-</audio>
-
 <span id="audio-mode"></span>
 
-<h2>MP4/WebM</h2>
+<h2>YouTube</h2>
 
 
 
 <div id="video-container">
 
-	<video width="640" height="360" id="player1" controls="controls" preload="none" poster="../media/echo-hereweare.jpg">
+	<video width="640" height="360" id="player1" controls="controls" preload="none">
 	
-		<source src="../media/echo-hereweare.mp4"  type="video/mp4" /> 	
-			
-		<track kind="subtitles" src="../media/mediaelement.srt" srclang="en"  ></track>
+		<source src="https://www.youtube.com/watch?v=C0DPdy98e4c"  type="video/youtube" /> 	
 		
 	</video>
 
@@ -103,26 +95,6 @@ $('#showit').on('click', function() {
 <div id="video-events"></div>
 <div id="video-props"></div>
 </div>
-
-<video width="640" height="360" id="player2" controls="controls"  preload="none" poster="../media/big_buck_bunny.jpg">
-	<!--
-	<source src="../media/big_buck_bunny.mp4"   type="video/mp4" />
-	-->
-	
-	<source src="../media/big_buck_bunny.mp4"   type="video/mp4" />
-</video>
-
-
-<br>
-
-<video width="640" height="360" id="player3" controls="controls" preload="none" poster="../media/big_buck_bunny.jpg">
-	<!--
-	<source src="../media/big_buck_bunny.mp4"   type="video/mp4" />
-	-->
-	
-	<source src="../media/big_buck_bunny.mp4"   type="video/mp4" />
-</video>
-
 
 </form>
 
@@ -223,13 +195,13 @@ function appendMediaProperties($node, media) {
 
 
 <script  type="text/javascript">
-$('audio, video').bind('error', function(e) {
+$('video').bind('error', function(e) {
 
 	//console.log('error',this, e, this.src, this.error.code);
 });
 
 jQuery(document).ready(function() {
-	$('audio, video').mediaelementplayer({
+	$('video').mediaelementplayer({
 		//mode: 'shim',
 	
 		pluginPath:'../build/', 
