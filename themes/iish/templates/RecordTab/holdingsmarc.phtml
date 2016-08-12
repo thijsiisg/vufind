@@ -11,11 +11,13 @@
             <?=$this->escapeHtml($holding['c'])?>
           </div>
 
-          <div class="digital loading hidden-print"
-               data-record="<?=$this->escapeHtml($this->driver->getUniqueId())?>"
-               data-item="<?=$this->escapeHtml($holding['p'])?>">
-            <i class="fa fa-spinner fa-spin"></i>
-          </div>
+          <? if (isset($holding['p'])): ?>
+            <div class="digital loading hidden-print"
+                 data-record="<?=$this->escapeHtml($this->driver->getUniqueId())?>"
+                 data-item="<?=$this->escapeHtml($holding['p'])?>">
+              <i class="fa fa-spinner fa-spin"></i>
+            </div>
+          <? endif; ?>
 
           <? $formats = $this->driver->getFormats(); $format = strtolower($formats[0]); ?>
           <? if (($format === 'books and brochures') || ($format === 'serials')): ?>
@@ -26,7 +28,7 @@
                  data-signature="<?=$this->escapeHtmlAttr($holding['j'])?>">
             </div>
           <? endif; ?>
-          </div>
+        </div>
 
         <? if (isset($holding['note'])): ?>
           <div class="note">
