@@ -43,7 +43,7 @@ class Loader extends Cacheable {
     /**
      * Loads the record.
      *
-     * @return string
+     * @return mixed
      */
     protected function create() {
         // TODO

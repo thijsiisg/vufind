@@ -6,35 +6,27 @@
   <div id="holdings">
     <? foreach ($holdings as $counter => $holding): ?>
       <div class="holding">
-        <div class="callnumber">
-          <?=$this->escapeHtml($holding['c'])?>
-        </div>
-
-        <? if (isset($holding['p'])): ?>
-          <div class="mets hidden-print">
-            [
-            <a href="http://hdl.handle.net/10622/<?=$holding['p']?>?locatt=view:pdf" target="_blank">
-              <?=$this->transEsc('ArchiveContentList.pdf')?>
-            </a>
-            <span class="hidden-xs hidden-ms">
-              |
-              <span class="m" title="http://hdl.handle.net/10622/<?=$holding['p']?>?locatt=view:mets">
-                <?=$this->transEsc('ArchiveContentList.view')?>
-              </span>
-            </span>
-            ]
+        <div class="info">
+          <div class="callnumber">
+            <?=$this->escapeHtml($holding['c'])?>
           </div>
-        <? endif; ?>
 
-        <? $formats = $this->driver->getFormats(); $format = strtolower($formats[0]); ?>
-        <? if (($format === 'books and brochures') || ($format === 'serials')): ?>
-          <div class="state hidden-print"
-               data-label="<?=$this->escapeHtmlAttr($this->truncate(preg_replace('/[\'"]/', '`',
-                 $this->driver->getShortTitle()), 40))?> - <?=$this->escapeHtmlAttr($holding['j'])?>"
-               data-pid="<?=$this->escapeHtmlAttr($this->driver->getIsShownAt())?>"
-               data-signature="<?=$this->escapeHtmlAttr($holding['j'])?>">
+          <div class="digital loading hidden-print"
+               data-record="<?=$this->escapeHtml($this->driver->getUniqueId())?>"
+               data-item="<?=$this->escapeHtml($holding['p'])?>">
+            <i class="fa fa-spinner fa-spin"></i>
           </div>
-        <? endif; ?>
+
+          <? $formats = $this->driver->getFormats(); $format = strtolower($formats[0]); ?>
+          <? if (($format === 'books and brochures') || ($format === 'serials')): ?>
+            <div class="state hidden-print"
+                 data-label="<?=$this->escapeHtmlAttr($this->truncate(preg_replace('/[\'"]/', '`',
+                   $this->driver->getShortTitle()), 40))?> - <?=$this->escapeHtmlAttr($holding['j'])?>"
+                 data-pid="<?=$this->escapeHtmlAttr($this->driver->getIsShownAt())?>"
+                 data-signature="<?=$this->escapeHtmlAttr($holding['j'])?>">
+            </div>
+          <? endif; ?>
+          </div>
 
         <? if (isset($holding['note'])): ?>
           <div class="note">

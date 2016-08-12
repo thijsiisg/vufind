@@ -393,7 +393,7 @@ class SolrMarc extends VuFindSolrMarc {
                     if ($subfieldj) {
                         $holdings[$key]['j'] = $subfieldj->getData();
                     }
-                    if ($subfieldp && in_array($subfieldp->getData(), $this->getBarcodesWithMets(), true)) {
+                    if ($subfieldp) {
                         $holdings[$key]['p'] = $subfieldp->getData();
                     }
                 }
