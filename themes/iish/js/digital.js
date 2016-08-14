@@ -132,7 +132,7 @@
             var isVideo = (item.contentType.indexOf('video') === 0);
 
             if (isAudio || isVideo) {
-                var avContainer = $('<div class="av-container"></div>');
+                var avContainer = $('<div class="av-container iish-mejs"></div>');
                 var avElem = null;
 
                 if (isAudio) {
