@@ -114,18 +114,20 @@ private String getTextFromMetsItemsUrls(String recordId, List urls) {
 
     StringBuilder stringBuilder = new StringBuilder();
     for (String[] metsItemUrl : urls) {
+        InputStream inputStream = null;
         try {
             String item = metsItemUrl[0];
             String metsUrl = metsItemUrl[1];
 
-            Document document = loadDocument(getInputStreamfromUrl(metsUrl));
+            inputStream = getInputStreamfromUrl(metsUrl);
+            Document document = loadDocument(inputStream);
 
             stringBuilder.append(getText(solrServer, recordId, item, document));
             stringBuilder.append(" ");
         } catch (Exception e) {
             // Ignore failures for the current METS, just continue
-            indexer.getLogger().error("Cannot obtain full text from " + recordId + ": " + e.getMessage());
-            e.printStackTrace();
+        } finally {
+            closeStream(inputStream);
         }
     }
 
@@ -145,12 +147,19 @@ private Document loadEAD(String id, String url) throws Exception {
 }
 
 private void saveDocument(String url, File file) throws Exception {
-    Document document = loadDocument(getInputStreamfromUrl(url));
-    TransformerFactory transformerFactory = TransformerFactory.newInstance();
-    Transformer transformer = transformerFactory.newTransformer();
-    DOMSource source = new DOMSource(document);
-    StreamResult result = new StreamResult(file);
-    transformer.transform(source, result);
+    InputStream inputStream = null;
+    try {
+        inputStream = getInputStreamfromUrl(url);
+        Document document = loadDocument(inputStream);
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        DOMSource source = new DOMSource(document);
+        StreamResult result = new StreamResult(file);
+        transformer.transform(source,result);
+    }
+    finally {
+        closeStream(inputStream);
+    }
 }
 
 /* METS */
@@ -220,15 +229,27 @@ private String getTextFromFptr(Document document, String id, String use) throws 
         if (fileElement.getAttribute("ID").equals(id)) {
             Element fLocatElement = getElement(fileElement.getElementsByTagName("FLocat"));
             if (fLocatElement != null) {
-                String url = fLocatElement.getAttribute("xlink:href");
-                InputStream inputStream = getInputStreamfromUrl(url);
+                InputStream inputStream = null;
+                String text = null;
 
-                if (use.contains("alto")) {
-                    Document altoDocument = loadDocument(inputStream);
-                    return getTextFromAlto(altoDocument);
+                try {
+                    String url = fLocatElement.getAttribute("xlink:href");
+                    inputStream = getInputStreamfromUrl(url);
+
+                    if (use.contains("alto")) {
+                        Document altoDocument = loadDocument(inputStream);
+                        text = getTextFromAlto(altoDocument);
+                    }
+                    else if (use.contains("plain")) {
+                        text = getTextFromPlain(inputStream);
+                    }
                 }
-                else if (use.contains("plain")) {
-                    return getTextFromPlain(inputStream);
+                finally {
+                    closeStream(inputStream);
+                }
+
+                if (text != null) {
+                    return text;
                 }
             }
         }
@@ -280,10 +301,33 @@ private void indexFullText(SolrServer solrServer, String record, String item, St
 /* UTILS */
 
 private InputStream getInputStreamfromUrl(String url) throws Exception {
-    URLConnection urlConnection = new URL(url).openConnection();
-    urlConnection.setConnectTimeout(10000); // 10 seconds is long enough
-    urlConnection.setReadTimeout(10000); // 10 seconds is long enough
-    return urlConnection.getInputStream();
+    URLConnection urlConnection = null;
+    InputStream inputStream = null;
+
+    try {
+        URLConnection urlConnection = new URL(url).openConnection();
+        urlConnection.setConnectTimeout(10000); // 10 seconds is long enough
+        urlConnection.setReadTimeout(10000); // 10 seconds is long enough
+        inputStream = urlConnection.getInputStream();
+    } catch (Exception e) {
+        closeStream(inputStream);
+
+        if (urlConnection != null) {
+            urlConnection.disconnect();
+        }
+
+        throw e;
+    }
+
+    return inputStream;
+}
+
+private void closeStream(InputStream inputStream) {
+    if (inputStream != null) {
+        try {
+            inputStream.close();
+        } catch (IOException ioe) { }
+    }
 }
 
 private Document loadDocument(InputStream inputStream) throws Exception {
