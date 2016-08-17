@@ -11,8 +11,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  *
  * @package IISH\RecordDriver
  */
-class SolrEad extends SolrMarc
-{
+class SolrEad extends SolrMarc {
     /**
      * @var \DOMDocument
      */
@@ -40,8 +39,7 @@ class SolrEad extends SolrMarc
      * @param \Zend\Config\Config $iishConfig IISH specific configuration.
      */
     public function __construct(ServiceLocatorInterface $serviceLocator, $mainConfig = null, $recordConfig = null,
-                                $searchSettings = null, $iishConfig = null)
-    {
+                                $searchSettings = null, $iishConfig = null) {
         parent::__construct($serviceLocator, $mainConfig, $recordConfig, $searchSettings, $iishConfig);
         $this->siteURL = $serviceLocator->get('VuFind\Config')->get('config')->Site->url;
         $this->cache_dir = $serviceLocator->get('VuFind\Config')->get('config')->Cache->cache_dir;
@@ -52,8 +50,7 @@ class SolrEad extends SolrMarc
      *
      * @return string|null The period.
      */
-    public function getPeriod()
-    {
+    public function getPeriod() {
         $period = $this->getFieldArray('245', array('g'), false);
         $period = count($period) > 0 ? $period[0] : null;
 
@@ -65,8 +62,7 @@ class SolrEad extends SolrMarc
      *
      * @return string|null The summary.
      */
-    public function getSummary()
-    {
+    public function getSummary() {
         $summary = parent::getSummary();
 
         return (count($summary) > 0) ? $summary[0] : null;
@@ -77,8 +73,7 @@ class SolrEad extends SolrMarc
      *
      * @return true or false
      */
-    public function getPDF()
-    {
+    public function getPDF() {
         $fileService = new File();
         $fileService->setFilename($this->cache_dir . '/pdf/' . $this->getUniqueID() . '.pdf');
         return $fileService->getFile();
@@ -89,8 +84,7 @@ class SolrEad extends SolrMarc
      *
      * @return \DOMDocument The EAD record.
      */
-    public function getEAD()
-    {
+    public function getEAD() {
         if ($this->ead === null) {
             $oai = new OAI($this->serviceLocator);
             $oai->setId($this->getUniqueID());
@@ -110,8 +104,7 @@ class SolrEad extends SolrMarc
      *
      * @return string The resulting view.
      */
-    public function getViewForXSLT($name)
-    {
+    public function getViewForXSLT($name) {
         $xslt = new XSLTProcessor(
             $this->serviceLocator,
             $this->getEAD(),
@@ -162,5 +155,28 @@ class SolrEad extends SolrMarc
             }
         }
         return $fullTextMatch;
+    }
+
+    /**
+     * Returns one of three things: a full URL to a thumbnail preview of the record
+     * if an image is available in an external system; an array of parameters to
+     * send to VuFind's internal cover generator if no fixed URL exists; or false
+     * if no thumbnail can be generated.
+     *
+     * Override to add temporarily support for audio thumbnails if there is audio digitally available.
+     *
+     * @param string $size Size of thumbnail (small, medium or large -- small is default).
+     *
+     * @return string|array|bool
+     */
+    public function getThumbnail($size = 'small') {
+        $thumbnail = parent::getThumbnail($size);
+
+        if (array_search('Sound documents', $this->getFieldArray('655', 'a')) !== false) {
+            $thumbnail = is_array($thumbnail) ? $thumbnail : array();
+            $thumbnail['audio'] = 'audio';
+        }
+
+        return $thumbnail;
     }
 } 

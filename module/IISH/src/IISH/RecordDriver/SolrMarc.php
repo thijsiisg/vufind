@@ -628,6 +628,11 @@ class SolrMarc extends VuFindSolrMarc {
             $thumbnail['pid'] = $pid;
             $thumbnail['size'] = $this->getLargestPossibleSize($size);
             $thumbnail['publication'] = $this->getPublicationStatus();
+
+            $formats = $this->getFormats();
+            if ($this->getDownloadable() && (strtolower($formats[0]) === 'music and sound')) {
+                $thumbnail['audio'] = 'audio';
+            }
         }
 
         return $thumbnail;
