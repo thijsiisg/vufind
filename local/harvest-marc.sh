@@ -75,7 +75,7 @@ fi
 # Import the records. Eo not take longer than one day.
 #-----------------------------------------------------------------------------------------------------------------------
 cd /usr/local/vufind
-/usr/bin/timeout --signal=SIGKILL --kill-after=10 86400 /usr/local/vufind/import-marc.sh -p /usr/local/vufind/local/import/import_$set_spec.properties $catalog_file >> $log
+/usr/bin/timeout --signal=SIGKILL --kill-after=10 259200 /usr/local/vufind/import-marc.sh -p /usr/local/vufind/local/import/import_$set_spec.properties $catalog_file >> $log
 if [[ $? != 0 ]] ; then
     subject="Error while indexing: ${catalog_file}"
     echo $subject >> $log
