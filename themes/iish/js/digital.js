@@ -16,75 +16,104 @@
                 success: function (message) {
                     var pdf = null;
                     if ((message.pdf !== undefined) && (message.pdf !== null)) {
-                        pdf = $('<a target="_blank"></a>')
-                            .attr('href', message.pdf)
-                            .text(vufindString.pdf);
+                        pdf = getPdf(message);
                     }
 
                     var view = null;
                     if ((message.view !== undefined) && (message.view !== null)) {
-                        view = $('<span>');
-                        if (pdf !== null) {
-                            view.append(document.createTextNode(' | '));
-                        }
-
-                        var linkText = vufindString.view;
-                        if ($.isArray(message.view.items)) {
-                            if (message.view.items[0].contentType.indexOf('audio') === 0) {
-                                linkText = vufindString.audio;
+                        testAccess(message.view, function (access) {
+                            if (access) {
+                                view = getView(message, pdf);
                             }
-                            else {
-                                linkText = vufindString.video;
-                            }
-                        }
-                        else {
-                            view.addClass('hidden-xs hidden-ms');
-                        }
-
-                        $('<a>')
-                            .attr('href', message.view.mets)
-                            .text(linkText)
-                            .appendTo(view)
-                            .click(function (event) {
-                                event.preventDefault();
-
-                                var parent = $(this).closest('.vfile, .vitem, .info');
-                                var div = parent.next();
-
-                                if (div.hasClass('mets-embedded') || div.hasClass('mets-players')) {
-                                    div.remove();
-                                }
-                                else {
-                                    $('.mets-embedded, .mets-players').remove();
-
-                                    if ($.isArray(message.view.items)) {
-                                        setPlayers(parent, message.view.items);
-                                    }
-                                    else {
-                                        setMetsViewer(parent, message.view.mets);
-                                    }
-                                }
-                            });
+                            setDigitalHtml(element, pdf, view);
+                        });
                     }
-
-                    element.html('');
-                    if ((pdf !== null) || (view !== null)) {
-                        element.append(document.createTextNode('[ '));
-                        if (pdf !== null) {
-                            element.append(pdf);
-                        }
-                        if (view !== null) {
-                            element.append(view);
-                        }
-                        element.append(document.createTextNode(' ]'));
+                    else {
+                        setDigitalHtml(element, pdf, view);
                     }
-                    element.removeClass('loading busy');
                 },
                 error: function () {
                     element.html('').removeClass('loading busy');
                 }
             });
         });
+    };
+
+    var getAvUrl = function (item) {
+        return item.url
+            .replace('http://hdl.handle.net/', '/AV/')
+            .replace('?locatt=view:level1', '');
+    };
+
+    var testAccess = function (view, callback) {
+        if (!$.isArray(view.items)) {
+            callback(true);
+            return;
+        }
+
+        $.ajax({
+            type: 'HEAD',
+            url: getAvUrl(view.items[0]),
+            success: function () {
+                callback(true);
+            },
+            error: function () {
+                callback(false);
+            }
+        });
+    };
+
+    var getPdf = function (message) {
+        return $('<a target="_blank"></a>')
+            .attr('href', message.pdf)
+            .text(vufindString.pdf);
+    };
+
+    var getView = function (message, pdf) {
+        var view = $('<span>');
+        if (pdf !== null) {
+            view.append(document.createTextNode(' | '));
+        }
+
+        var linkText = vufindString.view;
+        if ($.isArray(message.view.items)) {
+            if (message.view.items[0].contentType.indexOf('audio') === 0) {
+                linkText = vufindString.audio;
+            }
+            else {
+                linkText = vufindString.video;
+            }
+        }
+        else {
+            view.addClass('hidden-xs hidden-ms');
+        }
+
+        $('<a>')
+            .attr('href', message.view.mets)
+            .text(linkText)
+            .appendTo(view)
+            .click(function (event) {
+                event.preventDefault();
+
+                var parent = $(this).closest('.vfile, .vitem, .info');
+                var div = parent.next();
+
+                if (div.hasClass('mets-embedded') || div.hasClass('mets-players')) {
+                    div.remove();
+                }
+                else {
+                    $('.mets-embedded, .mets-players').remove();
+
+                    if ($.isArray(message.view.items)) {
+                        setPlayers(parent, message.view.items);
+                    }
+                    else {
+                        setMetsViewer(parent, message.view.mets);
+                    }
+                }
+            });
+
+        return view;
     };
 
     var setMetsViewer = function (parent, metsId) {
@@ -138,7 +167,7 @@
                 if (isAudio) {
                     avElem = $('<audio controls preload="metadata"></audio>');
                     $('<source/>')
-                        .attr('src', item.url)
+                        .attr('src', getAvUrl(item))
                         .attr('type', (item.contentType === 'audio/mpeg3') ? 'audio/mpeg' : item.contentType)
                         .appendTo(avElem);
                     $('<span>No audio playback capabilities</span>')
@@ -148,7 +177,7 @@
                     avElem = $('<video controls preload="metadata" width="100%" height="100%"></video>')
                         .attr('poster', item.stillsUrl);
                     $('<source/>')
-                        .attr('src', item.url)
+                        .attr('src', getAvUrl(item))
                         .attr('type', item.contentType)
                         .appendTo(avElem);
                     $('<img title="No video playback capabilities"/>')
@@ -168,6 +197,21 @@
             }
         });
         container.insertAfter(parent);
+    };
+
+    var setDigitalHtml = function (element, pdf, view) {
+        element.html('');
+        if ((pdf !== null) || (view !== null)) {
+            element.append(document.createTextNode('[ '));
+            if (pdf !== null) {
+                element.append(pdf);
+            }
+            if (view !== null) {
+                element.append(view);
+            }
+            element.append(document.createTextNode(' ]'));
+        }
+        element.removeClass('loading busy');
     };
 
     $(document).ready(function () {
