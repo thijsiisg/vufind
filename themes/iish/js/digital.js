@@ -53,6 +53,7 @@
 
         $.ajax({
             type: 'HEAD',
+            cache: false,
             url: getAvUrl(view.items[0]),
             success: function () {
                 callback(true);
