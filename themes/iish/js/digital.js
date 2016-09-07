@@ -21,7 +21,7 @@
 
                     var view = null;
                     if ((message.view !== undefined) && (message.view !== null)) {
-                        testAccess(message.view, function (access) {
+                        testAccess(message.view, message.internal, function (access) {
                             if (access) {
                                 view = getView(message, pdf);
                             }
@@ -39,13 +39,16 @@
         });
     };
 
-    var getAvUrl = function (item) {
-        return item.url
-            .replace('http://hdl.handle.net/', '/AV/')
-            .replace('?locatt=view:level1', '');
+    var getAvUrl = function (item, internal) {
+        if (internal) {
+            return item.url
+                .replace('http://hdl.handle.net/', '/AV/')
+                .replace('?locatt=view:level1', '');
+        }
+        return item.url;
     };
 
-    var testAccess = function (view, callback) {
+    var testAccess = function (view, internal, callback) {
         if (!$.isArray(view.items)) {
             callback(true);
             return;
@@ -54,7 +57,7 @@
         $.ajax({
             type: 'HEAD',
             cache: false,
-            url: getAvUrl(view.items[0]),
+            url: getAvUrl(view.items[0], internal),
             success: function () {
                 callback(true);
             },
@@ -106,7 +109,7 @@
                     $('.mets-embedded, .mets-players').remove();
 
                     if ($.isArray(message.view.items)) {
-                        setPlayers(parent, message.view.items);
+                        setPlayers(parent, message.view.items, message.internal);
                     }
                     else {
                         setMetsViewer(parent, message.view.mets);
@@ -155,7 +158,7 @@
             });
     };
 
-    var setPlayers = function (parent, items) {
+    var setPlayers = function (parent, items, internal) {
         var container = $('<div class="mets-players hidden-print"></div>');
         $.each(items, function (idx, item) {
             var isAudio = (item.contentType.indexOf('audio') === 0);
@@ -168,7 +171,7 @@
                 if (isAudio) {
                     avElem = $('<audio controls preload="metadata"></audio>');
                     $('<source/>')
-                        .attr('src', getAvUrl(item))
+                        .attr('src', getAvUrl(item, internal))
                         .attr('type', (item.contentType === 'audio/mpeg3') ? 'audio/mpeg' : item.contentType)
                         .appendTo(avElem);
                     $('<span>No audio playback capabilities</span>')
@@ -178,7 +181,7 @@
                     avElem = $('<video controls preload="metadata" width="100%" height="100%"></video>')
                         .attr('poster', item.stillsUrl);
                     $('<source/>')
-                        .attr('src', getAvUrl(item))
+                        .attr('src', getAvUrl(item, internal))
                         .attr('type', item.contentType)
                         .appendTo(avElem);
                     $('<img title="No video playback capabilities"/>')

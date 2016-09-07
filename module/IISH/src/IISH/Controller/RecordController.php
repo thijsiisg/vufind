@@ -1,5 +1,6 @@
 <?php
 namespace IISH\Controller;
+use IISH\Content\Covers\IISHContentAccessToken;
 use IISH\RecordDriver\SolrEad;
 use Zend\Config\Config;
 use Zend\View\Model\JsonModel;
@@ -125,77 +126,11 @@ class RecordController extends VuFindRecordController {
         }
 	    $arr = $digital->getList();
 
+        $iishConfig = $this->serviceLocator->get('VuFind\Config')->get('iish');
+        $contentAccessToken = new IISHContentAccessToken($iishConfig);
+        $arr['internal'] = $contentAccessToken->hasAccess();
 
-	    //
 	    return new JsonModel($arr);
-/*
-	    echo " + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + \n";
-	    print_r( new JsonModel($arr) );
-	    echo " + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + \n";
-
-		// TODO: Some example output:
-		if ($driver->getUniqueID() === 'COLL00162') {
-			$a = new JsonModel(array(
-				'pdf' => null,
-				'view' => array(
-					'mets' => 'http://hdl.handle.net/10622/COLL00162.2?locatt=view:mets',
-					'items' => array(
-						array(
-							'url' => 'http://hdl.handle.net/10622/256D7056-AC65-46E8-8CD0-E265A195732F?locatt=view:level1',
-							'contentType' => 'audio/mpeg3'
-						)
-					)
-				)
-			)) ;
-
-//			print_r($a);
-			return $a;
-		}
-
-		if ($driver->getUniqueID() === '1023831') {
-			$a = new JsonModel(array(
-				'pdf' => 'http://hdl.handle.net/10622/D4C1B7B6-D073-499D-A73A-73CEB4D793ED?locatt=view:master',
-				'view' => null
-			));
-
-//	        print_r($a);
-			return $a;
-		}
-
-		if ($driver->getUniqueID() === 'ARCH03210') {
-			$item = 7;
-			$a = new JsonModel(array(
-				'pdf' => 'http://hdl.handle.net/10622/ARCH03210.' . $item . '?locatt=view:pdf',
-				'view' => array(
-					'mets' => 'http://hdl.handle.net/10622/ARCH03210.' . $item . '?locatt=view:mets',
-					'items' => null
-				)
-			));
-
-//	        print_r($a);
-			return $a;
-		}
-
-		if ($driver->getUniqueID() === '1502798') {
-			$a = new JsonModel(array(
-				'pdf' => 'http://hdl.handle.net/10622/4538765749248975834?locatt=view:pdf',
-				'view' => array(
-					'mets' => 'http://hdl.handle.net/10622/4538765749248975834?locatt=view:mets',
-					'items' => array(
-						array(
-							'url' => 'http://hdl.handle.net/10622/1B8B599D-A11B-4861-9EBC-7CE0535FBCF2?locatt=view:level1',
-							'contentType' => 'video/mp4',
-							'stillsUrl' => 'http://hdl.handle.net/10622/1B8B599D-A11B-4861-9EBC-7CE0535FBCF2?locatt=view:level2',
-							'thumbnailUrl' => 'http://hdl.handle.net/10622/1B8B599D-A11B-4861-9EBC-7CE0535FBCF2?locatt=view:level3'
-						)
-					)
-				)
-			));
-
-//	        print_r($a);
-			return $a;
-		}
-*/
     }
 
     /**
