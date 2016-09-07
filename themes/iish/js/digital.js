@@ -21,7 +21,7 @@
 
                     var view = null;
                     if ((message.view !== undefined) && (message.view !== null)) {
-                        testAccess(message.view, message.internal, function (access) {
+                        testAccess(message.view, function (access) {
                             if (access) {
                                 view = getView(message, pdf);
                             }
@@ -48,7 +48,7 @@
         return item.url;
     };
 
-    var testAccess = function (view, internal, callback) {
+    var testAccess = function (view, callback) {
         if (!$.isArray(view.items)) {
             callback(true);
             return;
@@ -57,7 +57,7 @@
         $.ajax({
             type: 'HEAD',
             cache: false,
-            url: getAvUrl(view.items[0], internal),
+            url: getAvUrl(view.items[0], true),
             success: function () {
                 callback(true);
             },
