@@ -25,6 +25,12 @@
                             if (access) {
                                 view = getView(message, pdf);
                             }
+                            else {
+                                view = $('<span class="text-danger">' + vufindString.availableReadingRoom + '</span>');
+                                if (pdf !== null) {
+                                    view.prepend(document.createTextNode(' | '));
+                                }
+                            }
                             setDigitalHtml(element, pdf, view);
                         });
                     }
