@@ -1,47 +1,65 @@
 /*global path, vufindString */
 
 (function ($) {
+    var inViewport = function (elem) {
+        var w = $(window);
+
+        var top = w.scrollTop();
+        var left = w.scrollLeft();
+        var bottom = top + w.height();
+        var right = left + w.width();
+
+        var elemTop = elem.offset().top;
+        var elemLeft = elem.offset().left;
+        var elemBottom = elemTop + elem.height();
+        var elemRight = elemLeft + elem.width();
+
+        return (top < elemTop) && (left < elemLeft) && (bottom > elemBottom) && (right > elemRight);
+    };
+
     var loadDigital = function () {
         $('.digital.loading:visible').not('.busy').each(function () {
             var element = $(this);
-            element.addClass('busy');
+            if (inViewport(element)) {
+                element.addClass('busy');
 
-            var record = element.data('record');
-            var item = element.data('item');
+                var record = element.data('record');
+                var item = element.data('item');
 
-            $.ajax({
-                dataType: 'json',
-                url: path + '/Record/' + record + '/Digital',
-                data: {item: item},
-                success: function (message) {
-                    var pdf = null;
-                    if ((message.pdf !== undefined) && (message.pdf !== null)) {
-                        pdf = getPdf(message);
-                    }
+                $.ajax({
+                    dataType: 'json',
+                    url: path + '/Record/' + record + '/Digital',
+                    data: {item: item},
+                    success: function (message) {
+                        var pdf = null;
+                        if ((message.pdf !== undefined) && (message.pdf !== null)) {
+                            pdf = getPdf(message);
+                        }
 
-                    var view = null;
-                    if ((message.view !== undefined) && (message.view !== null)) {
-                        testAccess(message.view, function (access) {
-                            if (access) {
-                                view = getView(message, pdf);
-                            }
-                            else {
-                                view = $('<span class="text-danger">' + vufindString.availableReadingRoom + '</span>');
-                                if (pdf !== null) {
-                                    view.prepend(document.createTextNode(' | '));
+                        var view = null;
+                        if ((message.view !== undefined) && (message.view !== null)) {
+                            testAccess(message.view, function (access) {
+                                if (access) {
+                                    view = getView(message, pdf);
                                 }
-                            }
+                                else {
+                                    view = $('<span class="text-danger">' + vufindString.availableReadingRoom + '</span>');
+                                    if (pdf !== null) {
+                                        view.prepend(document.createTextNode(' | '));
+                                    }
+                                }
+                                setDigitalHtml(element, pdf, view);
+                            });
+                        }
+                        else {
                             setDigitalHtml(element, pdf, view);
-                        });
+                        }
+                    },
+                    error: function () {
+                        element.html('').removeClass('loading busy');
                     }
-                    else {
-                        setDigitalHtml(element, pdf, view);
-                    }
-                },
-                error: function () {
-                    element.html('').removeClass('loading busy');
-                }
-            });
+                });
+            }
         });
     };
 
@@ -229,5 +247,13 @@
         $('ul.recordTabs a').on('shown.bs.tab', function () {
             loadDigital();
         });
+    });
+
+    var scrollTimeout;
+    $(window).scroll(function() {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(function () {
+            loadDigital();
+        }, 250);
     });
 })(jQuery);
