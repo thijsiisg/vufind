@@ -30,8 +30,14 @@
                             type   : 'GET',
                             url    : navigationData,
                             success: function (data) {
-                                navigationElem.html(data);
-                                thisObj.loadSuccess(navigationElem);
+                                if (data.trim().length > 0) {
+                                    navigationElem.html(data);
+                                    thisObj.loadSuccess(navigationElem);
+                                }
+                                else {
+                                    navigationElem.remove();
+                                    thisObj.loadFailure();
+                                }
                             },
                             error  : function () {
                                 navigationElem.remove();

@@ -41,6 +41,11 @@ $config = array(
             'VuFind\CacheManager' => 'IISH\Service\Factory::getCacheManager',
         ),
     ),
+    'view_manager' => array(
+        'strategies' => array(
+            'ViewJsonStrategy',
+        ),
+    ),
     'vufind'          => array(
         'plugin_managers'   => array(
             'auth'           => array(
@@ -195,6 +200,21 @@ $config['router']['routes']['record-search'] = array(
         'defaults'    => array(
             'controller' => 'Record',
             'action'     => 'Search',
+        )
+    )
+);
+
+$config['router']['routes']['record-digital'] = array(
+    'type'    => 'Zend\Mvc\Router\Http\Segment',
+    'options' => array(
+        'route'       => '/Record/[:id]/Digital',
+        'constraints' => array(
+            'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+            'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+        ),
+        'defaults'    => array(
+            'controller' => 'Record',
+            'action'     => 'Digital',
         )
     )
 );

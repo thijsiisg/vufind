@@ -15,15 +15,21 @@ $this->jsobject()->addProps(array(
 ));
 $this->headScript()->appendScript($this->jsobject()->getScript('visualMets'));
 $this->headScript()->appendFile('mets2viewer.min.js');
-
 $this->headScript()->appendFile('visual-mets/' . $this->layout()->userLang . '.lang.js');
-$this->headScript()->appendFile('visual-mets.js');
 
-if ($this->driver->getDownloadable() && ($this->driver->hasVideo() || $this->driver->hasAudio())) {
-  $this->headLink()->appendStylesheet('../vendor/mediaelement/build/mediaelementplayer.css');
-  $this->headScript()->appendFile('../vendor/mediaelement/build/mediaelement-and-player.min.js');
-  $this->headScript()->appendFile('player.js');
-}
+$this->headScript()->appendFile('digital.js');
+
+$this->headLink()->appendStylesheet('../vendor/mediaelement/build/mediaelementplayer.css');
+$this->headScript()->appendFile('../vendor/mediaelement/build/mediaelement-and-player.min.js');
+$this->headScript()->appendFile('player.js');
+
+$this->jsTranslations()->addStrings(array(
+  'pdf' => 'digital.pdf',
+  'view' => 'digital.view',
+  'audio' => 'digital.audio',
+  'video' => 'digital.video',
+  'availableReadingRoom' => 'Available Reading Room',
+));
 ?>
 
 <div class="row" vocab="http://schema.org/" resource="#record" typeof="<?=$this->driver->getSchemaOrgFormats()?> Product">
@@ -36,8 +42,8 @@ if ($this->driver->getDownloadable() && ($this->driver->hasVideo() || $this->dri
 
   <div class="col-sm-5 col-sm-push-7">
     <? if ($this->driver->getDownloadable() && $this->driver->hasVideo()): ?>
-      <div class="video-container hidden-print">
-        <video controls preload="none" style="width: 100%; height: 100%;" poster="http://hdl.handle.net/10622/<?=$this->driver->getIsShownBy()?>?locatt=view:level2">
+      <div class="video-container iish-mejs hidden-print">
+        <video controls preload="metadata" style="width: 100%; height: 100%;" poster="http://hdl.handle.net/10622/<?=$this->driver->getIsShownBy()?>?locatt=view:level2">
           <source src="http://hdl.handle.net/10622/<?=$this->driver->getIsShownBy()?>?locatt=view:level1" type='video/mp4'/>
           <img src="http://hdl.handle.net/10622/<?=$this->driver->getIsShownBy()?>?locatt=view:level2" title="No video playback capabilities"/>
         </video>
@@ -464,8 +470,8 @@ if ($this->driver->getDownloadable() && ($this->driver->hasVideo() || $this->dri
 </div>
 
 <?php if ($this->driver->getDownloadable() && $this->driver->hasAudio()): ?>
-  <div class="audio-container hidden-print">
-    <audio controls preload="none" style="width: 100%;">
+  <div class="audio-container iish-mejs hidden-print">
+    <audio controls preload="metadata" style="width: 100%;">
       <source src="http://hdl.handle.net/10622/<?=$this->driver->getIsShownBy()?>?locatt=view:level1" type='audio/mp3'/>
     </audio>
   </div>

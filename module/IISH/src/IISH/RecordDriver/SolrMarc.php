@@ -393,7 +393,7 @@ class SolrMarc extends VuFindSolrMarc {
                     if ($subfieldj) {
                         $holdings[$key]['j'] = $subfieldj->getData();
                     }
-                    if ($subfieldp && in_array($subfieldp->getData(), $this->getBarcodesWithMets(), true)) {
+                    if ($subfieldp) {
                         $holdings[$key]['p'] = $subfieldp->getData();
                     }
                 }
@@ -628,6 +628,11 @@ class SolrMarc extends VuFindSolrMarc {
             $thumbnail['pid'] = $pid;
             $thumbnail['size'] = $this->getLargestPossibleSize($size);
             $thumbnail['publication'] = $this->getPublicationStatus();
+
+            $formats = $this->getFormats();
+            if ($this->getDownloadable() && (strtolower($formats[0]) === 'music and sound')) {
+                $thumbnail['audio'] = 'audio';
+            }
         }
 
         return $thumbnail;

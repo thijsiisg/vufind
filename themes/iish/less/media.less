@@ -1,0 +1,75 @@
+@iish-mejs-bg-color: #F5F5F5;
+
+.iish-mejs .mejs-container {
+  .mejs-overlay-loading {
+    position: static;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+
+    span {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .mejs-controls {
+    background: @iish-mejs-bg-color;
+
+    .mejs-button button {
+      background-image: url('../../images/controls.svg');
+      background-repeat: no-repeat;
+    }
+
+    .mejs-time,
+    .mejs-time a {
+      color: #666;
+    }
+
+    .mejs-time-rail {
+      .mejs-time-total {
+        background: darken(@iish-mejs-bg-color, 20%);
+      }
+
+      .mejs-time-loaded {
+        background: lighten(@iish-logo-color, 15%);
+      }
+
+      .mejs-time-current {
+        background: darken(@iish-logo-color, 15%);
+      }
+    }
+
+    .mejs-volume-slider {
+      background: @iish-mejs-bg-color;
+
+      .mejs-volume-total {
+        background: lighten(@iish-logo-color, 15%);
+      }
+
+      .mejs-volume-current {
+        background: darken(@iish-logo-color, 15%);
+      }
+
+      .mejs-volume-handle {
+        background: darken(@iish-logo-color, 15%);
+      }
+    }
+
+    .mejs-horizontal-volume-slider {
+      background: @iish-mejs-bg-color;
+
+      .mejs-horizontal-volume-total {
+        background: lighten(@iish-logo-color, 15%);
+      }
+
+      .mejs-horizontal-volume-current {
+        background: darken(@iish-logo-color, 15%);
+      }
+
+      .mejs-horizontal-volume-handle {
+        background: darken(@iish-logo-color, 15%);
+      }
+    }
+  }
+}

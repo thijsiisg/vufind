@@ -22,6 +22,11 @@ class Loader extends VuFindCoverLoader {
     private $publication;
 
     /**
+     * @var string
+     */
+    private $audio;
+
+    /**
      * @var int
      */
     private $resizeToWidth;
@@ -42,14 +47,34 @@ class Loader extends VuFindCoverLoader {
      * @param string $upc         UPC number.
      * @param string $pid         PID.
      * @param string $publication Publication status.
+     * @param string $audio       Audio.
      */
     public function loadImage($isbn = null, $size = 'small', $type = null,
                               $title = null, $author = null, $callnumber = null, $issn = null,
-                              $oclc = null, $upc = null, $pid = null, $publication = null) {
+                              $oclc = null, $upc = null, $pid = null, $publication = null, $audio = null) {
         $this->pid = $pid;
         $this->publication = $publication;
+        $this->audio = $audio;
 
         parent::loadImage($isbn, $size, $type, $title, $author, $callnumber, $issn, $oclc, $upc);
+    }
+
+    /**
+     * Load the user-specified "cover unavailable" graphic (or default if none
+     * specified).
+     *
+     * Override to add temporarily support for audio thumbnails if there is audio digitally available.
+     *
+     * @return void
+     */
+    public function loadUnavailable() {
+        if ($this->audio === 'audio') {
+            $this->contentType = 'image/png';
+            $this->image = file_get_contents($this->searchTheme('images/audio.png'));
+        }
+        else {
+            parent::loadUnavailable();
+        }
     }
 
     /**

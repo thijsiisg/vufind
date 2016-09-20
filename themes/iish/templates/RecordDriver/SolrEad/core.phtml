@@ -17,9 +17,21 @@ $this->jsobject()->addProps(array(
 ));
 $this->headScript()->appendScript($this->jsobject()->getScript('visualMets'));
 $this->headScript()->appendFile('mets2viewer.min.js');
-
 $this->headScript()->appendFile('visual-mets/' . $this->layout()->userLang . '.lang.js');
-$this->headScript()->appendFile('visual-mets.js');
+
+$this->headScript()->appendFile('digital.js');
+
+$this->headLink()->appendStylesheet('../vendor/mediaelement/build/mediaelementplayer.css');
+$this->headScript()->appendFile('../vendor/mediaelement/build/mediaelement-and-player.min.js');
+$this->headScript()->appendFile('player.js');
+
+$this->jsTranslations()->addStrings(array(
+  'pdf' => 'digital.pdf',
+  'view' => 'digital.view',
+  'audio' => 'digital.audio',
+  'video' => 'digital.video',
+  'availableReadingRoom' => 'Available Reading Room',
+));
 ?>
 
 <div class="row" vocab="http://schema.org/" resource="#record" typeof="<?=$this->driver->getSchemaOrgFormats()?> Product">

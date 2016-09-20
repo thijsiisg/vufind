@@ -1,7 +1,11 @@
 <?php
 namespace IISH\Controller;
+use IISH\Content\Covers\IISHContentAccessToken;
+use IISH\RecordDriver\SolrEad;
 use Zend\Config\Config;
+use Zend\View\Model\JsonModel;
 use IISH\Search\Highlighting;
+use IISH\Digital\Loader as Digital;
 use VuFind\Controller\RecordController as VuFindRecordController;
 
 /**
@@ -99,6 +103,34 @@ class RecordController extends VuFindRecordController {
         }
 
         return $viewModel;
+    }
+
+    /**
+     * Digital action -- Returns all available digital material.
+     *
+     * @return \Zend\View\Model\JsonModel
+     */
+    public function digitalAction() {
+        $driver = $this->loadRecord();
+
+	    $digital = new Digital($this->serviceLocator);
+	    $digital->setRecord($driver->getUniqueID());
+	    $digital->setItem($this->params()->fromQuery('item'));
+
+        if ($driver instanceof SolrEad) {
+	        $digital->setType('ead');
+	        $ead = $driver->getEAD();
+	        $digital->setEad($ead);
+        } else {
+	        $digital->setType('marc');
+        }
+	    $arr = $digital->getList();
+
+        $iishConfig = $this->serviceLocator->get('VuFind\Config')->get('iish');
+        $contentAccessToken = new IISHContentAccessToken($iishConfig);
+        $arr['internal'] = $contentAccessToken->hasAccess();
+
+	    return new JsonModel($arr);
     }
 
     /**
