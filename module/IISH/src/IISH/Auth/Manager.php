@@ -16,7 +16,7 @@ class Manager extends VuFindManager {
      *
      * @param string $authMethod optional; check this auth method rather than the one in config file
      *
-     * @return bool
+     * @return bool: defaults to true
      */
     public function supportsPasswordChange($authMethod = null) {
         if ($authMethod !== null) {
@@ -29,6 +29,6 @@ class Manager extends VuFindManager {
             && $this->config->Authentication->change_password;
         }
 
-        return false;
+        return true;
     }
 }

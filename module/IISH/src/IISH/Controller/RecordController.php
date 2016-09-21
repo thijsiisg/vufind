@@ -1,7 +1,12 @@
 <?php
 namespace IISH\Controller;
-use VuFind\Controller\RecordController as VuFindRecordController;
+use IISH\Content\Covers\IISHContentAccessToken;
+use IISH\RecordDriver\SolrEad;
 use Zend\Config\Config;
+use Zend\View\Model\JsonModel;
+use IISH\Search\Highlighting;
+use IISH\Digital\Loader as Digital;
+use VuFind\Controller\RecordController as VuFindRecordController;
 
 /**
  * Record Controller.
@@ -69,6 +74,63 @@ class RecordController extends VuFindRecordController {
         }
 
         return parent::exportAction();
+    }
+
+    /**
+     * Search action -- Performs a full text search within a specific record.
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function searchAction() {
+        $driver = $this->loadRecord();
+        $searchService = $this->getServiceLocator()->get('VuFind\Search');
+        $highlighting = new Highlighting($searchService, $driver);
+
+        $lookfor = $this->params()->fromPost('lookfor');
+        $results = $highlighting->getResultsFor($lookfor);
+
+        $viewModel = $this->createViewModel();
+        $viewModel->setTemplate('search/highlighting.phtml');
+
+        $viewModel->tagPre = $highlighting::TAG_PRE;
+        $viewModel->tagPost = $highlighting::TAG_POST;
+        $viewModel->results = $results;
+        $viewModel->recordDriver = $driver;
+
+        // If called via AJAX, use the Lightbox layout
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $this->layout()->setTemplate('layout/lightbox');
+        }
+
+        return $viewModel;
+    }
+
+    /**
+     * Digital action -- Returns all available digital material.
+     *
+     * @return \Zend\View\Model\JsonModel
+     */
+    public function digitalAction() {
+        $driver = $this->loadRecord();
+
+	    $digital = new Digital($this->serviceLocator);
+	    $digital->setRecord($driver->getUniqueID());
+	    $digital->setItem($this->params()->fromQuery('item'));
+
+        if ($driver instanceof SolrEad) {
+	        $digital->setType('ead');
+	        $ead = $driver->getEAD();
+	        $digital->setEad($ead);
+        } else {
+	        $digital->setType('marc');
+        }
+	    $arr = $digital->getList();
+
+        $iishConfig = $this->serviceLocator->get('VuFind\Config')->get('iish');
+        $contentAccessToken = new IISHContentAccessToken($iishConfig);
+        $arr['internal'] = $contentAccessToken->hasAccess();
+
+	    return new JsonModel($arr);
     }
 
     /**

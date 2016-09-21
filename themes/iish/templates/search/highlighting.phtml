@@ -1,0 +1,43 @@
+<div class="text-search-results">
+  <? if (count($this->results) === 0): ?>
+    <div class="result-item">
+      <?= $this->transEsc('nohit_heading') ?>
+    </div>
+  <? endif; ?>
+
+  <? foreach ($this->results as $result): ?>
+    <div class="result-item">
+      <? $item = $result->getItem(); $page = $result->getPage(); ?>
+
+      <? if (($item !== null) || ($page !== null)): ?>
+        <h5>
+          <?= $this->transEsc('Found') ?>
+          <? if ($page !== null): ?>
+            <?= $this->transEsc('on') . ' ' . $this->transEsc('page') . ' ' . $page ?>
+          <? endif; ?>
+          <? if ($item !== null): ?>
+            <? if ($this->recordDriver instanceof \IISH\RecordDriver\SolrEad): ?>
+              <?= $this->transEsc('for') . ' '?>
+              <a href="<?=$this->url('record', array('id' => $this->recordDriver->getUniqueID(), 'tab' => 'ArchiveContentList'), array('fragment' => $item))?>">
+                <?= $this->transEsc('item') . ' ' ?> <?= $item ?>
+              </a>
+            <? else: ?>
+              <?= $this->transEsc('for') . ' ' . $this->transEsc('item') . ' ' . $item ?>
+            <? endif; ?>
+          <? endif; ?>
+          <?= ':' ?>
+        </h5>
+      <? endif; ?>
+
+      <ul class="result-item-text list-unstyled">
+        <? foreach ($result->getHighlightedText() as $text): ?>
+          <?
+          $text = str_replace($this->tagPre, '<mark>', $text);
+          $text = str_replace($this->tagPost, '</mark>', $text);
+          ?>
+          <li><?= $text ?></li>
+        <? endforeach; ?>
+      </ul>
+    </div>
+  <? endforeach; ?>
+</div>

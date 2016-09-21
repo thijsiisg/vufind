@@ -72,13 +72,14 @@ fi
  
 
 #-----------------------------------------------------------------------------------------------------------------------
-# Import the records
+# Import the records. Eo not take longer than one day.
 #-----------------------------------------------------------------------------------------------------------------------
 cd /usr/local/vufind
-/usr/local/vufind/import-marc.sh -p /usr/local/vufind/local/import/import_$set_spec.properties $catalog_file >> $log
+/usr/bin/timeout --signal=SIGKILL --kill-after=10 259200 /usr/local/vufind/import-marc.sh -p /usr/local/vufind/local/import/import_$set_spec.properties $catalog_file >> $log
 if [[ $? != 0 ]] ; then
     subject="Error while indexing: ${catalog_file}"
     echo $subject >> $log
+    rm -rf "$HARVEST_DIRECTORY"
     /usr/bin/sendmail --body "$log" --from "$MAIL_FROM" --to "$MAIL_TO" --subject "$subject" --mail_relay "$VUFIND_MAIL_HOST" --mail_user "$MAIL_USER" --mail_password "$MAIL_PASSWORD"
     exit 1
 fi
@@ -102,7 +103,8 @@ fi
 #-----------------------------------------------------------------------------------------------------------------------
 # Commit. Really not neccessary. But we like to be sure all is in the index and not the transaction log.
 #-----------------------------------------------------------------------------------------------------------------------
-wget -O /tmp/commit.txt "http://localhost:8080/solr/biblio/update?commit=true"
+wget -O /tmp/commit-biblio.txt "http://localhost:8080/solr/biblio/update?commit=true"
+wget -O /tmp/commit-fulltext.txt "http://localhost:8080/solr/fulltext/update?commit=true"
 
 
 #-----------------------------------------------------------------------------------------------------------------------

@@ -20,7 +20,8 @@ class IISHContentAccessToken {
         'HTTP_X_FORWARDED_FOR',
         'HTTP_X_FORWARDED',
         'HTTP_FORWARDED_FOR',
-        'HTTP_FORWARDED'
+        'HTTP_FORWARDED',
+        'REMOTE_ADDR'
     );
 
     /**
@@ -69,7 +70,7 @@ class IISHContentAccessToken {
      *
      * @return bool Whether access is granted.
      */
-    private function hasAccess() {
+    public function hasAccess() {
         $clientIP = self::getClientIP();
         foreach ($this->audienceInternal as $network) {
             if (self::checkNetwork($network, $clientIP) === true) {

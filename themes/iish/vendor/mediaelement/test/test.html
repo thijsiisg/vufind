@@ -1,9 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html debug="true">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<title>HTML5 MediaElement</title>	
+	
+	<script src="firebug-lite/build/firebug-lite.js"></script>
+	
+	<script>
+	if (typeof window.console == 'undefined') {
+		window.console = {log:function() {}};
+	}	
+	</script>
 	
 	<script src="../build/jquery.js"></script>
 	
@@ -53,7 +61,7 @@
 
 <h2>MP3 audio (as src)</h2>
 
-<audio id="player2" src="../media/AirReview-Landmarks-02-ChasingCorporate.mp3" preload="none" type="audio/mp3" controls="controls">
+<audio id="player2" src="../media/test.mp3" preload="none" type="audio/mp3" controls="controls">
 	<p>Your browser leaves much to be desired.</p>			
 </audio>
 

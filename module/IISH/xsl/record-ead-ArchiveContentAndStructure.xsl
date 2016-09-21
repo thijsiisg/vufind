@@ -29,6 +29,7 @@
       <table class="table table-striped">
         <xsl:call-template name="bibliographical"/>
         <xsl:call-template name="custodhist"/>
+        <xsl:call-template name="acquisition"/>
         <xsl:call-template name="arrangement"/>
         <xsl:call-template name="content"/>
         <xsl:call-template name="processinfo"/>
@@ -84,6 +85,16 @@
       <xsl:with-param name="value">
         <xsl:apply-templates
             select="ead:archdesc/ead:descgrp[@type='content_and_structure']/ead:processinfo/*"/>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="acquisition">
+    <xsl:call-template name="row">
+      <xsl:with-param name="key" select="'ArchiveContentAndStructure.acquisition'"/>
+      <xsl:with-param name="value">
+        <xsl:apply-templates
+         select="ead:archdesc/ead:descgrp[@type='context']/ead:acqinfo/*"/>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:template>

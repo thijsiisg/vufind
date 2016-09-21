@@ -131,25 +131,11 @@
   <xsl:template match="ead:head"/>
 
   <xsl:template match="ead:daogrp">
-    <span class="hidden-print">
-      [
-      <a href="{ead:daoloc[@xlink:label='pdf']/@xlink:href}" target="_blank">
-        <xsl:call-template name="language">
-          <xsl:with-param
-              name="key" select="'ArchiveContentList.pdf'"/>
-        </xsl:call-template>
-      </a>
-      <span class="hidden-xs hidden-ms">
-        |
-        <span class="m" title="{ead:daoloc[@xlink:label='mets']/@xlink:href}">
-          <xsl:call-template name="language">
-            <xsl:with-param
-                name="key" select="'ArchiveContentList.view'"/>
-          </xsl:call-template>
-        </span>
-      </span>
-      ] -
-    </span>
+    <div class="digital loading hidden-print"
+         data-record="{normalize-space(//ead:ead/ead:archdesc/ead:did/ead:unitid)}"
+         data-item="{normalize-space(../ead:unitid)}">
+      <i class="fa fa-spinner fa-spin">.</i>
+    </div>
   </xsl:template>
 
   <!-- Catch all -->

@@ -73,6 +73,13 @@
             <? if ($hasNavigation): ?>data-navigation="<?=$navigationLink?>"<? endif; ?>><?=$this->transEsc($desc)?></a>
         </li>
         <? endforeach; ?>
+
+        <li class="dropdown responsive-dropdown" style="display:none;">
+          <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu"></ul>
+        </li>
       </ul>
     <? endif; ?>
 

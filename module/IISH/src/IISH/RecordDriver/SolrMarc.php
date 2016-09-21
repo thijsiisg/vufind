@@ -1,6 +1,8 @@
 <?php
 namespace IISH\RecordDriver;
+use Zend\ServiceManager\ServiceLocatorInterface;
 use VuFind\RecordDriver\SolrMarc as VuFindSolrMarc;
+use IISH\Content\Covers\IISHContentAccessToken;
 
 /**
  * Model for MARC records in Solr.
@@ -9,13 +11,24 @@ use VuFind\RecordDriver\SolrMarc as VuFindSolrMarc;
  */
 class SolrMarc extends VuFindSolrMarc {
     /**
+     * @var \Zend\ServiceManager\ServiceLocatorInterface
+     */
+    protected $serviceLocator;
+
+    /**
      * @var \Zend\Config\Config
      */
     protected $iishConfig;
 
     /**
+     * @var \IISH\Content\Covers\IISHContentAccessToken
+     */
+    protected $contentAccessToken;
+
+    /**
      * Constructor.
      *
+     * @param ServiceLocatorInterface $serviceLocator
      * @param \Zend\Config\Config $mainConfig     VuFind main configuration. (omit for
      *                                            built-in defaults)
      * @param \Zend\Config\Config $recordConfig   Record-specific configuration file.
@@ -23,9 +36,12 @@ class SolrMarc extends VuFindSolrMarc {
      * @param \Zend\Config\Config $searchSettings Search-specific configuration file
      * @param \Zend\Config\Config $iishConfig     IISH specific configuration.
      */
-    public function __construct($mainConfig = null, $recordConfig = null, $searchSettings = null, $iishConfig = null) {
+    public function __construct(ServiceLocatorInterface $serviceLocator, $mainConfig = null, $recordConfig = null,
+                                $searchSettings = null, $iishConfig = null) {
         parent::__construct($mainConfig, $recordConfig, $searchSettings);
+        $this->serviceLocator = $serviceLocator;
         $this->iishConfig = $iishConfig;
+        $this->contentAccessToken= new IISHContentAccessToken($this->iishConfig);
     }
 
     /**
@@ -76,6 +92,18 @@ class SolrMarc extends VuFindSolrMarc {
             return $this->fields['downloadable'];
         }
 
+        return false;
+    }
+
+    /**
+     * True if we have full text indexed.
+     *
+     * @return bool
+     */
+    public function hasFullText() {
+        if (isset($this->fields['no_text'])) {
+            return !$this->fields['no_text'];
+        }
         return false;
     }
 
@@ -149,6 +177,18 @@ class SolrMarc extends VuFindSolrMarc {
     }
 
     /**
+     * Which barcodes of this record have METS?
+     *
+     * @return string[] All barcodes with METS.
+     */
+    public function getBarcodesWithMets() {
+        if (isset($this->fields['mets_barcodes'])) {
+            return $this->fields['mets_barcodes'];
+        }
+        return array();
+    }
+
+    /**
      * Tries to find the authority for the specified MARC field.
      * If a value is given, the authority for that value is returned if found.
      * Otherwise the first found authority is returned instead.
@@ -167,7 +207,7 @@ class SolrMarc extends VuFindSolrMarc {
 
         foreach ($fields as $f) {
             $subfieldValues = $this->getSubfieldArray($f, $subfields, false);
-            if (($value == null) || (($value != null) && ($subfieldValues[0] == $value))) {
+            if (($value == null) || (isset($subfieldValues[0]) && ($subfieldValues[0] == $value))) {
                 return isset($subfieldValues[1]) ? $subfieldValues[1] : null;
             }
         }
@@ -335,6 +375,7 @@ class SolrMarc extends VuFindSolrMarc {
             if ($tag == '852') {
                 $subfieldc = $datafield->getSubfield('c');
                 $subfieldj = $datafield->getSubfield('j');
+                $subfieldp = $datafield->getSubfield('p');
                 $subfield = null;
 
                 if ($subfieldc && $subfieldj) {
@@ -351,6 +392,9 @@ class SolrMarc extends VuFindSolrMarc {
                     $holdings[$key]['c'] = $subfield;
                     if ($subfieldj) {
                         $holdings[$key]['j'] = $subfieldj->getData();
+                    }
+                    if ($subfieldp) {
+                        $holdings[$key]['p'] = $subfieldp->getData();
                     }
                 }
             }
@@ -372,7 +416,7 @@ class SolrMarc extends VuFindSolrMarc {
     /**
      * Returns the classifications.
      *
-     * @return array|null The classifications.
+     * @return array The classifications.
      */
     public function getClassifications() {
         $classifications = array();
@@ -382,14 +426,14 @@ class SolrMarc extends VuFindSolrMarc {
             foreach ($marcClassifications as $classification) {
                 // Is there an address in the current field?
                 $code = $classification->getSubfield('a');
-                if ($code !== null) {
+                if ($code) {
                     $english = $classification->getSubfield('b');
                     $dutch = $classification->getSubfield('c');
 
                     $classifications[] = array(
                         'code'    => $code->getData(),
-                        'english' => ($english !== null) ? $english->getData() : null,
-                        'dutch'   => ($dutch !== null) ? $dutch->getData() : null
+                        'english' => $english ? $english->getData() : null,
+                        'dutch'   => $dutch ? $dutch->getData() : null
                     );
                 }
             }
@@ -469,14 +513,19 @@ class SolrMarc extends VuFindSolrMarc {
      * @return string The largest possible image size.
      */
     public function getLargestPossibleSize($largestSize = 'large') {
+        // If access to the images is granted, the largest size is always available
+        if ($this->contentAccessToken->hasAccess()) {
+            return $largestSize;
+        }
+
         switch ($this->getPublicationStatus()) {
-            case 'closed':
-                return $largestSize;
             case 'minimal':
+            case 'pictoright':
                 return 'small';
+            case 'closed':
             case 'restricted':
             default:
-                return ($largestSize === 'small') ? $largestSize : 'medium';
+                return $largestSize;
         }
     }
 
@@ -579,9 +628,25 @@ class SolrMarc extends VuFindSolrMarc {
             $thumbnail['pid'] = $pid;
             $thumbnail['size'] = $this->getLargestPossibleSize($size);
             $thumbnail['publication'] = $this->getPublicationStatus();
+
+            $formats = $this->getFormats();
+            if ($this->getDownloadable() && (strtolower($formats[0]) === 'music and sound')) {
+                $thumbnail['audio'] = 'audio';
+            }
         }
 
         return $thumbnail;
+    }
+
+    /**
+     * Whether this record driver also has text indexed.
+     *
+     * @return bool Whether this record driver also has text indexed.
+     */
+    public function hasTextIndexed() {
+        $searchService = $this->serviceLocator->get('VuFind\Search');
+        $highlighting = new \IISH\Search\Highlighting($searchService, $this);
+        return $highlighting->hasTextIndexed();
     }
 
     /**
@@ -599,6 +664,11 @@ class SolrMarc extends VuFindSolrMarc {
 
                 return ($pos) ? substr($tmp, 0, $pos) : $tmp;
             }
+        }
+
+        $barcodes = $this->getBarcodesWithMets();
+        if (isset($barcodes[0])) {
+            return $barcodes[0];
         }
 
         return false;

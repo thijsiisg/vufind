@@ -29,6 +29,7 @@ import java.security.NoSuchAlgorithmException;
 
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.HttpURLConnection;
 
 import org.apache.log4j.Logger;
 
@@ -271,6 +272,7 @@ private Document loadDocument(String url) throws Exception {
     final URL oai_url = new URL(url);
     final URLConnection connection = oai_url.openConnection();
     connection.setConnectTimeout(10000); // 10 seconds is long enough
+    connection.setReadTimeout(10000); // 10 seconds is long enough
 
     DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     dbf.setIgnoringComments(true);
@@ -482,6 +484,10 @@ public String downloadableBiblio(Record record ){
                 return "true";
         }
     }
+
+    final Set barcodes = barcodesHaveMets(record);
+    if (!barcodes.isEmpty())
+        return "true";
     
     return "false";
 }
@@ -524,6 +530,38 @@ public String getAlphabetical(Record record) {
     }
 
     return null;
+}
+
+public Set barcodesHaveMets(Record record) {
+    final Set result = new LinkedHashSet();
+    final List fields = record.getVariableFields("852");
+    if (fields != null) {
+        final Iterator fieldsIter = fields.iterator();
+        while (fieldsIter.hasNext()) {
+            final DataField physical = (DataField) fieldsIter.next();
+            final List subfields = physical.getSubfields('p');
+            if (subfields != null) {
+                final Iterator subfieldsIter = subfields.iterator();
+                while (subfieldsIter.hasNext()) {
+                    final Subfield subfield = subfield(subfieldsIter.next());
+                    String metsUrl = "http://hdl.handle.net/10622/" + subfield.getData() + "?locatt=view:mets";
+
+                    try {
+                        HttpURLConnection urlConnection = (HttpURLConnection) new URL(metsUrl).openConnection();
+                        urlConnection.setRequestMethod("HEAD");
+                        urlConnection.connect();
+                        String contentType = urlConnection.getContentType();
+
+                        if (contentType.equals("application/xml") || contentType.equals("text/xml")) {
+                            result.add(subfield.getData());
+                        }
+                    }
+                    catch (Exception e) { }
+                }
+            }
+        }
+    }
+    return result;
 }
 
 private String subfieldQ(DataField datafield) {

@@ -9,17 +9,30 @@
   <div id="holdings-container" <?=$hasOnlineContent ? 'class="online-content-available"' : ''?>>
     <? foreach ($holdings as $counter => $holding): ?>
       <div class="holding">
-        <div class="callnumber">
-          <?=$this->escapeHtml($holding['c'])?>
-        </div>
+        <div class="info">
+          <div class="callnumber">
+            <?=$this->escapeHtml($holding['c'])?>
+          </div>
 
-        <div class="state hidden-print"
-             data-label="<?=$this->escapeHtmlAttr($this->truncate(preg_replace('/[\'"]/', '`',
-               $this->driver->getShortTitle()), 40))?> - <?=$this->escapeHtmlAttr($holding['j'])?>"
-             data-pid="<?=$this->escapeHtmlAttr($this->driver->getIsShownAt())?>"
-             data-signature="<?=$this->escapeHtmlAttr($holding['j'])?>"
-             data-show-reservation="<?=var_export(($format === 'books and brochures') || ($format === 'serials'))?>"
-             data-show-reproduction="<?=var_export(($format !== 'articles') && ($format !== 'other'))?>">
+          <? if (isset($holding['p'])): ?>
+            <div class="digital loading hidden-print"
+                 data-record="<?=$this->escapeHtml($this->driver->getUniqueId())?>"
+                 data-item="<?=$this->escapeHtml($holding['p'])?>">
+              <i class="fa fa-spinner fa-spin"></i>
+            </div>
+          <? endif; ?>
+
+          <? $formats = $this->driver->getFormats(); $format = strtolower($formats[0]); ?>
+          <? if (($format === 'books and brochures') || ($format === 'serials')): ?>
+            <div class="state hidden-print"
+                 data-label="<?=$this->escapeHtmlAttr($this->truncate(preg_replace('/[\'"]/', '`',
+                   $this->driver->getShortTitle()), 40))?> - <?=$this->escapeHtmlAttr($holding['j'])?>"
+                 data-pid="<?=$this->escapeHtmlAttr($this->driver->getIsShownAt())?>"
+                 data-signature="<?=$this->escapeHtmlAttr($holding['j'])?>"
+                 data-show-reservation="<?=var_export(($format === 'books and brochures') || ($format === 'serials'))?>"
+                 data-show-reproduction="<?=var_export(($format !== 'articles') && ($format !== 'other'))?>">
+            </div>
+          <? endif; ?>
         </div>
 
         <? if (isset($holding['note'])): ?>
