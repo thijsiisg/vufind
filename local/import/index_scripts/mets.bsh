@@ -1,0 +1,365 @@
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathFactory;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.*;
+
+import org.marc4j.marc.DataField;
+import org.marc4j.marc.Record;
+import org.marc4j.marc.Subfield;
+
+import org.apache.solr.common.SolrInputDocument;
+import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.util.ClientUtils;
+
+// Give ourselves the ability to import other BeanShell scripts
+String vufindHome = System.getenv("VUFIND_HOME");
+String vufindLocal = System.getenv("VUFIND_LOCAL_DIR");
+addClassPath(vufindHome + "/import");
+if (vufindLocal != null) {
+    addClassPath(vufindLocal + "/import");
+}
+importCommands("index_scripts");
+
+// define the base level indexer so that its methods can be called from the script.
+// note that the SolrIndexer code will set this value before the script methods are called.
+org.solrmarc.index.VuFindIndexer indexer = null;
+
+/* MARC / EAD */
+
+public String getTextFromMarc(Record record) {
+    String recordId = getId(record);
+    List metsItemUrls = new ArrayList();
+
+    List fields = record.getVariableFields("852");
+    for (DataField datafield : fields) {
+        Subfield callNumber = datafield.getSubfield('j');
+        Subfield barcode = datafield.getSubfield('p');
+
+        if (barcode != null) {
+            String cn = null;
+            if (callNumber != null) {
+                cn = callNumber.getData();
+            }
+
+            String metsUrl = "http://hdl.handle.net/10622/" + barcode.getData() + "?locatt=view:mets";
+            metsItemUrls.add(new String[] {cn, metsUrl});
+        }
+    }
+
+    return getTextFromMetsItemsUrls(recordId, metsItemUrls);
+}
+
+public String getTextFromMarcAndParser(Record record, String parserFieldSpec, String parserExtension) {
+    String metsText = getTextFromMarc(record);
+    String parserText = indexer.getFulltext(record, parserFieldSpec, parserExtension);
+
+    SolrServer solrServer = indexer.getSolrServer();
+    indexFullText(solrServer, getId(record), null, null, parserText);
+
+    return (metsText + " " + parserText).trim();
+}
+
+public String getTextFromEAD(Record record) {
+    String recordId = getId(record);
+    String url = indexer.getFirstFieldVal(record, "856u");
+    Document ead = loadEAD(recordId, url);
+
+    List metsItemUrls = new ArrayList();
+    for (Element didElement : getElements(ead.getElementsByTagName("ead:did"))) {
+        Element unitidElem = getElement(didElement.getElementsByTagName("ead:unitid"));
+        String unitid = (unitidElem != null) ? unitidElem.getTextContent() : null;
+
+        String metsUrl = null;
+        for (Element daolocElement : getElements(didElement.getElementsByTagName("ead:daoloc"))) {
+            if (daolocElement.getAttribute("xlink:label").equals("mets"))
+                metsUrl = daolocElement.getAttribute("xlink:href");
+        }
+
+        if (unitid != null && metsUrl != null)
+            metsItemUrls.add(new String[] {unitid, metsUrl});
+    }
+
+    return getTextFromMetsItemsUrls(recordId, metsItemUrls);
+}
+
+private String getTextFromMetsItemsUrls(String recordId, List urls) {
+    SolrServer solrServer = indexer.getSolrServer();
+
+    try {
+        solrServer.deleteByQuery("record:\""+ClientUtils.escapeQueryChars(recordId)+"\"");
+    }
+    catch (SolrServerException e) {
+        indexer.getLogger().error("Cannot deleteByQuery " + recordId + ": " + e.getMessage());
+        e.printStackTrace();
+    }
+
+    StringBuilder stringBuilder = new StringBuilder();
+    for (String[] metsItemUrl : urls) {
+        InputStream inputStream = null;
+        try {
+            String item = metsItemUrl[0];
+            String metsUrl = metsItemUrl[1];
+
+            inputStream = getInputStreamfromUrl(metsUrl);
+            Document document = loadDocument(inputStream);
+
+            stringBuilder.append(getText(solrServer, recordId, item, document));
+            stringBuilder.append(" ");
+        } catch (Exception e) {
+            // Ignore failures for the current METS, just continue
+        } finally {
+            closeStream(inputStream);
+        }
+    }
+
+    return stringBuilder.toString().trim();
+}
+
+private Document loadEAD(String id, String url) throws Exception {
+    String cache = System.getenv("VUFIND_CACHE_CACHE_DIR");
+    if (cache == null)
+        cache = "/usr/local/vufind/local/cache/";
+
+    File file = new File(cache + "pdf/", id + ".xml");
+    if (!file.exists())
+        saveDocument(url, file);
+
+    return loadDocument(new FileInputStream(file));
+}
+
+private void saveDocument(String url, File file) throws Exception {
+    InputStream inputStream = null;
+    try {
+        inputStream = getInputStreamfromUrl(url);
+        Document document = loadDocument(inputStream);
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        DOMSource source = new DOMSource(document);
+        StreamResult result = new StreamResult(file);
+        transformer.transform(source,result);
+    }
+    finally {
+        closeStream(inputStream);
+    }
+}
+
+/* METS */
+
+private String getText(SolrServer solrServer, String recordId, String item, Document document) throws Exception {
+    StringBuilder stringBuilder = new StringBuilder();
+    Map fptrsPerGroup = gettFptrsPerGroup(document);
+    Map fptrsOrdered = getFptrsOrdered(document);
+
+    for (String fileGrpId : fptrsPerGroup.keySet()) {
+        String[] fileGrpIds = fileGrpId.split(":");
+        String id = fileGrpIds[0];
+        String use = fileGrpIds[1];
+
+        if (use.contains("text")) {
+            for (String order : fptrsOrdered.keySet()) {
+                Set groupFptrs = fptrsPerGroup.get(fileGrpId);
+                Set orderedFptrs = fptrsOrdered.get(order);
+
+                for (String fptr : orderedFptrs) {
+                    if (groupFptrs.contains(fptr)) {
+                        String text = getTextFromFptr(document, fptr, use);
+                        indexFullText(solrServer, recordId, item, order, text);
+
+                        stringBuilder.append(text);
+                        stringBuilder.append(" ");
+                    }
+                }
+            }
+        }
+    }
+
+    return stringBuilder.toString().trim();
+}
+
+private Map gettFptrsPerGroup(Document document) throws Exception {
+    TreeMap fptrsPerGroup = new TreeMap();
+    for (Element fileGrpElement : getElements(document.getElementsByTagName("fileGrp"))) {
+        Set fptrs = new HashSet();
+        for (Element fptrElement : getElements(fileGrpElement.getElementsByTagName("file")))
+            fptrs.add(fptrElement.getAttribute("ID"));
+        String fileGrpId = fileGrpElement.getAttribute("ID") + ":" + fileGrpElement.getAttribute("USE");
+        fptrsPerGroup.put(fileGrpId, fptrs);
+    }
+    return fptrsPerGroup;
+}
+
+private Map getFptrsOrdered(Document document) throws Exception {
+    TreeMap fptrsPerPage = new TreeMap();
+    for (Element structMapElement : getElements(document.getElementsByTagName("structMap"))) {
+        if (structMapElement.getAttribute("TYPE").equals("physical")) {
+            for (Element divElement : getElements(structMapElement.getElementsByTagName("div"))) {
+                if (divElement.getAttribute("TYPE").equals("page")) {
+                    Set fptrs = new HashSet();
+                    for (Element fptrElement : getElements(divElement.getElementsByTagName("fptr")))
+                        fptrs.add(fptrElement.getAttribute("FILEID"));
+                    fptrsPerPage.put(divElement.getAttribute("ORDER"), fptrs);
+                }
+            }
+        }
+    }
+    return fptrsPerPage;
+}
+
+private String getTextFromFptr(Document document, String id, String use) throws Exception {
+    for (Element fileElement : getElements(document.getElementsByTagName("file"))) {
+        if (fileElement.getAttribute("ID").equals(id)) {
+            Element fLocatElement = getElement(fileElement.getElementsByTagName("FLocat"));
+            if (fLocatElement != null) {
+                InputStream inputStream = null;
+                String text = null;
+
+                try {
+                    String url = fLocatElement.getAttribute("xlink:href");
+                    inputStream = getInputStreamfromUrl(url);
+
+                    if (use.contains("alto")) {
+                        Document altoDocument = loadDocument(inputStream);
+                        text = getTextFromAlto(altoDocument);
+                    }
+                    else if (use.contains("plain")) {
+                        text = getTextFromPlain(inputStream);
+                    }
+                }
+                finally {
+                    closeStream(inputStream);
+                }
+
+                if (text != null) {
+                    return text;
+                }
+            }
+        }
+    }
+    return "";
+}
+
+/* TEXT LAYERS */
+
+private String getTextFromAlto(Document document) throws Exception {
+    StringBuilder builder = new StringBuilder();
+    for (Element textLine : getElements(document.getElementsByTagName("String"))) {
+        builder.append(textLine.getAttribute("CONTENT"));
+        builder.append(" ");
+    }
+    return builder.toString().trim();
+}
+
+private String getTextFromPlain(InputStream inputStream) throws Exception {
+    StringBuilder builder = new StringBuilder();
+    Scanner sc = new Scanner(inputStream);
+    while (sc.hasNextLine()) {
+        builder.append(sc.nextLine());
+        builder.append(" ");
+    }
+    sc.close();
+    return builder.toString().trim();
+}
+
+private void indexFullText(SolrServer solrServer, String record, String item, String page, String fulltext) {
+    try {
+        if (!fulltext.trim().isEmpty()) {
+            SolrInputDocument document = new SolrInputDocument();
+            document.addField("record", record);
+            document.addField("fulltext", fulltext);
+            if (item != null)
+                document.addField("item", item);
+            if (page != null)
+                document.addField("page", page);
+            solrServer.add(document);
+        }
+    }
+    catch (SolrServerException e) {
+        indexer.getLogger().error("Cannot index full text for " + record + ": " + e.getMessage());
+        e.printStackTrace();
+    }
+}
+
+/* UTILS */
+
+private InputStream getInputStreamfromUrl(String url) throws Exception {
+    URLConnection urlConnection = null;
+    InputStream inputStream = null;
+
+    try {
+        URLConnection urlConnection = new URL(url).openConnection();
+        urlConnection.setConnectTimeout(10000); // 10 seconds is long enough
+        urlConnection.setReadTimeout(10000); // 10 seconds is long enough
+        inputStream = urlConnection.getInputStream();
+    } catch (Exception e) {
+        closeStream(inputStream);
+
+        if (urlConnection != null) {
+            urlConnection.disconnect();
+        }
+
+        throw e;
+    }
+
+    return inputStream;
+}
+
+private void closeStream(InputStream inputStream) {
+    if (inputStream != null) {
+        try {
+            inputStream.close();
+        } catch (IOException ioe) { }
+    }
+}
+
+private Document loadDocument(InputStream inputStream) throws Exception {
+    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    dbf.setIgnoringComments(true);
+    dbf.setNamespaceAware(true);
+    dbf.setValidating(false);
+    DocumentBuilder db = dbf.newDocumentBuilder();
+    return db.parse(inputStream);
+}
+
+private Element getElement(NodeList nodeList) throws Exception {
+    List elements = getElements(nodeList);
+    if (!elements.isEmpty()) {
+        return elements.get(0);
+    }
+    return null;
+}
+
+private List getElements(NodeList nodeList) throws Exception {
+    List elements = new ArrayList();
+    for (int i = 0; i < nodeList.getLength(); i++) {
+        if (nodeList.item(i).getNodeType() == Node.ELEMENT_NODE) {
+            Element element = (Element) nodeList.item(i);
+            elements.add(element);
+        }
+    }
+    return elements;
+}
+
+private String getId(Record record) {
+    String text = indexer.getFirstFieldVal(record, "001");
+    int i = text.indexOf("/");
+    return (i == -1) ? text : text.substring(i + 1);
+}

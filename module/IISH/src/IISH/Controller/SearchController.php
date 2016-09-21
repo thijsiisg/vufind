@@ -43,6 +43,11 @@ class SearchController extends VuFindSearchController {
      * @return mixed
      */
     public function resultsAction() {
+        if (($this->getRequest()->getQuery()->get('fulltext') === 'on') &&
+            ($this->getRequest()->getQuery()->get('type') === 'AllFields')) {
+            $this->getRequest()->getQuery()->set('type', 'AllFieldsFullText');
+        }
+
         if ($this->getRequest()->getQuery()->get('facetSort') === null) {
             $this->getRequest()->getQuery()->set('facetSort', 'index');
         }

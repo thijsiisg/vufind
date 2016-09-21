@@ -1,0 +1,17 @@
+<? $this->headTitle($this->translate('Search in text') . ': ' . $this->driver->getBreadcrumb()); ?>
+
+<form role="search" name="fulltextSearchForm" id="fulltextSearchForm" class="form-horizontal" autocomplete="off">
+    <div class="form-group">
+        <div class="col-sm-10">
+            <input type="text" name="lookfor" class="form-control"/>
+        </div>
+        <div class="col-sm-2">
+            <button type="submit" class="btn btn-primary">
+                <i class="fa fa-search"></i>
+                <?=$this->transEsc('Find')?>
+            </button>
+        </div>
+    </div>
+</form>
+
+<div id="fulltextSearchResults"></div>

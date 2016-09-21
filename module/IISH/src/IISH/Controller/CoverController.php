@@ -56,7 +56,8 @@ class CoverController extends VuFindCoverController {
             $this->params()->fromQuery('oclc'),
             $this->params()->fromQuery('upc'),
             $this->params()->fromQuery('pid'),
-            $this->params()->fromQuery('publication')
+            $this->params()->fromQuery('publication'),
+            $this->params()->fromQuery('audio')
         );
 
         return $this->displayImage();
