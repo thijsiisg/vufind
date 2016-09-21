@@ -68,7 +68,8 @@ class Loader extends Cacheable {
      * @return string The key.
      */
     protected function getKey() {
-	    return $this->record . '_' . $this->item;
+	    $key = $this->record . '_' . $this->item;
+        return preg_replace('/[^a-z0-9_\+\-]/i', '_', $key);
 	}
 
 	/*
