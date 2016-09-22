@@ -110,6 +110,7 @@ class SolrEad extends SolrMarc {
             $this->getEAD(),
             'record-ead-' . $name . '.xsl',
             array(
+                'id' => $this->getUniqueID(),
                 'action' => $name,
                 'baseUrl' => $this->siteURL . '/Record/' . $this->getUniqueID(),
                 'title' => $this->getTitle()
