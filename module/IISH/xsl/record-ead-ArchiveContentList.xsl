@@ -16,6 +16,7 @@
   <xsl:output method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="no"/>
   <xsl:strip-space elements="*"/>
 
+  <xsl:param name="id"/>
   <xsl:param name="action"/>
   <xsl:param name="baseUrl"/>
   <xsl:param name="lang"/>
