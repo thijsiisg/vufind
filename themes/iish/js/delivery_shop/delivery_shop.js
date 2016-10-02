@@ -401,6 +401,7 @@ function button_callback(pars, data, holding)
             // embargo:         "2013-03-20",
             restrictionType: 'OPEN',
             publicationStatus: 'CLOSED',
+            openForReproduction: false,
             holdings: [
                 {
                     signature:        pars.signature,
@@ -481,7 +482,7 @@ function button_callback(pars, data, holding)
 
                 if (pars.show_reproduction)
                 {
-                    if (data.publicationStatus !== 'MINIMAL' && data.publicationStatus !== 'CLOSED')
+                    if (data.openForReproduction)
                     {
                         html += createReproductionButtonHtml();
                     }
