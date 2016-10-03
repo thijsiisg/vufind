@@ -8,7 +8,7 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:ead="urn:isbn:1-931666-22-9"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xs="http://www.w3.org/1999/XSL/Transform"
                 xsi:schemaLocation="urn:isbn:1-931666-22-9 http://www.loc.gov/ead/ead.xsd"
                 xmlns:php="http://php.net/xsl"
                 exclude-result-prefixes="xsl ead xsi php xlink">
@@ -55,6 +55,7 @@
 
       <div id="arch" class="{$arch_class}">
         <table class="table table-striped">
+          <xsl:call-template name="reproduction"/>
           <xsl:call-template name="creator"/>
           <xsl:call-template name="secondcreator"/>
           <xsl:call-template name="abstract"/>
@@ -92,6 +93,39 @@
       </script>
     </xsl:if>
 
+  </xsl:template>
+
+  <xsl:template name="reproduction">
+    <tr>
+      <th> </th>
+      <td>
+        <xsl:variable name="colid" select="ead:archdesc/ead:did/ead:unitid"/>
+        <xsl:variable name="identifier" select="ead:eadheader/ead:eadid/@identifier"/>
+        <div id="holdings-container">
+          <xsl:attribute name="class">
+            <xsl:choose>
+              <xsl:when test="$digital_items>0">archive online-content-available</xsl:when>
+              <xsl:otherwise>archive</xsl:otherwise>
+            </xsl:choose>
+          </xsl:attribute>
+          <div class="holding">
+            <div class="state hidden-print">
+              <xsl:attribute name="data-label">
+                <xsl:value-of select="$title"/> - <xsl:value-of select="$colid"/>
+              </xsl:attribute>
+              <xsl:attribute name="data-pid">
+                <xsl:value-of select="substring($identifier, 5)"/>
+              </xsl:attribute>
+              <xsl:attribute name="data-signature">
+                <xsl:value-of select="$colid"/>
+              </xsl:attribute>
+              <xsl:attribute name="data-show-reservation">false</xsl:attribute>
+              <xsl:attribute name="data-show-reproduction">true</xsl:attribute>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
   </xsl:template>
 
   <xsl:template name="creator">

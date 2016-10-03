@@ -22,17 +22,4 @@ class Factory {
             $sm->getServiceLocator()->get('VuFind\Config')->get('iish')
         );
     }
-
-    /**
-     * Construct the OrderController.
-     *
-     * @param ServiceManager $sm Service manager.
-     *
-     * @return OrderController
-     */
-    public static function getOrderController(ServiceManager $sm) {
-        return new OrderController(
-            $sm->getServiceLocator()->get('VuFind\Config')->get('iish')->Order->toArray()
-        );
-    }
 } 

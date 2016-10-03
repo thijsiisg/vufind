@@ -1,14 +1,14 @@
 <?php
 namespace IISH\View\Helper\IISH;
 use Zend\Config\Config;
-use Zend\View\Helper\AbstractHelper;
+use Zend\I18n\View\Helper\AbstractTranslatorHelper;
 
 /**
  * DeliveryInit helper for setting up the integration of Delivery.
  *
  * @package IISH\View\Helper\IISH
  */
-class DeliveryInit extends AbstractHelper {
+class DeliveryInit extends AbstractTranslatorHelper {
     /**
      * @var string
      */
@@ -36,7 +36,10 @@ class DeliveryInit extends AbstractHelper {
     public function scripts() {
         $this->view->jsobject()->addProps(array(
             'url'  => $this->deliveryUrl,
-            'lang' => $this->view->layout()->userLang
+            'lang' => $this->view->layout()->userLang,
+            'warningOnlineContent' => $this->getTranslator()->translate('Content available'),
+            'reservationTooltip' =>  $this->getTranslator()->translate('ReservationTooltip'),
+            'reproductionTooltip' =>  $this->getTranslator()->translate('ReproductionTooltip')
         ));
 
         $this->view->headScript()->appendScript($this->view->jsobject()->getScript('delivery'));
