@@ -44,7 +44,12 @@ do
 done
 
 echo $revision>$app/revision.txt
+
 composer --working-dir=$app install
+npm install --production
+mv ./node_modules/ ./themes/iish/vendor/
+
+php ./util/cssBuilder.php iish
 
 tar -zcvf $expect $app
 rm -rf $app
