@@ -1,132 +1,5 @@
 [
     {
-        "name": "npm-asset/mediaelement",
-        "version": "2.16.3",
-        "version_normalized": "2.16.3.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/johndyer/mediaelement.git",
-            "reference": "d799a546ed179be1ed575bde86f36c239ee25875"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/johndyer/mediaelement/zipball/d799a546ed179be1ed575bde86f36c239ee25875",
-            "reference": "d799a546ed179be1ed575bde86f36c239ee25875",
-            "shasum": ""
-        },
-        "require-dev": {
-            "npm-asset/grunt": ">=0.4.1,<0.5",
-            "npm-asset/grunt-contrib-clean": ">=0.6.0,<0.7",
-            "npm-asset/grunt-contrib-concat": ">=0.3.0,<0.4",
-            "npm-asset/grunt-contrib-copy": ">=0.4.1,<0.5",
-            "npm-asset/grunt-contrib-cssmin": ">=0.6.1,<0.7",
-            "npm-asset/grunt-contrib-uglify": ">=0.2.2,<0.3",
-            "npm-asset/grunt-remove-logging": ">=0.2.0,<0.3",
-            "npm-asset/grunt-shell": ">=1.1.1,<1.2",
-            "npm-asset/grunt-text-replace": ">=0.3.12,<0.4"
-        },
-        "type": "npm-asset-library",
-        "extra": {
-            "npm-asset-repository": {
-                "type": "git",
-                "url": "https://github.com/johndyer/mediaelement.git"
-            }
-        },
-        "installation-source": "dist"
-    },
-    {
-        "name": "bower-asset/slimScroll",
-        "version": "v1.3.3",
-        "version_normalized": "1.3.3.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/rochal/jQuery-slimScroll.git",
-            "reference": "c1d1c794f8364d751b188c8b21859501c7991249"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/rochal/jQuery-slimScroll/zipball/c1d1c794f8364d751b188c8b21859501c7991249",
-            "reference": "c1d1c794f8364d751b188c8b21859501c7991249",
-            "shasum": ""
-        },
-        "require": {
-            "bower-asset/jquery": ">=1.7"
-        },
-        "type": "bower-asset-library",
-        "extra": {
-            "bower-asset-main": "./jquery.slimscroll.min.js"
-        },
-        "installation-source": "dist",
-        "description": "slimScroll is a small jQuery plugin that transforms any div into a scrollable area. slimScroll doesn't occupy any visual space as it only appears on a user initiated mouse-over.",
-        "keywords": [
-            "scroll",
-            "scrollable",
-            "scrollbar",
-            "scroller",
-            "scrolling",
-            "slimscroll",
-            "ui"
-        ]
-    },
-    {
-        "name": "fxp/composer-asset-plugin",
-        "version": "v1.0.0-beta4",
-        "version_normalized": "1.0.0.0-beta4",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/francoispluchino/composer-asset-plugin.git",
-            "reference": "06d8b3ebf69e79a511657716beab5a98e3cf1452"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/francoispluchino/composer-asset-plugin/zipball/06d8b3ebf69e79a511657716beab5a98e3cf1452",
-            "reference": "06d8b3ebf69e79a511657716beab5a98e3cf1452",
-            "shasum": ""
-        },
-        "require": {
-            "composer-plugin-api": "1.0.0",
-            "php": ">=5.3.3"
-        },
-        "require-dev": {
-            "composer/composer": "~1.0@dev"
-        },
-        "time": "2014-11-04 16:35:17",
-        "type": "composer-plugin",
-        "extra": {
-            "class": "Fxp\\Composer\\AssetPlugin\\FxpAssetPlugin",
-            "branch-alias": {
-                "dev-master": "1.0-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Fxp\\Composer\\AssetPlugin\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "François Pluchino",
-                "email": "francois.pluchino@gmail.com"
-            }
-        ],
-        "description": "NPM/Bower Dependency Manager for Composer",
-        "homepage": "https://github.com/francoispluchino/composer-asset-plugin",
-        "keywords": [
-            "asset",
-            "bower",
-            "composer",
-            "dependency manager",
-            "nodejs",
-            "npm",
-            "package"
-        ]
-    },
-    {
         "name": "abeautifulsite/simpleimage",
         "version": "2.5.3",
         "version_normalized": "2.5.3.0",
@@ -144,7 +17,7 @@
         "require": {
             "php": ">=5.3.0"
         },
-        "time": "2014-03-18 06:42:58",
+        "time": "2014-03-18T06:42:58+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -194,7 +67,7 @@
         "require": {
             "php": ">=5.3.0"
         },
-        "time": "2013-07-08 09:39:08",
+        "time": "2013-07-08T09:39:08+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -354,51 +227,13 @@
         "description": "Package containes ISPN (International Standard Product Numbers) validations such as:\n * ISSN\n * ISBN\n * ISMN\n * ISRC (International Standard Recording Code)\n * EAN8\n * EAN13\n * EAN14\n * UCC12\n * SSCC"
     },
     {
-        "name": "serialssolutions/summon",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/summon/Summon.php.git",
-            "reference": "ce26752adfded96aff2f4422991078eedfc740a5"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/summon/Summon.php/zipball/ce26752adfded96aff2f4422991078eedfc740a5",
-            "reference": "ce26752adfded96aff2f4422991078eedfc740a5",
-            "shasum": ""
-        },
-        "time": "2013-11-13 19:07:09",
-        "type": "library",
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "SerialsSolutions": ""
-            }
-        },
-        "license": [
-            "GPL-2.0"
-        ],
-        "authors": [
-            {
-                "name": "Demian Katz",
-                "email": "demian.katz@villanova.edu"
-            }
-        ],
-        "description": "Library for interacting with Serials Solutions' Summon API.",
-        "support": {
-            "source": "https://github.com/summon/Summon.php/tree/master",
-            "issues": "https://github.com/summon/Summon.php/issues"
-        }
-    },
-    {
         "name": "zendframework/zendframework",
         "version": "2.2.7",
         "version_normalized": "2.2.7.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/zendframework/zf2.git",
-            "reference": "ffca3e3eefd7fbe0f316ed0224edff368949223d"
+            "url": "https://github.com/zendframework/zendframework.git",
+            "reference": "65e2a4a348727a2174cf1051543957c77eb90e8f"
         },
         "dist": {
             "type": "zip",
@@ -479,7 +314,7 @@
             "zendframework/zendpdf": "ZendPdf for creating PDF representations of barcodes",
             "zendframework/zendservice-recaptcha": "ZendService\\ReCaptcha for rendering ReCaptchas in Zend\\Captcha and/or Zend\\Form"
         },
-        "time": "2014-04-15 14:31:59",
+        "time": "2014-04-15T14:31:59+00:00",
         "bin": [
             "bin/classmap_generator.php",
             "bin/pluginmap_generator.php",
@@ -523,8 +358,8 @@
         },
         "dist": {
             "type": "zip",
-            "url": "https://packages.zendframework.com/composer/zendframework-zendrest-7427d242b4546e5aef1206d2c97e402109d8843e-zip-da96cc.zip",
-            "reference": "2.0.2",
+            "url": "https://api.github.com/repos/zendframework/ZendRest/zipball/7427d242b4546e5aef1206d2c97e402109d8843e",
+            "reference": "7427d242b4546e5aef1206d2c97e402109d8843e",
             "shasum": "cd304d9e2fccccbd98348bfbead7d42b102e565a"
         },
         "require": {
@@ -533,7 +368,7 @@
             "zendframework/zend-uri": "~2.0",
             "zendframework/zendxml": "~1.0-dev"
         },
-        "time": "2014-03-05 22:32:09",
+        "time": "2014-03-05T22:32:09+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -576,7 +411,7 @@
             "zendframework/zend-uri": ">=2.0.0",
             "zendframework/zend-version": ">=2.0.0"
         },
-        "time": "2012-09-24 15:18:29",
+        "time": "2012-09-24T15:18:29+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -667,96 +502,6 @@
         "description": "This is a PHP implementation of &quot;getopt&quot; supporting both\nshort and long options."
     },
     {
-        "name": "bower-asset/jquery",
-        "version": "2.1.4",
-        "version_normalized": "2.1.4.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/jquery/jquery.git",
-            "reference": "7751e69b615c6eca6f783a81e292a55725af6b85"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/jquery/jquery/zipball/7751e69b615c6eca6f783a81e292a55725af6b85",
-            "reference": "7751e69b615c6eca6f783a81e292a55725af6b85",
-            "shasum": ""
-        },
-        "require-dev": {
-            "bower-asset/qunit": "1.14.0",
-            "bower-asset/requirejs": "2.1.10",
-            "bower-asset/sinon": "1.8.1",
-            "bower-asset/sizzle": "2.1.1-patch2"
-        },
-        "type": "bower-asset-library",
-        "extra": {
-            "bower-asset-main": "dist/jquery.js",
-            "bower-asset-ignore": [
-                "**/.*",
-                "build",
-                "dist/cdn",
-                "speed",
-                "test",
-                "*.md",
-                "AUTHORS.txt",
-                "Gruntfile.js",
-                "package.json"
-            ]
-        },
-        "installation-source": "dist",
-        "license": [
-            "MIT"
-        ],
-        "keywords": [
-            "javascript",
-            "jquery",
-            "library"
-        ]
-    },
-    {
-        "name": "bower-asset/jqcloud2",
-        "version": "v2.0.1",
-        "version_normalized": "2.0.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/mistic100/jQCloud.git",
-            "reference": "36338f7760bef5861cfc253691ad64d34ec2074a"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/mistic100/jQCloud/zipball/36338f7760bef5861cfc253691ad64d34ec2074a",
-            "reference": "36338f7760bef5861cfc253691ad64d34ec2074a",
-            "shasum": ""
-        },
-        "require": {
-            "bower-asset/jquery": ">=1.9.0"
-        },
-        "type": "bower-asset-library",
-        "extra": {
-            "bower-asset-main": [
-                "dist/jqcloud.js",
-                "dist/jqcloud.css"
-            ],
-            "bower-asset-ignore": [
-                "**/.*",
-                "node_modules",
-                "bower_components",
-                "test",
-                "tests"
-            ]
-        },
-        "installation-source": "dist",
-        "license": [
-            "MIT"
-        ],
-        "description": "jQuery plugin for drawing neat word clouds that actually look like clouds",
-        "keywords": [
-            "cloud",
-            "jquery",
-            "keyword",
-            "tag"
-        ]
-    },
-    {
         "name": "easyrdf/easyrdf",
         "version": "0.9.1",
         "version_normalized": "0.9.1.0",
@@ -784,7 +529,7 @@
         "suggest": {
             "ml/json-ld": "~1.0"
         },
-        "time": "2015-02-27 09:45:49",
+        "time": "2015-02-27T09:45:49+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -852,120 +597,18 @@
         "description": "The standard for machine-readable cataloging (MARC) records is documented at http://loc.gov/marc/. This package enables you to read existing MARC records from a file, string, or (using the YAZ extension), from a Z39.50 source. You can also use this package to create new MARC records.\n\nThis package is based on the PHP MARC package, originally called \"php-marc\", that is part of the Emilda Project (http://www.emilda.org).  Christoffer Landtman generously agreed to make the \"php-marc\" code available under the GNU LGPL so it could be used as the basis of this PEAR package."
     },
     {
-        "name": "symfony/yaml",
-        "version": "v2.7.4",
-        "version_normalized": "2.7.4.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/Yaml.git",
-            "reference": "2dc7b06c065df96cc686c66da2705e5e18aef661"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/Yaml/zipball/2dc7b06c065df96cc686c66da2705e5e18aef661",
-            "reference": "2dc7b06c065df96cc686c66da2705e5e18aef661",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.9"
-        },
-        "require-dev": {
-            "symfony/phpunit-bridge": "~2.7"
-        },
-        "time": "2015-08-24 07:13:45",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.7-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Symfony\\Component\\Yaml\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "https://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony Yaml Component",
-        "homepage": "https://symfony.com"
-    },
-    {
-        "name": "zendframework/zendxml",
-        "version": "1.0.1",
-        "version_normalized": "1.0.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/zendframework/ZendXml.git",
-            "reference": "d8b34286c7c0f3a19fbad05ceec82ceb9dcb8257"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://packages.zendframework.com/composer/zendframework-zendxml-1.0.1-88b0f5.zip",
-            "reference": "d8b34286c7c0f3a19fbad05ceec82ceb9dcb8257",
-            "shasum": "f532a500c86c8d811f1a2e0ee43022685367e15a"
-        },
-        "require": {
-            "php": ">=5.3.3"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "~3.7",
-            "squizlabs/php_codesniffer": "~1.5"
-        },
-        "time": "2015-08-03 14:50:10",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.0-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "ZendXml\\": "library/"
-            }
-        },
-        "autoload-dev": {
-            "psr-4": {
-                "ZendTest\\Xml\\": "tests/ZendXmlTest/"
-            }
-        },
-        "license": [
-            "BSD-3-Clause"
-        ],
-        "description": "Utility library for XML usage, best practices, and security in PHP",
-        "homepage": "http://packages.zendframework.com/",
-        "keywords": [
-            "security",
-            "xml",
-            "zf2"
-        ]
-    },
-    {
         "name": "zendframework/zendservice-amazon",
         "version": "2.0.4",
         "version_normalized": "2.0.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/zendframework/ZendService_Amazon.git",
-            "reference": "a44eec522c622970a6c6666dc308ec6daad08ed4"
+            "reference": "f69e443f3114bda3da31515e51b66d442a22e360"
         },
         "dist": {
             "type": "zip",
-            "url": "https://packages.zendframework.com/composer/zendframework-zendservice-amazon-2.0.4-db4e7c.zip",
-            "reference": "a44eec522c622970a6c6666dc308ec6daad08ed4",
+            "url": "https://api.github.com/repos/zendframework/ZendService_Amazon/zipball/f69e443f3114bda3da31515e51b66d442a22e360",
+            "reference": "f69e443f3114bda3da31515e51b66d442a22e360",
             "shasum": "6725f42e30e9fa4fa2f8476d650fc07118900569"
         },
         "require": {
@@ -984,7 +627,7 @@
         "suggest": {
             "zendframework/zend-uri": "Zend\\Uri component"
         },
-        "time": "2015-06-04 19:47:46",
+        "time": "2015-06-04T19:47:46+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1079,83 +722,123 @@
         "description": "Structures_Graph is a package for creating and manipulating graph datastructures. It allows building of directed\nand undirected graphs, with data and metadata stored in nodes. The library provides functions for graph traversing\nas well as for characteristic extraction from the graph topology."
     },
     {
-        "name": "jasig/phpcas",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
+        "name": "zendframework/zendxml",
+        "version": "1.0.2",
+        "version_normalized": "1.0.2.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/Jasig/phpCAS.git",
-            "reference": "84746c954e96bbb88404448e9c70c97a4f6c47db"
+            "url": "https://github.com/zendframework/ZendXml.git",
+            "reference": "0fac84668cf1e09d21cef97223a526ef1b3c956a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Jasig/phpCAS/zipball/84746c954e96bbb88404448e9c70c97a4f6c47db",
-            "reference": "84746c954e96bbb88404448e9c70c97a4f6c47db",
-            "shasum": ""
+            "url": "https://packages.zendframework.com/composer/zendframework-zendxml-1.0.2-00d807.zip",
+            "reference": "0fac84668cf1e09d21cef97223a526ef1b3c956a",
+            "shasum": "0c90b6a97b86b15676f5da48186780e82b6ad517"
         },
         "require": {
-            "ext-curl": "*",
-            "php": ">=5.0.0"
+            "php": "^5.3.3 || ^7.0"
         },
         "require-dev": {
-            "phpunit/phpunit": "~3.7.10"
+            "phpunit/phpunit": "^3.7 || ^4.0",
+            "squizlabs/php_codesniffer": "^1.5"
         },
-        "time": "2015-08-29 17:11:33",
+        "time": "2016-02-04T21:02:08+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "1.3.x-dev"
+                "dev-master": "1.0-dev"
             }
         },
-        "installation-source": "source",
+        "installation-source": "dist",
         "autoload": {
-            "classmap": [
-                "source/"
-            ]
+            "psr-0": {
+                "ZendXml\\": "library/"
+            }
+        },
+        "autoload-dev": {
+            "psr-4": {
+                "ZendTest\\Xml\\": "tests/ZendXmlTest/"
+            }
         },
         "license": [
-            "Apache-2.0"
+            "BSD-3-Clause"
         ],
-        "authors": [
-            {
-                "name": "Joachim Fritschi",
-                "homepage": "https://wiki.jasig.org/display/~fritschi"
-            },
-            {
-                "name": "Adam Franco",
-                "homepage": "https://wiki.jasig.org/display/~adamfranco"
-            }
-        ],
-        "description": "Provides a simple API for authenticating users against a CAS server",
-        "homepage": "https://wiki.jasig.org/display/CASC/phpCAS",
+        "description": "Utility library for XML usage, best practices, and security in PHP",
+        "homepage": "http://packages.zendframework.com/",
         "keywords": [
-            "cas",
-            "jasig"
-        ],
-        "support": {
-            "source": "https://github.com/Jasig/phpCAS/tree/master",
-            "issues": "https://github.com/Jasig/phpCAS/issues"
-        }
+            "security",
+            "xml",
+            "zf2"
+        ]
     },
     {
-        "name": "oyejorge/less.php",
-        "version": "v1.7.0.6",
-        "version_normalized": "1.7.0.6",
+        "name": "symfony/yaml",
+        "version": "v2.7.6",
+        "version_normalized": "2.7.6.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/oyejorge/less.php.git",
-            "reference": "29140fadbcae80f920d86bf91104c78f83cc223b"
+            "url": "https://github.com/symfony/yaml.git",
+            "reference": "eca9019c88fbe250164affd107bc8057771f3f4d"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/oyejorge/less.php/zipball/29140fadbcae80f920d86bf91104c78f83cc223b",
-            "reference": "29140fadbcae80f920d86bf91104c78f83cc223b",
+            "url": "https://api.github.com/repos/symfony/yaml/zipball/eca9019c88fbe250164affd107bc8057771f3f4d",
+            "reference": "eca9019c88fbe250164affd107bc8057771f3f4d",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.9"
+        },
+        "time": "2015-10-11T09:39:48+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.7-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Symfony\\Component\\Yaml\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Yaml Component",
+        "homepage": "https://symfony.com"
+    },
+    {
+        "name": "oyejorge/less.php",
+        "version": "v1.7.0.9",
+        "version_normalized": "1.7.0.9",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/oyejorge/less.php.git",
+            "reference": "fb64e2f6ef647a229c50e9fa0f2076240a3484c6"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/oyejorge/less.php/zipball/fb64e2f6ef647a229c50e9fa0f2076240a3484c6",
+            "reference": "fb64e2f6ef647a229c50e9fa0f2076240a3484c6",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3"
         },
-        "time": "2015-09-15 20:13:20",
+        "time": "2015-09-28T01:11:47+00:00",
         "bin": [
             "bin/lessc"
         ],
@@ -1197,5 +880,101 @@
             "php",
             "stylesheet"
         ]
+    },
+    {
+        "name": "jasig/phpcas",
+        "version": "1.3.3",
+        "version_normalized": "1.3.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Jasig/phpCAS.git",
+            "reference": "b6f5d484735d3b0e80b068a87bd1eabac04b2cbe"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Jasig/phpCAS/zipball/b6f5d484735d3b0e80b068a87bd1eabac04b2cbe",
+            "reference": "b6f5d484735d3b0e80b068a87bd1eabac04b2cbe",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.0.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "~3.7.10"
+        },
+        "time": "2014-07-24T20:29:29+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.3.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "classmap": [
+                "source/"
+            ]
+        },
+        "license": [
+            "Apache-2.0"
+        ],
+        "authors": [
+            {
+                "name": "Joachim Fritschi",
+                "homepage": "https://wiki.jasig.org/display/~fritschi"
+            },
+            {
+                "name": "Adam Franco",
+                "homepage": "https://wiki.jasig.org/display/~adamfranco"
+            }
+        ],
+        "description": "Provides a simple API for authenticating users against a CAS server",
+        "homepage": "https://wiki.jasig.org/display/CASC/phpCAS",
+        "keywords": [
+            "cas",
+            "jasig"
+        ],
+        "support": {
+            "source": "https://github.com/Jasig/phpCAS/tree/1.3.3",
+            "issues": "https://github.com/Jasig/phpCAS/issues"
+        }
+    },
+    {
+        "name": "serialssolutions/summon",
+        "version": "v1.0.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/summon/Summon.php.git",
+            "reference": "ce26752adfded96aff2f4422991078eedfc740a5"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/summon/Summon.php/zipball/ce26752adfded96aff2f4422991078eedfc740a5",
+            "reference": "ce26752adfded96aff2f4422991078eedfc740a5",
+            "shasum": ""
+        },
+        "time": "2013-11-13T19:07:09+00:00",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "SerialsSolutions": ""
+            }
+        },
+        "license": [
+            "GPL-2.0"
+        ],
+        "authors": [
+            {
+                "name": "Demian Katz",
+                "email": "demian.katz@villanova.edu"
+            }
+        ],
+        "description": "Library for interacting with Serials Solutions' Summon API.",
+        "support": {
+            "source": "https://github.com/summon/Summon.php/tree/v1.0.0",
+            "issues": "https://github.com/summon/Summon.php/issues"
+        }
     }
 ]

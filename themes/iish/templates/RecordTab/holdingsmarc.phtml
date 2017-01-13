@@ -1,9 +1,12 @@
 <? $this->headTitle($this->translate('Holdings') . ': ' . $this->driver->getBreadcrumb()); ?>
 
 <? $holdings = $this->driver->getHoldings(); if (!empty($holdings)): ?>
+  <? $formats = $this->driver->getFormats(); $format = strtolower($formats[0]); ?>
+  <? $hasOnlineContent = $this->driver->getDownloadable() && ($format === 'books and brochures'); ?>
+
   <h4><?=$this->transEsc('Holding')?></h4>
 
-  <div id="holdings">
+  <div id="holdings-container" <?=$hasOnlineContent ? 'class="online-content-available"' : ''?>>
     <? foreach ($holdings as $counter => $holding): ?>
       <div class="holding">
         <div class="info">
@@ -20,14 +23,14 @@
           <? endif; ?>
 
           <? $formats = $this->driver->getFormats(); $format = strtolower($formats[0]); ?>
-          <? if (($format === 'books and brochures') || ($format === 'serials')): ?>
-            <div class="state hidden-print"
-                 data-label="<?=$this->escapeHtmlAttr($this->truncate(preg_replace('/[\'"]/', '`',
-                   $this->driver->getShortTitle()), 40))?> - <?=$this->escapeHtmlAttr($holding['j'])?>"
-                 data-pid="<?=$this->escapeHtmlAttr($this->driver->getIsShownAt())?>"
-                 data-signature="<?=$this->escapeHtmlAttr($holding['j'])?>">
-            </div>
-          <? endif; ?>
+          <div class="state hidden-print"
+               data-label="<?=$this->escapeHtmlAttr($this->truncate(preg_replace('/[\'"]/', '`',
+                 $this->driver->getShortTitle()), 40))?> - <?=$this->escapeHtmlAttr($holding['j'])?>"
+               data-pid="<?=$this->escapeHtmlAttr($this->driver->getIsShownAt())?>"
+               data-signature="<?=$this->escapeHtmlAttr($holding['j'])?>"
+               data-show-reservation="<?=var_export(($format === 'books and brochures') || ($format === 'serials'))?>"
+               data-show-reproduction="<?=var_export(($format !== 'articles') && ($format !== 'other'))?>">
+          </div>
         </div>
 
         <? if (isset($holding['note'])): ?>

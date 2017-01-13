@@ -4,7 +4,7 @@ return array(
     'css'     => array(),
     'js'      => array(
         'iish.js',
-        '../vendor/slimScroll/jquery.slimscroll.min.js'
+        '../vendor/jquery-slimscroll/jquery.slimscroll.js'
     ),
     'favicon' => 'favicon.ico',
     'helpers' => array(

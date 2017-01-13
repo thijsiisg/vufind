@@ -56,45 +56,21 @@
     ],
     "require": {
         "aferrandini/phpqrcode": "1.0.1",
-        "jasig/phpCAS": "dev-master",
+        "jasig/phpCAS": "1.3.3",
         "johnwohlers/sip2": "dev-master",
         "mobileesp/mdetect": "dev-master",
-        "oyejorge/less.php": "*",
-        "pear-pear.php.net/file_marc": "*",
+        "oyejorge/less.php": "1.7.0.9",
+        "pear-pear.php.net/file_marc": "1.1.2",
         "pear-pear.php.net/pear": "*",
         "pear-pear.php.net/validate_ispn": "*",
         "pear-pear.php.net/Console_Getopt": "1.3.1",
-        "serialssolutions/summon": "dev-master",
-        "symfony/yaml": "*",
+        "serialssolutions/summon": "1.0.0",
+        "symfony/yaml": "2.7.6",
         "zendframework/zendframework": "2.2.7",
         "zendframework/zendrest": "2.*",
         "zendframework/zendservice-amazon": "2.*",
         "zendframework/zendservice-recaptcha": "2.*",
         "easyrdf/easyrdf": "0.9.1",
-        "abeautifulsite/simpleimage": "2.5.3",
-        "fxp/composer-asset-plugin": "1.0.0-beta4",
-        "npm-asset/mediaelement": "2.22.0",
-        "bower-asset/slimScroll": "1.3.3",
-        "bower-asset/jqcloud2": "2.0.1"
-    },
-    "extra": {
-        "asset-installer-paths": {
-            "npm-asset-library": "themes/iish/vendor",
-            "bower-asset-library": "themes/iish/vendor"
-        },
-        "asset-repositories": [
-            {
-                "type": "npm-git",
-                "url": "https://github.com/johndyer/mediaelement.git"
-            },
-            {
-                "type": "bower-git",
-                "url": "https://github.com/rochal/jQuery-slimScroll.git"
-            },
-            {
-                "type": "bower-git",
-                "url": "https://github.com/mistic100/jQCloud.git"
-            }
-        ]
+        "abeautifulsite/simpleimage": "2.5.3"
     }
 }

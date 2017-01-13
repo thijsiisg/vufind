@@ -1,3 +1,13 @@
+#holdings-container button {
+    margin-left: 10px;
+}
+
+#holdings-container.archive,
+#holdings-container.archive .holding {
+    margin: 0;
+    display: inline;
+}
+
 #delivery_cart_wrapper {
     position: fixed;
     bottom: 0;
@@ -14,22 +24,14 @@ th.item-name, th.item-remove {
     font-weight: bold;
 }
 
-#delivery_cart_wrapper h3 {
+#delivery_cart_wrapper h3, #delivery_cart_wrapper h5 {
     margin-top: 1px;
     background: #73A1C7;
     color: white;
-    padding: 0;
+    padding: 3px;
     margin-bottom: 0;
     width: 100%;
-}
-
-#delivery_cart_wrapper span {
-    width: 100%;
-    background: #73A1C7;
-    color: black;
-    padding: 0;
-    font-size: smaller;
-    display: block;
+    font-weight: bold;
 }
 
 .item-pid {
@@ -38,7 +40,6 @@ th.item-name, th.item-remove {
 
 #delivery_cart {
     font-size: small;
-    margin-top: 5px;
 }
 
 .deliveryReserveButton {
@@ -55,27 +56,35 @@ th.item-name, th.item-remove {
     font-size: small;
 }
 
-.simpleCart_checkout {
-    border: 1px solid #39a8ff;
-    background-color: #ffffff;
+.reservationCart, .reproductionCart {
+    background-color: #e5eCf9;
+    margin-top: 5px;
+    padding: 1px;
 }
 
-.simpleCart_checkout:hover {
+.reservationCart_checkout, .reproductionCart_checkout {
+    border: 1px solid #39a8ff;
+    background-color: #ffffff;
+    margin: 1px;
+}
+
+.reservationCart_checkout:hover, .reproductionCart_checkout:hover {
     border: 1px solid #62c5eb;
     background: #ccf;
 }
 
-.simpleCart_empty {
+.reservationCart_empty, .reproductionCart_empty {
     border: 1px solid #39a8ff;
     background-color: #ffffff;
+    margin: 1px;
 }
 
-.simpleCart_empty:hover {
+.reservationCart_empty:hover, .reproductionCart_empty:hover {
     border: 1px solid #62c5eb;
     background: #ccf;
 }
 
-.simpleCart_items table {
+.reservationCart_items table, .reproductionCart_items table {
     width: 100%;
     border-collapse: collapse;
     border-color: #003399;
@@ -104,10 +113,6 @@ th.item-name, th.item-remove {
 
 #delivery_cart .even {
     background-color: #ffffff;
-}
-
-#delivery_cart {
-    background-color: #e5eCf9;
 }
 
 .deliveryStatReserved, .deliveryStatUsageRestriction, .deliveryStatClosed {
