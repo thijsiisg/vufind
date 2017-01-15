@@ -27,7 +27,15 @@
   </xsl:template>
 
   <xsl:template match="ead:ead">
-    <div id="arch">
+    <div id="arch" class="holdings-container with-children archive"
+         data-show-reservation="true" data-show-reproduction="false">
+      <xsl:attribute name="data-label">
+        <xsl:value-of select="$title"/>
+      </xsl:attribute>
+      <xsl:attribute name="data-pid">
+        <xsl:value-of select="substring(ead:eadheader/ead:eadid/@identifier, 5)"/>
+      </xsl:attribute>
+
       <xsl:for-each select="//ead:dsc[1]/ead:c01">
         <xsl:call-template name="cxx"/>
       </xsl:for-each>
@@ -46,15 +54,23 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="ead:dsc">
-    <!--
-            <h2>
-                <xsl:call-template name="aname">
-                    <xsl:with-param name="value" select="normalize-space(ead:head)"/>
-                    <xsl:with-param name="tag" select="name(ancestor::node())"/>
-                </xsl:call-template>
-            </h2>
-    -->
+  <xsl:template name="delivery">
+    <xsl:if test="count(.//ead:did/ead:unitid) = 1 and not(./ead:did/ead:daogrp)">
+      <xsl:variable name="child">
+        <xsl:value-of select="ead:did/ead:unitid"/>
+      </xsl:variable>
+
+      <xsl:if test="$child != '' and $child != '-'">
+        <div class="holding">
+          <div class="state hidden-print">
+            <xsl:attribute name="data-child">
+              <xsl:value-of select="$child"/>
+            </xsl:attribute>
+            <wbr/>
+          </div>
+        </div>
+      </xsl:if>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template
@@ -65,31 +81,20 @@
         <xsl:apply-templates select="*[not(starts-with(local-name(),'c'))]"/>
       </xsl:when>
       <xsl:otherwise>
-
         <xsl:variable name="t">
-          <xsl:choose>
-            <xsl:when test="count(ead:did/ead:unittitle) &lt; 2">
-              <xsl:apply-templates select="ead:did/*[not(local-name() = 'unitid')]"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:apply-templates select="ead:did/*[not(local-name() = 'unitid')]"/>
-              <!-- <ul>
-                   <xsl:for-each select="ead:did/ead:unittitle">
-                       <li>
-                           ccc<xsl:apply-templates select="."/>
-                       </li>
-                   </xsl:for-each>
-               </ul>-->
-            </xsl:otherwise>
-          </xsl:choose>
+          <xsl:apply-templates select="ead:did/*[not(local-name() = 'unitid')]"/>
         </xsl:variable>
 
         <div class="k{@level}">
-          <a class="b" name="{ead:did/ead:unitid}"><xsl:apply-templates select="ead:did/ead:unitid"/>.
+          <a class="b" name="{ead:did/ead:unitid}">
+            <xsl:if test="ead:did/ead:unitid != '' and ead:did/ead:unitid != '-'">
+              <xsl:apply-templates select="ead:did/ead:unitid"/>.
+            </xsl:if>
           </a>
         </div>
         <xsl:if test="string-length($t)>1">
           <div class="v{@level}">
+            <xsl:call-template name="delivery"/>
             <xsl:copy-of select="$t"/>
           </div>
         </xsl:if>

@@ -120,44 +120,6 @@ class SolrEad extends SolrMarc {
         return $xslt->process();
     }
 
-    public function getItems() {
-        if (isset($this->fields['items'])) {
-            return $this->fields['items'];
-        }
-        return array();
-    }
-
-    public function getFullTextItems() {
-        if (isset($this->fields['fulltext_items'])) {
-            return $this->fields['fulltext_items'];
-        }
-        return array();
-    }
-
-    public function getFullTextPerItem() {
-        return array_combine($this->getItems(), $this->getFullTextItems());
-    }
-
-    public function countItems($search) {
-        $fullTextMatch = array();
-        if (strlen(trim($search)) > 0) {
-            $keywords = explode(' ', $search);
-
-            foreach ($this->getFullTextPerItem() as $item => $fulltext) {
-                $count = 0;
-                foreach ($keywords as $keyword) {
-                    if (strpos($fulltext, $keyword) !== false) {
-                        $count++;
-                    }
-                }
-                if ($count > 0) {
-                    $fullTextMatch[$item] = $count;
-                }
-            }
-        }
-        return $fullTextMatch;
-    }
-
     /**
      * Returns one of three things: a full URL to a thumbnail preview of the record
      * if an image is available in an external system; an array of parameters to

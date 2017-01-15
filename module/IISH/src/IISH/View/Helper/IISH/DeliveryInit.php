@@ -24,13 +24,6 @@ class DeliveryInit extends AbstractTranslatorHelper {
     }
 
     /**
-     * Initializes the Delivery stylesheets.
-     */
-    public function stylesheets() {
-        $this->view->headLink()->appendStylesheet('shopping_cart.css');
-    }
-
-    /**
      * Initializes the Delivery scripts.
      */
     public function scripts() {
@@ -44,10 +37,9 @@ class DeliveryInit extends AbstractTranslatorHelper {
 
         $this->view->headScript()->appendScript($this->view->jsobject()->getScript('delivery'));
         $this->view->headScript()->appendFile('delivery.js');
-        $this->view->headScript()->appendFile('delivery_shop_custom/delivery.locale.nl.js');
-        $this->view->headScript()->appendFile('delivery_shop_custom/delivery.locale.en.js');
+        $this->view->headScript()->appendFile('delivery_shop/delivery.locale.nl.js');
+        $this->view->headScript()->appendFile('delivery_shop/delivery.locale.en.js');
         $this->view->headScript()->appendFile('delivery_shop/delivery_shop.js');
-        $this->view->headScript()->appendFile('delivery_shop/example/resources/js/simpleCart.min.js');
     }
 
     /**
