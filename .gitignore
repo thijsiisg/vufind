@@ -18,3 +18,5 @@ solr/**/index
 solr/**/tlog
 solr/**/spellchecker
 solr/**/spellShingle
+
+themes/iish/vendor
