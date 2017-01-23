@@ -38,7 +38,7 @@ $this->jsTranslations()->addStrings(array(
     <img src="<?=$this->imageLink('IISG-logo-' . $langClass . '.jpg')?>"/>
   </div>
 
-  <h3 property="name"><?=$this->escapeHtml($this->driver->getShortTitleEscaped())?></h3>
+  <h3 property="name"><?=$this->escapeHtml($this->driver->getShortTitle())?></h3>
 
   <div class="col-sm-5 col-sm-push-7">
     <? if ($this->driver->getDownloadable() && $this->driver->hasVideo()): ?>

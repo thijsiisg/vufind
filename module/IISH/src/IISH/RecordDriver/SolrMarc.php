@@ -62,13 +62,34 @@ class SolrMarc extends VuFindSolrMarc {
     }
 
     /**
+     * Get the full title of the record.
+     * If the title ends with a single character, remove it. (Usually /)
+     *
+     * @return string An extension of the title.
+     */
+    public function getTitle() {
+        $title = parent::getTitle();
+        $append = null;
+        $fields = array('245' => array('b'), '710' => array('a'));
+
+        foreach ($fields as $field => $subfield) {
+            $append = $this->getFirstFieldValue($field, $subfield);
+            if ($append && (strpos($title, $append) === false)) {
+                return self::escape($title . ' ' . $append);
+            }
+        }
+
+        return self::escape($title);
+    }
+
+    /**
      * Get the short (pre-subtitle) title of the record.
      * If the title ends with a single character, remove it. (Usually /)
      *
      * @return string The short title escaped.
      */
-    public function getShortTitleEscaped() {
-        return preg_replace('/\s.\Z/', '', $this::getShortTitle());
+    public function getShortTitle() {
+        return self::escape(parent::getShortTitle());
     }
 
     /**
@@ -79,7 +100,7 @@ class SolrMarc extends VuFindSolrMarc {
      * @return string Breadcrumb text to represent this record.
      */
     public function getBreadcrumb() {
-        return $this->getShortTitleEscaped();
+        return $this->getShortTitle();
     }
 
     /**
@@ -108,8 +129,6 @@ class SolrMarc extends VuFindSolrMarc {
     }
 
     /**
-     * TODO: Previously used field 'callnumber-a'.
-     *
      * Returns the collector.
      *
      * @return string|null The collector.
@@ -136,26 +155,6 @@ class SolrMarc extends VuFindSolrMarc {
         }
 
         return $publicationStatus;
-    }
-
-    /**
-     * Returns an extension of the title.
-     *
-     * @return string An extension of the title.
-     */
-    public function getTitleExtension() {
-        $title = $this->getTitle();
-        $append = null;
-        $fields = array('245' => array('b'), '710' => array('a'));
-
-        foreach ($fields as $field => $subfield) {
-            $append = $this->getFirstFieldValue($field, $subfield);
-            if ($append && (strpos($title, $append) === false)) {
-                return ' ' . $append;
-            }
-        }
-
-        return '';
     }
 
     /**
@@ -680,11 +679,18 @@ class SolrMarc extends VuFindSolrMarc {
      * - Remove the '.' or ',' at the end.
      * - Make sure the first character is uppercase.
      *
-     * @param string $text The text to normalize.
+     * @param string|array $text The text to normalize.
      *
-     * @return string The normalized text.
+     * @return string|array The normalized text.
      */
-    private function normalize($text) {
+    protected function normalize($text) {
+        if (is_array($text)) {
+            foreach ($text as $key => $value) {
+                $text[$key] = self::normalize($value);
+            }
+            return $text;
+        }
+
         $text = trim($text);
         $i = strlen($text) - 1;
         if (($i >= 0) && (($text[$i] === '.') || ($text[$i] === ','))) {
@@ -692,5 +698,16 @@ class SolrMarc extends VuFindSolrMarc {
         }
 
         return ucfirst($text);
+    }
+
+    /**
+     * Escape the text, if it ends with a single character, remove it. (Usually /)
+     *
+     * @param string $text The text to be escaped.
+     *
+     * @return string The text escaped.
+     */
+    protected function escape($text) {
+        return preg_replace('/\s.\Z/', '', $text);
     }
 }
