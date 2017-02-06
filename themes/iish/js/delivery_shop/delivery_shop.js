@@ -403,7 +403,7 @@ var DeliveryShoppingCart = {RESERVATIONS: 0, REPRODUCTIONS: 1};
             data = {
                 pid: pars.pid,
                 title: pars.pid,
-                restrictionType: 'OPEN',
+                restriction: 'OPEN',
                 publicationStatus: 'CLOSED',
                 openForReproduction: false,
                 holdings: [{
@@ -422,8 +422,8 @@ var DeliveryShoppingCart = {RESERVATIONS: 0, REPRODUCTIONS: 1};
                     .text(Rsrc.getString('stat_notfound'))
             );
         }
-        else {
-            if (data.restrictionType === 'OPEN') {
+        else if (pars.show_reservation || pars.show_reproduction) {
+            if (data.restriction !== 'CLOSED') {
                 if (holding.usageRestriction === 'OPEN') {
                     if (pars.show_reservation) {
                         if (holding.status === 'AVAILABLE') {
@@ -456,20 +456,13 @@ var DeliveryShoppingCart = {RESERVATIONS: 0, REPRODUCTIONS: 1};
                         }
                     }
                 }
-                else if (pars.show_reservation || pars.show_reproduction) {
+                else {
                     html.push(
                         $('<span>')
                             .addClass("deliveryResponseText deliveryStatUsageRestriction")
                             .text(Rsrc.getString('stat_open_restricted'))
                     );
                 }
-            }
-            else if (pars.show_reservation || pars.show_reproduction) {
-                html.push(
-                    $('<span>')
-                        .addClass("deliveryResponseText deliveryStatClosed")
-                        .text(Rsrc.getString('stat_closed'))
-                );
             }
         }
 

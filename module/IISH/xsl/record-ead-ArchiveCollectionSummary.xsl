@@ -105,10 +105,10 @@
           <xsl:attribute name="class">
             <xsl:choose>
               <xsl:when test="$digital_items>0">
-                holdings-container no-children archive online-content-available
+                holdings-container with-children archive online-content-available
               </xsl:when>
               <xsl:otherwise>
-                holdings-container no-children archive
+                holdings-container with-children archive
               </xsl:otherwise>
             </xsl:choose>
           </xsl:attribute>

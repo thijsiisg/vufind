@@ -60,7 +60,11 @@
         <xsl:value-of select="ead:did/ead:unitid"/>
       </xsl:variable>
 
-      <xsl:if test="$child != '' and $child != '-'">
+      <xsl:variable name="restriction">
+        <xsl:value-of select="ead:accessrestrict/@type"/>
+      </xsl:variable>
+
+      <xsl:if test="$child != '' and $child != '-' and $restriction != 'closed'">
         <div class="holding">
           <div class="state hidden-print">
             <xsl:attribute name="data-child">
