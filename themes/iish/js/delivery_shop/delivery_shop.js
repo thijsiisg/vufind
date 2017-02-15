@@ -153,7 +153,13 @@ var DeliveryShoppingCart = {RESERVATIONS: 0, REPRODUCTIONS: 1};
                         removeRequest(init.shoppingCart, btn.data('pid'), btn.data('child'));
                     }
                 })
-                .on('click', '.' + init.classStart + 'Btn.deliveryReserveButton', function (e) {
+                .on('click', 'button.' + init.classStart + 'Btn.deliveryReserveButton', function (e) {
+                    e.preventDefault();
+                    var btn = $(this);
+                    makeRequest(init.shoppingCart, btn.data('label'),
+                        btn.data('pid'), btn.data('signature'), btn.data('child'));
+                })
+                .on('change', 'label.' + init.classStart + 'Btn.deliveryReserveButton', function (e) {
                     e.preventDefault();
                     var btn = $(this);
                     makeRequest(init.shoppingCart, btn.data('label'),
@@ -373,17 +379,17 @@ var DeliveryShoppingCart = {RESERVATIONS: 0, REPRODUCTIONS: 1};
                 show_reproduction: parsParent.show_reproduction
             };
 
-            var childState = data.childrenDifferentState[pars.pid + "." + pars.child];
+            var childAvailable = data.reservedChilds.indexOf(pars.child) < 0;
             var newData = {
                 pid: pars.pid + "." + pars.child,
                 title: pars.label,
-                restrictionType: childState ? childState.restrictionType : data.restrictionType,
-                publicationStatus: childState ? childState.publicationStatus : data.publicationStatus,
-                openForReproduction: childState ? childState.openForReproduction : data.openForReproduction,
+                restrictionType: data.restrictionType,
+                publicationStatus: data.publicationStatus,
+                openForReproduction: data.openForReproduction,
                 holdings: [{
                     signature: pars.signature,
-                    status: childState ? childState.status : holding.status,
-                    usageRestriction: childState ? childState.usageRestriction : holding.usageRestriction
+                    status: childAvailable ? 'AVAILABLE' : 'RESERVED',
+                    usageRestriction: holding.usageRestriction
                 }]
             };
 
@@ -418,7 +424,7 @@ var DeliveryShoppingCart = {RESERVATIONS: 0, REPRODUCTIONS: 1};
         if (!!pars.error) {
             html.push(
                 $('<span>')
-                    .addClass("deliveryResponseError")
+                    .addClass("deliveryResponseText deliveryResponseError")
                     .text(Rsrc.getString('stat_notfound'))
             );
         }
@@ -429,11 +435,18 @@ var DeliveryShoppingCart = {RESERVATIONS: 0, REPRODUCTIONS: 1};
                         if (holding.status === 'AVAILABLE') {
                             html.push(createButtonHtml(DeliveryShoppingCart.RESERVATIONS, pars, data));
                         }
+                        else if (pars.child) {
+                            html.push(
+                                $('<span>')
+                                    .addClass("deliveryResponseText deliveryStatReserved")
+                                    .text(Rsrc.getString('stat_open_reserved_child'))
+                            );
+                        }
                         else {
                             html.push(
                                 $('<span>')
                                     .addClass("deliveryResponseText deliveryStatReserved")
-                                    .text(Rsrc.getString('stat_open_reserved'))
+                                    .text(Rsrc.getString('stat_open_reserved') + ' ')
                                     .append(
                                         $('<a>')
                                             .attr("href", "mailto:" + Rsrc.getString('email_office'))
