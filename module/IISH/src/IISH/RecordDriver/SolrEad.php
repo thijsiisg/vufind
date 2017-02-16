@@ -113,7 +113,7 @@ class SolrEad extends SolrMarc {
                 'id' => $this->getUniqueID(),
                 'action' => $name,
                 'baseUrl' => $this->siteURL . '/Record/' . $this->getUniqueID(),
-                'title' => $this->getTitle()
+                'title' => preg_replace('/[\'"]/', '`', $this->getTitle())
             )
         );
 
