@@ -132,6 +132,15 @@ class Loader extends Cacheable {
      * @throws \IISH\Exception\OAI
      */
     protected function create() {
+        // TODO: Temp for testing purposes
+        $clientTemp = $this->http->createClient();
+        $clientTemp->setMethod(Request::METHOD_GET);
+        $clientTemp->setUri('http://localhost/ead/' . $this->getId() . '.xml');
+        $responseTemp = $clientTemp->send();
+
+        if ($responseTemp->isSuccess())
+            return $responseTemp->getBody();
+
         $client = $this->http->createClient();
         $client->setOptions(array('sslverifypeer' => false));
         $client->setMethod(Request::METHOD_GET);
