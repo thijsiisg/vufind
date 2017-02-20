@@ -65,10 +65,19 @@ class SolrMarc extends VuFindSolrMarc {
      * Get the full title of the record.
      * If the title ends with a single character, remove it. (Usually /)
      *
-     * @return string An extension of the title.
+     * @return string The title.
      */
     public function getTitle() {
-        $title = parent::getTitle();
+        return $this->getTitleExtension(parent::getTitle());
+    }
+
+    /**
+     * Add an extension to the title.
+     *
+     * @param string $title The original title.
+     * @return string An extension of the title.
+     */
+    public function getTitleExtension($title) {
         $append = null;
         $fields = array('245' => array('b'), '710' => array('a'));
 
