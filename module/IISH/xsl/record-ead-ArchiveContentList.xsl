@@ -91,6 +91,7 @@
         <xsl:if test="string-length($t)>1">
           <div class="v{@level}">
             <xsl:copy-of select="$t"/>
+            <xsl:apply-templates select="ead:accessrestrict"/>
           </div>
         </xsl:if>
 
@@ -188,15 +189,15 @@
   </xsl:template>
 
   <xsl:template match="ead:p">
-    <xsl:text></xsl:text>
     <xsl:apply-templates/>
-    <xsl:text></xsl:text>
+  </xsl:template>
+
+  <xsl:template match="ead:accessrestrict">
+    <span class="warning"><xsl:apply-templates/></span>
   </xsl:template>
 
   <xsl:template match="ead:extent">
-    <xsl:text></xsl:text>
     <xsl:value-of select="normalize-space(text())"/>
   </xsl:template>
-
 </xsl:stylesheet>
 
