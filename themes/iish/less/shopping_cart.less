@@ -1,23 +1,30 @@
 @mainBorder: #39a8ff;
 
 .holdings-container {
-  button {
-    margin-left: 10px;
-  }
-
   .holding {
     margin-bottom: 25px;
+    display: inline-block;
+
+    .state,
+    .callnumber {
+      display: inline-block;
+    }
 
     .callnumber,
-    .state {
-      display: inline-block;
+    .deliveryResponseText,
+    .deliveryReserveButton {
+      margin-right: 10px;
     }
   }
 
-  &.archive,
   &.archive .holding {
-    margin: 2px 10px 2px 0;
-    display: inline-block;
+    margin: 2px 0;
+  }
+
+  .deliveryStatReserved,
+  .deliveryStatUsageRestriction,
+  .deliveryStatClosed {
+    color: #D10018;
   }
 }
 
@@ -198,20 +205,4 @@
   width: 100%;
   border-collapse: collapse;
   border-color: #003399;
-}
-
-.deliveryStatReserved,
-.deliveryStatUsageRestriction,
-.deliveryStatClosed {
-  color: #D10018;
-}
-
-.deliveryResponseText {
-  margin-left: 10px;
-}
-
-.archive {
-  .deliveryResponseText:first-child {
-    margin-left: 0;
-  }
 }
