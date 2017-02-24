@@ -134,7 +134,7 @@
     <div class="digital loading hidden-print"
          data-record="{normalize-space($id)}"
          data-item="{normalize-space(../ead:unitid)}">
-      <i class="fa fa-spinner fa-spin">.</i>
+      <span class="loading-text">Loading...</span>
     </div>
   </xsl:template>
 
