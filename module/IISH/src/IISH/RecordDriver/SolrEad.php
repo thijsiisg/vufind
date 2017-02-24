@@ -46,6 +46,17 @@ class SolrEad extends SolrMarc {
     }
 
     /**
+     * Add an extension to the title.
+     * In the case of EAD, no extension to the title.
+     *
+     * @param string $title The original title.
+     * @return string An extension of the title.
+     */
+    public function getTitleExtension($title) {
+        return self::escape($title);
+    }
+
+    /**
      * Returns the period.
      *
      * @return string|null The period.
