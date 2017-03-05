@@ -379,19 +379,22 @@ var DeliveryShoppingCart = {RESERVATIONS: 0, REPRODUCTIONS: 1};
                 show_reproduction: parsParent.show_reproduction
             };
 
-            var childAvailable = data.reservedChilds.indexOf(pars.child) < 0;
-            var newData = {
-                pid: pars.pid + "." + pars.child,
-                title: pars.label,
-                restrictionType: data.restrictionType,
-                publicationStatus: data.publicationStatus,
-                openForReproduction: data.openForReproduction,
-                holdings: [{
-                    signature: pars.signature,
-                    status: childAvailable ? 'AVAILABLE' : 'RESERVED',
-                    usageRestriction: holding.usageRestriction
-                }]
-            };
+            var newData = null;
+            if (data !== null) {
+                var childAvailable = data.reservedChilds.indexOf(pars.child) < 0;
+                newData = {
+                    pid: pars.pid + "." + pars.child,
+                    title: pars.label,
+                    restrictionType: data.restrictionType,
+                    publicationStatus: data.publicationStatus,
+                    openForReproduction: data.openForReproduction,
+                    holdings: [{
+                        signature: pars.signature,
+                        status: childAvailable ? 'AVAILABLE' : 'RESERVED',
+                        usageRestriction: holding.usageRestriction
+                    }]
+                };
+            }
 
             buttonCallback(pars, newData, newData.holdings[0]);
         });
