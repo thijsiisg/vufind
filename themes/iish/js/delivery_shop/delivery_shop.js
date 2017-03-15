@@ -609,7 +609,7 @@ var DeliveryShoppingCart = {RESERVATIONS: 0, REPRODUCTIONS: 1};
         function createUpdateChildrenRangeHtml(idx, from, until) {
             var rangesDivs = childrenDiv.find('.range');
             if (idx < rangesDivs.length) {
-                var rangeDiv = $(rangesDivs.get(idx));
+                var rangeDiv = rangesDivs.eq(idx);
                 rangeDiv.find('input.from').val(from);
                 rangeDiv.find('input.until').val(until);
                 rangeDiv.find('a').data('children', item.children.slice(
@@ -623,7 +623,7 @@ var DeliveryShoppingCart = {RESERVATIONS: 0, REPRODUCTIONS: 1};
                         .addClass('range')
                         .append($('<span>').text(Rsrc.getString('cart_children')))
                         .append($('<input>').attr('type', 'text').prop('disabled', true).addClass('from').val(from))
-                        .append($('<span>').text('-'))
+                        .append($('<span>').text('-').addClass('divider'))
                         .append($('<input>').attr('type', 'text').prop('disabled', true).addClass('until').val(until))
                         .append(
                             $('<a>')
@@ -637,6 +637,9 @@ var DeliveryShoppingCart = {RESERVATIONS: 0, REPRODUCTIONS: 1};
                         )
                 )
             }
+
+            var dividerAndUntil = childrenDiv.find('.range').eq(idx).find('.divider, .until');
+            (from === until) ? dividerAndUntil.hide() : dividerAndUntil.show();
         }
     }
 
