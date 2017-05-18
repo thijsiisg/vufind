@@ -125,6 +125,12 @@ class RecordController extends VuFindRecordController {
 	        $digital->setType('marc');
         }
 	    $arr = $digital->getList();
+        if($arr === null){
+            $arr = array(
+                'pdf' => null,
+                'view' => null
+            );
+        }
 
         $iishConfig = $this->serviceLocator->get('VuFind\Config')->get('iish');
         $contentAccessToken = new IISHContentAccessToken($iishConfig);

@@ -51,7 +51,8 @@ abstract class Cacheable {
         }
 
         $cachedInstance = $this->create();
-        $this->setCache($cachedInstance);
+        if($cachedInstance !== null)
+            $this->setCache($cachedInstance);
 
         return $cachedInstance;
     }

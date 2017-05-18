@@ -250,11 +250,8 @@ class Loader extends Cacheable {
 		}
 
 		if ( empty($metsUrl)) {
-			// if empty, return empty
-			return array(
-				'pdf' => null
-				, 'view' => null
-				);
+			// if empty, return null
+            return null;
 		} else {
 
 			if ($this->isAudio || $this->isVideo) {
