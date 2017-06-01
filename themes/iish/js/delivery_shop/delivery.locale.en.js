@@ -1,6 +1,6 @@
 var string_table_en = {
-	alert_max:                    "Only a reservation of {0} holdings can be made",
-    alert_max_children:           "Only a reservation of {0} items per archive can be made",
+	alert_max:                    "You have already reached the maximum of {0} items per reservation.",
+    alert_max_children:           "For this archive/collection, you have already reached the maximum of {0} items.",
 	alert_noitems:                "No holdings selected",
 	button_request_reservation:   "Request Reservation",
 	button_request_reproduction:  "Request Reproduction",
@@ -19,5 +19,5 @@ var string_table_en = {
 	date_format:                  "dd/mm/yy",
 	email_office:                 "ask@iisg.nl",
 	reproduction_header:          "Reproductions",
-	reservation_header:           "Reservations (max 3 items, max 10 items per archive)"
+	reservation_header:           "Reservations"
 };
