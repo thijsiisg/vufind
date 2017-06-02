@@ -1,9 +1,9 @@
 var string_table_nl = {
-	alert_max:                    "U heeft u al het maximum van {0} items per reservering bereikt.",
-    alert_max_children:           "Voor deze collectie/archief heeft u al het maximum van {0} inventaris nummers bereikt.",
+	alert_max:                    "U kunt per aanvraag maximaal {0} items reserveren.",
+    alert_max_children:           "U kunt per aanvraag van een collectie of archief maximaal {0} inventarisnummers reserveren.",
 	alert_noitems:                "Geen items geselecteerd",
-	button_request_reservation:   "Reservering aanvragen",
-	button_request_reproduction:  "Reproductie aanvragen",
+	button_request_reservation:   "Aanvragen",
+	button_request_reproduction:  "Reproductie",
 	stat_open_reserved:           "* Item uitgeleend, neem contact op met",
 	stat_open_restricted:         "* Niet ter inzage",
 	stat_open_publication_status: "* U kunt dit item niet aanvragen vanwege copyright beperkingen",
