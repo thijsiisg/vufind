@@ -1,6 +1,6 @@
 var string_table_nl = {
-	alert_max:                    "U kunt maximaal {0} items reserveren",
-    alert_max_children:           "U kunt maximaal {0} inventaris nummers per archief reserveren",
+	alert_max:                    "U heeft u al het maximum van {0} items per reservering bereikt.",
+    alert_max_children:           "Voor deze collectie/archief heeft u al het maximum van {0} inventaris nummers bereikt.",
 	alert_noitems:                "Geen items geselecteerd",
 	button_request_reservation:   "Reservering aanvragen",
 	button_request_reproduction:  "Reproductie aanvragen",
@@ -19,5 +19,5 @@ var string_table_nl = {
 	date_format:                  "dd-mm-yy",
 	email_office:                 "vraag@iisg.nl",
 	reproduction_header:          "Reproducties",
-	reservation_header:           "Reserveringen (max 3 items, max 10 inv.no. per archief)"
+	reservation_header:           "Reserveringen"
 };

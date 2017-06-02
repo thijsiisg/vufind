@@ -50,6 +50,19 @@
     float: left;
   }
 
+  .vfile,
+  .vitem {
+    margin-bottom: 2px;
+
+    &:nth-of-type(4n) {
+      background-color: #f5f5f5;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
   @media (max-width: @screen-sm-max) {
     .vfile,
     .kitem {
@@ -78,6 +91,10 @@
 
   .warning {
     color: orangered;
+    font-style: italic;
+  }
+
+  .physdesc {
     font-style: italic;
   }
 }
