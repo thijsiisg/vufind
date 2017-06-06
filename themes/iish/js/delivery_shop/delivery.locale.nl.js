@@ -3,7 +3,7 @@ var string_table_nl = {
     alert_max_children:           "U kunt per aanvraag van een collectie of archief maximaal {0} inventarisnummers reserveren.",
 	alert_noitems:                "Geen items geselecteerd",
 	button_request_reservation:   "Aanvragen",
-	button_request_reproduction:  "Reproductie",
+	button_request_reproduction:  "Bestel reproductie",
 	stat_open_reserved:           "* Item uitgeleend, neem contact op met",
 	stat_open_restricted:         "* Niet ter inzage",
 	stat_open_publication_status: "* U kunt dit item niet aanvragen vanwege copyright beperkingen",

@@ -3,7 +3,7 @@ var string_table_en = {
     alert_max_children:           "You can order up to {0} inventory numbers per archive/collection per reservation.",
 	alert_noitems:                "No holdings selected",
 	button_request_reservation:   "Request",
-	button_request_reproduction:  "Reproduction",
+	button_request_reproduction:  "Order reproduction",
 	stat_open_reserved:           "* Item already reserved, please contact",
 	stat_open_restricted:         "* Cannot be requested",
 	stat_open_publication_status: "* You cannot request this item because of copyright restrictions",
