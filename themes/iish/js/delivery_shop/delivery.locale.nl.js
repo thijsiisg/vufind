@@ -1,42 +1,23 @@
-/*
- * Copyright 2013 International Institute of Social History
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
-
 var string_table_nl = {
-    alert_max:            "U kunt maximaal {0} objecten reserveren",
-    alert_noitems:        "Geen objecten geselecteerd om te reserveren",
-    button_request:       "Reserveer Item",
-    button_permission:    "Vraag Toestemming",
-    stat_open_reserved:   "Dit item is momenteel gereserveerd door iemand anders, neem contact op met de leeskamer",
-    stat_open_restricted: "U kunt dit item niet reserveren i.v.m. beperkingen op dit archief",
-    stat_restricted:      "U heeft toestemming nodig voor dit item",
-    stat_closed:          "U kunt dit item niet reserveren i.v.m. beperkingen op dit archief",
-    stat_closed_embargo:  "U kunt dit item t/m {0} niet reserveren i.v.m. beperkingen op dit archief",
-    stat_notfound:        "Item niet gevonden",
-    cart_title:           "Titel",
-    cart_pid:             "Pid/Signature",
-    cart_remove:          "Remove",
-    cart_button_reserve:  "Reserveer",
-    cart_button_empty:    "Leeg",
-    cart_button_remove:   "X",
-    date_format:          "dd-mm-yy",
-    email_office:         "ask@iisg.nl"
+	alert_max:                    "U kunt per aanvraag maximaal {0} items reserveren.",
+    alert_max_children:           "U kunt per aanvraag van een collectie of archief maximaal {0} inventarisnummers reserveren.",
+	alert_noitems:                "Geen items geselecteerd",
+	button_request_reservation:   "Aanvragen",
+	button_request_reproduction:  "Reproductie",
+	stat_open_reserved:           "* Item uitgeleend, neem contact op met",
+	stat_open_restricted:         "* Niet ter inzage",
+	stat_open_publication_status: "* U kunt dit item niet aanvragen vanwege copyright beperkingen",
+	stat_notfound:                "* Item niet gevonden",
+    stat_open_reserved_child:     "Uitgeleend",
+	cart_title:                   "Titel",
+	cart_children:				  "Inv. no.",
+	cart_pid:                     "Pid/Signature",
+	cart_remove:                  "Verwijder",
+	cart_button_request:          "Versturen",
+	cart_button_empty:            "Leeg maken",
+	cart_button_remove:           "X",
+	date_format:                  "dd-mm-yy",
+	email_office:                 "vraag@iisg.nl",
+	reproduction_header:          "Reproducties",
+	reservation_header:           "Reserveringen"
 };
-
-
-
-
-
-

@@ -6,7 +6,7 @@
 
   <h4><?=$this->transEsc('Holding')?></h4>
 
-  <div id="holdings-container" <?=$hasOnlineContent ? 'class="online-content-available"' : ''?>>
+  <div class="holdings-container no-children <?=$hasOnlineContent ? 'online-content-available' : ''?>">
     <? foreach ($holdings as $counter => $holding): ?>
       <div class="holding">
         <div class="info">

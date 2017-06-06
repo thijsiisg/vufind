@@ -1,681 +1,711 @@
-/*
- * Copyright 2013 International Institute of Social History
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
+/*global jQuery*/
+var DeliveryShoppingCart = {RESERVATIONS: 0, REPRODUCTIONS: 1};
 
-/*
- * Local properties object  
- */
-var DeliveryProps = (function() {
-    var host             = "localhost/delivery";
-    var language         = "en";
-    var max_items        = 3;
-    var url_search       = window.location.protocol + "//hdl.handle.net";
-    var cart_div         = null;
-    var showhide_buttons = true;
-    var onLoad = function() {};
-    var onUpdate = function() {};
-    var cartStyle = "table";
+(function ($) {
+    "use strict";
 
-    return {
-        setProperties: function(props) {
-            if (!!props)
-            {
-                if (!!props.showhide_buttons) showhide_buttons = props.showhide_buttons;
-                if (!!props.host)             host             = props.host;
-                if (!!props.language)         language         = props.language;
-                if (!!props.max_items)        max_items        = props.max_items;
-                if (!!props.url_search)       url_search       = props.url_search;
-                if (!!props.cart_div)         cart_div         = props.cart_div;
-                if (!!props.cartStyle)        cartStyle        = props.cartStyle;
-                if (!!props.onLoad && typeof(props.onLoad) === 'function')        onLoad = props.onLoad;
-                if (!!props.onUpdate && typeof(props.onUpdate) === 'function')        onUpdate = props.onUpdate;
+    var DeliveryProps = (function () {
+        var host = "localhost/delivery";
+        var language = "en";
+        var max_items = 3;
+        var max_children = 10;
+        var url_search = window.location.protocol + "//hdl.handle.net";
+        var cart_div = null;
+
+        return {
+            setProperties: function (props) {
+                if (!!props) {
+                    if (!!props.host) host = props.host;
+                    if (!!props.language) language = props.language;
+                    if (!!props.max_items) max_items = props.max_items;
+                    if (!!props.max_children) max_children = props.max_children;
+                    if (!!props.url_search) url_search = props.url_search;
+                    if (!!props.cart_div) cart_div = props.cart_div;
+                }
+            },
+            getDeliveryHost: function () {
+                return (host);
+            },
+            getLanguage: function () {
+                return (language);
+            },
+            getMaxItems: function () {
+                return (max_items);
+            },
+            getMaxChildren: function () {
+                return (max_children);
+            },
+            getSearchURL: function () {
+                return (url_search);
+            },
+            getShoppingCartDiv: function () {
+                return (cart_div);
             }
-        },
-        getDeliveryHost: function() {
-            return(host);
-        },
-        getLanguage: function() {
-            return(language);
-        },
-        getMaxItems: function() {
-            return(max_items);
-        },
-        getSearchURL: function() {
-            return(url_search);
-        },
-        getShoppingCartDiv: function() {
-            return(cart_div);
-        },
-        getShowHideButtons: function() {
-            return(showhide_buttons);
-        },
-        getLoadFunction: function() {
-            return onLoad;
-        },
-        getUpdateFunction: function() {
-            return onUpdate;
-        },
-        getCartStyle: function() {
-            return cartStyle;
-        }
-    };
-})();
-
-/*
- * Localization resources object  
- */
-var Rsrc = (function() {
-    var language  = 'en';
-    var str_table = null;
-    
-    return {
-        setLanguage: function(lang) {
-            /*
-            var url = "resources/js/delivery.locale." + lang + ".js";
-            $.getScript(url, function(data, textStatus, jqxhr) {
-                if (jqxhr.status === 200)
-                {
-                    eval(data);
-                    str_table = string_table;
-                    language  = lang;
-                }              
-                syslog("Load was performed with "  + textStatus + " " + jqxhr.status);
-            });
-            */
-           switch (lang)
-           {
-               case 'nl':
-                   str_table = string_table_nl;
-                   break;
-               case 'en':
-               default:
-                   str_table = string_table_en;
-                   break;
-           }
-        },
-        getString: function(key, par)
-        {   
-            var str;
-            
-            if (!!str_table)
-            {
-                str = str_table[key];
-                if (!!par) str = str.replace("{0}", par);
-                return(str);
-            }
-            return("TBS");
-        }
-    };
-})();
-
-var reservationCart = {
-    cart: null,
-    className: "reservationCart",
-    isReservationCart: true
-};
-
-var reproductionCart = {
-    cart: null,
-    className: "reproductionCart",
-    isReservationCart: false
-};
-
-var shoppingCarts = [reservationCart, reproductionCart];
-
-// Public functions
-
-/**
- * Initialize the Delivery shopping cart API
- *
- * An object with the following properties can be passed:
- * { 
- *      host:             "localhost/delivery",    // The delivery host and context
- *      language:         "en",                    // The language
- *      max_items:        3,                       // The maximum entries in the shopping cart
- *      cart_div:         "#delivery_cart",        // The html div where the shopping cart is displayed
- *      url_search:       window.location.protocol + "//hdl.handle.net", // The url (host) to the holding information  
- *      showhide_buttons: true                     // Flag if the cart buttons should be hidden with empty cart
- * }
- *
- * @param {object} props     the delivery properties
- * @returns {undefined}
- */
-function initDelivery(props)
-{
-    var html;
-
-    if (!!props) DeliveryProps.setProperties(props);
-    syslog("Use delivery host: " + DeliveryProps.getDeliveryHost());
-    Rsrc.setLanguage(DeliveryProps.getLanguage());
-
-    if (DeliveryProps.getShoppingCartDiv() !== null)
-    {
-        shoppingCarts.forEach(function (shoppingCart) {
-            shoppingCart.cart = simpleCart.copy(shoppingCart.className);
-            shoppingCart.cart({
-                // array representing the format and columns of the cart
-                cartColumns: [
-                    { attr: "name",   label: Rsrc.getString('cart_title')},
-                    { attr: "pid",    label: Rsrc.getString('cart_pid')},
-                    { view: "remove", label: Rsrc.getString('cart_remove'), text: Rsrc.getString('cart_button_remove')}
-                ],
-                // "div" or "table"
-                cartStyle: DeliveryProps.getCartStyle(),
-                // how simpleCart should checkout
-                checkout: {
-                    type: "SendForm",
-                    url:  shoppingCart.isReservationCart
-                        ? "javascript:sendRequest(reservationCart);"
-                        : "javascript:sendRequest(reproductionCart);"
-                },
-                load: function() {
-                    show_hide_cart_buttons(this);
-                    // Call custom load function.
-                    DeliveryProps.getLoadFunction()(this);
-                },
-                update: function() {
-                    show_hide_cart_buttons(this);
-                    // Call Custom update function.
-                    DeliveryProps.getUpdateFunction()(this);
-                },
-                currency: "EUR"
-            });
-        });
-
-        html  = "<div class=\"reservationCart\">";
-        html += "<div class=\"reservationCart_header\"><h5>" + Rsrc.getString('reservation_header') + "</h5></div>";
-        html += "<div class=\"reservationCart_items\"></div>";
-        html += "<div class=\"deliveryCartButtons\">";
-        html += "<button type=\"submit\" class=\"reservationCart_checkout\" value=\"";
-        html += Rsrc.getString('cart_button_request');
-        html += "\" name=\"Reserve\" onclick=\"javascript:;\" >";
-        html += Rsrc.getString('cart_button_request');
-        html += "<\/button>";
-        html += "&nbsp;";
-        html += "<button type=\"submit\" class=\"reservationCart_empty\" value=\"";
-        html += Rsrc.getString('cart_button_empty');
-        html += "\" name=\"Empty\" onclick=\"javascript:;\" >";
-        html += Rsrc.getString('cart_button_empty');
-        html += "<\/button>";
-        html += "</div></div>";
-        html += "<div class=\"reproductionCart\">";
-        html += "<div class=\"reproductionCart_header\"><h5>" + Rsrc.getString('reproduction_header') + "</h5></div>";
-        html += "<div class=\"reproductionCart_items\"></div>";
-        html += "<div class=\"deliveryCartButtons\">";
-        html += "<button type=\"submit\" class=\"reproductionCart_checkout\" value=\"";
-        html += Rsrc.getString('cart_button_request');
-        html += "\" name=\"Reproduction\" onclick=\"javascript:;\" >";
-        html += Rsrc.getString('cart_button_request');
-        html += "<\/button>";
-        html += "&nbsp;";
-        html += "<button type=\"submit\" class=\"reproductionCart_empty\" value=\"";
-        html += Rsrc.getString('cart_button_empty');
-        html += "\" name=\"Empty\" onclick=\"javascript:;\" >";
-        html += Rsrc.getString('cart_button_empty');
-        html += "<\/button>";
-        html += "</div></div>";
-        $(DeliveryProps.getShoppingCartDiv()).html(html);
-    }
-} /* initDelivery */
-
-(function($) {
-    /**
-     * Function displays the reservation button and/or reproduction button or status text for the holding
-     *
-     * @param {string}  label               the label tobe displayed uin shopping cart,
-     *                                      if null record title is displayed
-     * @param {string}  pid                 the holding pid
-     * @param {string}  signature           the holding signature (call number)
-     * @param {boolean} directflag          if true the button jumps direct to the reservation/reproduction page
-     *                                      and skips shopping cart
-     * @param {boolean} show_reservation    whether tho show a reservation button
-     * @param {boolean} show_reproduction   whether tho show a reproduction button
-     */
-    $.fn.determineButtons = function(label, pid, signature, directflag, show_reservation, show_reproduction) {
-        var pars = {
-            label:             label,
-            pid:               $.trim(pid),
-            signature:         $.trim(signature),
-            direct:            directflag,
-            field:             $(this),
-            show_reservation:  (show_reservation || (show_reservation === undefined)),
-            show_reproduction: (show_reproduction || (show_reproduction === undefined)),
-            result:            button_callback
         };
-        get_json_data("GET", "record/" + encodeURIComponent(pars.pid), pars);
-    }; /* determineButtons */
+    })();
 
-    /**
-     * Empty the shopping cart
-     */
-    $.fn.emptyShoppingCart = function(shoppingCart) {
-        shoppingCart.cart.empty();
-    }; /* emptyShoppingCart */
+    var Rsrc = (function () {
+        var str_table = null;
+        return {
+            setLanguage: function (lang) {
+                switch (lang) {
+                    case 'nl':
+                        str_table = string_table_nl;
+                        break;
+                    case 'en':
+                    default:
+                        str_table = string_table_en;
+                        break;
+                }
+            },
+            getString: function (key, par) {
+                var str;
 
-    /**
-     * Show the delivery host and selected language
-     * For debugging only!
-     */
-    $.fn.getDeliveryInfo = function() {
-        var html;
+                if (!!str_table) {
+                    str = str_table[key];
+                    if (!!par) str = str.replace("{0}", par);
+                    return (str);
+                }
+                return ("TBS");
+            }
+        };
+    })();
 
-        html  = "<i>";
-        html += "host=" + DeliveryProps.getDeliveryHost();
-        html += " ";
-        html += "lang=" + DeliveryProps.getLanguage();
-        html += "</i>";
-        $(this).html(html);
-    }; /* getDeliveryInfo */
+    var reservationItems = [], reproductionItems = [];
+    var reservationChildrenByPid = {}, reproductionChildrenByPid = {};
 
-    /**
-     * Show the record response from the delivery REST API
-     * For debugging only!
-     *
-     * @param {string} pid          the holding pid
-     * @param {string} signature    the holding signature
-     */
-    $.fn.getRecordInfo = function(pid, signature) {
+    $.initDelivery = function (props) {
+        if (!!props) DeliveryProps.setProperties(props);
+        Rsrc.setLanguage(DeliveryProps.getLanguage());
+
+        loadShoppingCarts();
+        loadChildrenByPid();
+
+        var inits = [
+            {classStart: 'reservation', shoppingCart: DeliveryShoppingCart.RESERVATIONS},
+            {classStart: 'reproduction', shoppingCart: DeliveryShoppingCart.REPRODUCTIONS}
+        ];
+
+        var shoppingCartDiv = $(DeliveryProps.getShoppingCartDiv());
+        if (!shoppingCartDiv.hasClass('delivery-init')) {
+            inits.forEach(function (init) {
+                shoppingCartDiv.append(
+                    $('<div>').addClass(init.classStart + "Cart")
+                        .append(
+                            $('<div>').addClass(init.classStart + "Cart_header").append(
+                                $('<h5>').text(Rsrc.getString(init.classStart + '_header'))
+                            )
+                        )
+                        .append(
+                            $('<div>').addClass(init.classStart + "Cart_items").append(
+                                $('<div>').addClass("header itemRow")
+                                    .append(
+                                        $('<div>').addClass("itemCol").text(Rsrc.getString('cart_title'))
+                                    )
+                                    .append(
+                                        $('<div>').addClass("itemCol item-remove").text(Rsrc.getString('cart_remove'))
+                                    )
+                            )
+                        )
+                        .append(
+                            $('<div>').addClass("deliveryCartButtons")
+                                .append(
+                                    $('<button>')
+                                        .addClass(init.classStart + "Cart_checkout")
+                                        .val(Rsrc.getString('cart_button_request'))
+                                        .text(Rsrc.getString('cart_button_request'))
+                                )
+                                .append(
+                                    $('<button>')
+                                        .addClass(init.classStart + "Cart_empty")
+                                        .val(Rsrc.getString('cart_button_empty'))
+                                        .text(Rsrc.getString('cart_button_empty'))
+                                )
+                        )
+                );
+            });
+            shoppingCartDiv.addClass('delivery-init');
+        }
+
+        inits.forEach(function (init) {
+            getItems(init.shoppingCart).forEach(function (item) {
+                update(init.shoppingCart, item, 'init');
+            });
+
+            $(document)
+                .on('click', '.' + init.classStart + 'Cart_checkout', function (e) {
+                    e.preventDefault();
+                    sendRequest(init.shoppingCart);
+                })
+                .on('click', '.' + init.classStart + 'Cart_empty', function (e) {
+                    e.preventDefault();
+                    emptyRequest(init.shoppingCart);
+                })
+                .on('click', '.' + init.classStart + 'Cart_remove', function (e) {
+                    e.preventDefault();
+                    var btn = $(this);
+                    if (btn.data('children')) {
+                        btn.data('children').split(',').forEach(function (child) {
+                            removeRequest(init.shoppingCart, btn.data('pid'), child);
+                        });
+                    }
+                    else {
+                        removeRequest(init.shoppingCart, btn.data('pid'), btn.data('child'));
+                    }
+                })
+                .on('click', 'button.' + init.classStart + 'Btn.deliveryReserveButton', function (e) {
+                    e.preventDefault();
+                    var btn = $(this);
+                    makeRequest(init.shoppingCart, btn.data('label'),
+                        btn.data('pid'), btn.data('signature'), btn.data('child'));
+                })
+                .on('change', 'label.' + init.classStart + 'Btn.deliveryReserveButton', function (e) {
+                    e.preventDefault();
+                    var btn = $(this);
+                    makeRequest(init.shoppingCart, btn.data('label'),
+                        btn.data('pid'), btn.data('signature'), btn.data('child'));
+                });
+        });
+    };
+
+    $.getShoppingCartItems = function (shoppingCart) {
+        return getItems(shoppingCart);
+    };
+
+    $.getShoppingCartItemElem = function (shoppingCart, pid) {
+        return getItemElem(shoppingCart, pid);
+    };
+
+    $.fn.determineButtons = function (label, pid, signature, show_reservation, show_reproduction) {
         var pars = {
-            pid:       $.trim(pid),
+            label: label,
+            pid: $.trim(pid),
             signature: $.trim(signature),
-            field:     $(this),
-            result:    record_callback
+            field: $(this),
+            show_reservation: (show_reservation || (show_reservation === undefined)),
+            show_reproduction: (show_reproduction || (show_reproduction === undefined)),
+            result: buttonCallback
         };
-        get_json_data("GET", "record/" + encodeURIComponent(pars.pid), pars);
-        $(this).html("<i>Request: pid=" + pars.pid + " signature=" + pars.signature + "</i>");
-    }; /* getRecordInfo */
-})(jQuery);
+        getJSONData("GET", "record/" + encodeURIComponent(pars.pid), pars);
+    };
 
-/**
- * Add the holding to the shopping cart or jump to reservation/reproduction page if direct request
- * This function is called by the "Request Item" button
- *
- * @param {object} shoppingCart the shopping cart
- * @param {string} label        text (link) displayed in shopping card
- * @param {string} pid          the holding pid
- * @param {string} signature    the holding signature
- * @param {string} direct       the direct flag
- * @returns {undefined}
- */
-function makeRequest(shoppingCart, label, pid, signature, direct)
-{
-    var item = pid + "^" + signature;
+    $.fn.determineChildButtons = function (field_selector, label, pid, signature, show_reservation, show_reproduction) {
+        var pars = {
+            container: $(this),
+            field_selector: field_selector,
+            label: label,
+            pid: $.trim(pid),
+            signature: $.trim(signature),
+            show_reservation: (show_reservation || (show_reservation === undefined)),
+            show_reproduction: (show_reproduction || (show_reproduction === undefined)),
+            result: parentRecordCallback
+        };
+        getJSONData("GET", "record/" + encodeURIComponent(pars.pid), pars);
+    };
 
-    if (direct === true)
-    {
-        show_delivery_page(item, shoppingCart.isReservationCart);
+    function onShoppingCart(shoppingCart, ifReservation, ifReproduction) {
+        if (shoppingCart === DeliveryShoppingCart.RESERVATIONS)
+            return ($.isFunction(ifReservation)) ? ifReservation() : ifReservation;
+        else if (shoppingCart === DeliveryShoppingCart.REPRODUCTIONS)
+            return ($.isFunction(ifReproduction)) ? ifReproduction() : ifReproduction;
+        return null;
     }
-    else
-    {
-        if (DeliveryProps.getShoppingCartDiv() !== null)
-        {
-            if (shoppingCart.cart.find({pid: item}).length === 0)
-            {
-                if (shoppingCart.isReservationCart && (shoppingCart.cart.quantity() >= DeliveryProps.getMaxItems()))
-                {
-                    alert(Rsrc.getString('alert_max', DeliveryProps.getMaxItems()));
-                }
-                else
-                {
-                    label = "<a href=\"" + DeliveryProps.getSearchURL() + "/" + encodeURIComponent(pid) + "\">" + label + "</a>";
-                    shoppingCart.cart.add({
-                        name:     label,
-                        pid:      item,
-                        quantity: 1
-                    });
-                }
+
+    function getItems(shoppingCart) {
+        if (shoppingCart === DeliveryShoppingCart.RESERVATIONS)
+            return reservationItems;
+        if (shoppingCart === DeliveryShoppingCart.REPRODUCTIONS)
+            return reproductionItems;
+        return null;
+    }
+
+    function getItemByPid(items, pid) {
+        var foundItem = null;
+        items.forEach(function (item) {
+            if (item.pid === pid) foundItem = item;
+        });
+        return foundItem;
+    }
+
+    function loadShoppingCarts() {
+        reservationItems = loadFromLocalStorage("delivery_reservations") || [];
+        reproductionItems = loadFromLocalStorage("delivery_reproductions") || [];
+    }
+
+    function saveShoppingCart(shoppingCart) {
+        if (shoppingCart === DeliveryShoppingCart.RESERVATIONS)
+            localStorage.setItem("delivery_reservations", JSON.stringify(reservationItems));
+        if (shoppingCart === DeliveryShoppingCart.REPRODUCTIONS)
+            localStorage.setItem("delivery_reproductions", JSON.stringify(reproductionItems));
+    }
+
+    function loadChildrenByPid() {
+        reservationChildrenByPid = loadFromLocalStorage("delivery_reservation_children_pid") || {};
+        reproductionChildrenByPid = loadFromLocalStorage("delivery_reproduction_children_pid") || {};
+    }
+
+    function saveChildrenByPid() {
+        localStorage.setItem("delivery_reservation_children_pid", JSON.stringify(reservationChildrenByPid));
+        localStorage.setItem("delivery_reproduction_children_pid", JSON.stringify(reproductionChildrenByPid));
+    }
+
+    function loadFromLocalStorage(key) {
+        try {
+            return JSON.parse(localStorage.getItem(key));
+        }
+        catch (err) {
+            return null;
+        }
+    }
+
+    function getItemElem(shoppingCart, pid) {
+        var classStart = onShoppingCart(shoppingCart, 'reservationCart', 'reproductionCart');
+        var itemsContainer = $(DeliveryProps.getShoppingCartDiv()).find('.' + classStart + '_items');
+        return itemsContainer
+            .find('.itemRow.item')
+            .filter(function () {
+                return $(this).data('pid') === pid;
+            });
+    }
+
+    function makeRequest(shoppingCart, label, pid, signature, child) {
+        var longPid = signature ? pid + "^" + signature : pid;
+        var items = getItems(shoppingCart);
+        var item = getItemByPid(items, longPid);
+
+        if (!item) {
+            if ((shoppingCart === DeliveryShoppingCart.RESERVATIONS) &&
+                (items.length >= DeliveryProps.getMaxItems())) {
+                alert(Rsrc.getString('alert_max', DeliveryProps.getMaxItems()));
+            }
+            else {
+                item = {
+                    name: label,
+                    handle: DeliveryProps.getSearchURL() + "/" + encodeURIComponent(pid),
+                    pid: longPid,
+                    children: child ? [child] : []
+                };
+                items.push(item);
             }
         }
-        else
-        {
-            show_delivery_page(item, shoppingCart.isReservationCart);
+        else if (child) {
+            if (item.children.indexOf(child) < 0) {
+                if (item.children.length >= DeliveryProps.getMaxChildren()) {
+                    alert(Rsrc.getString('alert_max_children', DeliveryProps.getMaxChildren()));
+                }
+                else {
+                    item.children.push(child);
+                }
+            }
+            else {
+                removeRequest(shoppingCart, pid, child);
+            }
+        }
+
+        if (item) {
+            update(shoppingCart, item, 'add');
         }
     }
-} /* makeRequest */
 
-/**
- * Send the holdings in the shopping cart to delivery
- * This function is called by the cart "Reserve" button
- *
- * @returns {undefined}
- */
-function sendRequest(shoppingCart)
-{
-    var pids = "";
+    function removeRequest(shoppingCart, pid, child) {
+        var items = getItems(shoppingCart);
+        var item = getItemByPid(items, pid);
 
-    if (shoppingCart.cart.quantity() > 0)
-    {
-        shoppingCart.cart.each(function(item, x) {
-            if (pids.length > 0) pids += ",";
-            pids += item.get('pid');
+        if (item) {
+            if (child && (item.children.indexOf(child) >= 0)) {
+                item.children.splice(item.children.indexOf(child), 1);
+                if (item.children.length === 0) {
+                    items.splice(items.indexOf(item), 1);
+                }
+            }
+            else {
+                items.splice(items.indexOf(item), 1);
+            }
+        }
+
+        update(shoppingCart, item, 'remove');
+    }
+
+    function update(shoppingCart, item, type) {
+        saveShoppingCart(shoppingCart);
+        updateItemHtml(shoppingCart, item);
+        updateButtonHtml(shoppingCart, item);
+
+        $(document)
+            .trigger('delivery.update', [shoppingCart, item])
+            .trigger('delivery.' + type, [shoppingCart, item]);
+    }
+
+    function emptyRequest(shoppingCart) {
+        while (getItems(shoppingCart).length > 0) {
+            var item = getItems(shoppingCart)[0];
+            removeRequest(shoppingCart, item.pid);
+        }
+    }
+
+    function sendRequest(shoppingCart) {
+        var items = getItems(shoppingCart);
+        if (items.length > 0) {
+            var pids = "";
+            items.forEach(function (item) {
+                var pid = (item.children.length > 0) ? "" : item.pid;
+                item.children.forEach(function (child, i) {
+                    if (i > 0) pid += ",";
+                    pid += item.pid + "." + child;
+                });
+
+                if (pids.length > 0) pids += ",";
+                pids += pid;
+            });
+
+            showDeliveryPage(shoppingCart, pids);
+            emptyRequest(shoppingCart);
+        }
+        else {
+            alert(Rsrc.getString('alert_noitems'));
+        }
+    }
+
+    function parentRecordCallback(parsParent, data, holding) {
+        $(parsParent.container).find(parsParent.field_selector).each(function () {
+            var field = $(this);
+            var pars = {
+                label: parsParent.label,
+                pid: parsParent.pid,
+                signature: parsParent.signature,
+                child: field.data('child') ? field.data('child').toString() : null,
+                field: field,
+                show_reservation: parsParent.show_reservation,
+                show_reproduction: parsParent.show_reproduction
+            };
+
+            var newData = null;
+            if (data !== null) {
+                var childAvailable = data.reservedChilds.indexOf(pars.child) < 0;
+                newData = {
+                    pid: pars.pid + "." + pars.child,
+                    title: pars.label,
+                    restrictionType: data.restrictionType,
+                    publicationStatus: data.publicationStatus,
+                    openForReproduction: data.openForReproduction,
+                    holdings: [{
+                        signature: pars.signature,
+                        status: childAvailable ? 'AVAILABLE' : 'RESERVED',
+                        usageRestriction: holding.usageRestriction
+                    }]
+                };
+            }
+
+            buttonCallback(pars, newData, newData.holdings[0]);
         });
-        show_delivery_page(pids, shoppingCart.isReservationCart);
-        shoppingCart.cart.empty();
+
+        reservationChildrenByPid[parsParent.pid] = getChildren(DeliveryShoppingCart.RESERVATIONS, parsParent.container);
+        reproductionChildrenByPid[parsParent.pid] = getChildren(DeliveryShoppingCart.REPRODUCTIONS, parsParent.container);
+        saveChildrenByPid();
     }
-    else
-    {
-        alert(Rsrc.getString('alert_noitems'));
-    }
-} /* sendRequest */
 
-/**
- * Goto the delivery request permission page
- * This function is called by the "Request Permission" button
- *
- * @param {string} pid          the holding pid
- * @param {string} signature    the holding signature
- * @returns {undefined}
- */
-function requestPermission(pid, signature)
-{
-    var item = pid + "^" + signature;
+    function buttonCallback(pars, data, holding) {
+        var html = [];
 
-    show_permission_page(item);
-} /* requestPermission */
-
-// Local functions
-
-function button_callback(pars, data, holding)
-{
-    var html = "";
-
-    syslog("button_callback: field=" + pars.field + " data=" + data);
-    if (data === null)
-    {
-        // Holding is not found in Delivery
-        data = {
-            pid:             pars.pid,
-            title:           pars.pid,
-            // embargo:         "2013-03-20",
-            restrictionType: 'OPEN',
-            publicationStatus: 'CLOSED',
-            openForReproduction: false,
-            holdings: [
-                {
-                    signature:        pars.signature,
-                    status:           'AVAILABLE',
+        if (data === null) {
+            // Holding is not found in Delivery
+            data = {
+                pid: pars.pid,
+                title: pars.pid,
+                restriction: 'OPEN',
+                publicationStatus: 'CLOSED',
+                openForReproduction: false,
+                holdings: [{
+                    signature: pars.signature,
+                    status: 'AVAILABLE',
                     usageRestriction: 'OPEN'
-                }
-            ]
-        };
-        holding = data.holdings[0];
-    }
-    if (!!pars.error)
-    {
-        html = "<span class=\"deliveryResponseError\">";
-        html += Rsrc.getString('stat_notfound');
-        html += "</span>";
-    }
-    else
-    {
-        var createButtonsHtml = function (isReservation)
-        {
-            var html;
-            var btnText = isReservation
-                ? Rsrc.getString('button_request_reservation')
-                : Rsrc.getString('button_request_reproduction');
+                }]
+            };
+            holding = data.holdings[0];
+        }
 
-            html  = "<button type=\"submit\" class=\"deliveryReserveButton ";
-            html += isReservation ? 'reservationBtn' : 'reproductionBtn';            
-            html += "\" value=\"" + btnText + "\" ";
-            html += "name=\"RequestItem\" onclick=\"makeRequest(";
-            html += isReservation ? 'reservationCart' : 'reproductionCart';
-            html += ", '";
-            if (pars.label === null)
-            {
-                html += data.title.replace(/\"/g, "&quot;");
-            }
-            else
-            {
-                html += pars.label.replace(/\"/g, "&quot;");
-            }
-            html += "', '";
-            html += pars.pid;
-            html += "', '";
-            html += pars.signature;
-            html += "', ";
-            html += pars.direct;
-            html += ");\" >";
-            html += btnText;
-            html += "<\/button>";
-
-            return html;
-        };
-        var createReservationButtonHtml = function () { return createButtonsHtml(true); };
-        var createReproductionButtonHtml = function () { return createButtonsHtml(false); };
-
-        if (data.restrictionType === 'OPEN')
-        {
-            if (holding.usageRestriction === 'OPEN')
-            {
-                if (pars.show_reservation)
-                {
-                    if (holding.status === 'AVAILABLE')
-                    {
-                        html += createReservationButtonHtml();
+        if (!!pars.error) {
+            html.push(
+                $('<span>')
+                    .addClass("deliveryResponseText deliveryResponseError")
+                    .text(Rsrc.getString('stat_notfound'))
+            );
+        }
+        else if (pars.show_reservation || pars.show_reproduction) {
+            if (data.restriction !== 'CLOSED') {
+                if (holding.usageRestriction === 'OPEN') {
+                    if (pars.show_reservation) {
+                        if (holding.status === 'AVAILABLE') {
+                            html.push(createButtonHtml(DeliveryShoppingCart.RESERVATIONS, pars, data));
+                        }
+                        else if (pars.child) {
+                            html.push(
+                                $('<span>')
+                                    .addClass("deliveryResponseText deliveryStatReserved")
+                                    .text(Rsrc.getString('stat_open_reserved_child'))
+                            );
+                        }
+                        else {
+                            html.push(
+                                $('<span>')
+                                    .addClass("deliveryResponseText deliveryStatReserved")
+                                    .text(Rsrc.getString('stat_open_reserved') + ' ')
+                                    .append(
+                                        $('<a>')
+                                            .attr("href", "mailto:" + Rsrc.getString('email_office'))
+                                            .text(Rsrc.getString('email_office'))
+                                    )
+                            );
+                        }
                     }
-                    else
-                    {
-                        html += "<span class=\"deliveryResponseText deliveryStatReserved\">";
-                        html += Rsrc.getString('stat_open_reserved');
-                        html += " ";
-                        html += "<a href=\"mailto:";
-                        html += Rsrc.getString('email_office');
-                        html += "\">";
-                        html += Rsrc.getString('email_office');
-                        html += "</a>";
-                        html += ".</span>";
+
+                    if (pars.show_reproduction) {
+                        if (data.openForReproduction) {
+                            html.push(createButtonHtml(DeliveryShoppingCart.REPRODUCTIONS, pars, data));
+                        }
+                        else {
+                            html.push(
+                                $('<span>')
+                                    .addClass("deliveryResponseText deliveryStatPublicationStatus")
+                                    .text(Rsrc.getString('stat_open_publication_status'))
+                            );
+                        }
                     }
                 }
-
-                if (pars.show_reproduction)
-                {
-                    if (data.openForReproduction)
-                    {
-                        html += createReproductionButtonHtml();
-                    }
-                    else
-                    {
-                        html += "<span class=\"deliveryResponseText deliveryStatPublicationStatus\">";
-                        html += Rsrc.getString('stat_open_publication_status');
-                        html += ".</span>";
-                    }
+                else {
+                    html.push(
+                        $('<span>')
+                            .addClass("deliveryResponseText deliveryStatUsageRestriction")
+                            .text(Rsrc.getString('stat_open_restricted'))
+                    );
                 }
             }
-            else if (pars.show_reservation || pars.show_reproduction)
-            {
-                html += "<span class=\"deliveryResponseText deliveryStatUsageRestriction\">";
-                html += Rsrc.getString('stat_open_restricted');
-                html += ".</span>";
+        }
+
+        var field = $(pars.field).html('');
+        html.forEach(function (elem) {
+            field.append(elem);
+        });
+    }
+
+    function getChildren(shoppingCart, container) {
+        var btnClass = onShoppingCart(shoppingCart, 'reservationBtn', 'reproductionBtn');
+        return $(container)
+            .find('.deliveryReserveButton.' + btnClass)
+            .map(function (i, c) { return $(c).data('child'); })
+            .toArray();
+    }
+
+    function createButtonHtml(shoppingCart, pars, data) {
+        var html;
+        var btnClass = onShoppingCart(shoppingCart, 'reservationBtn', 'reproductionBtn');
+        var btnText = onShoppingCart(shoppingCart,
+            Rsrc.getString('button_request_reservation'), Rsrc.getString('button_request_reproduction'));
+
+        if (pars.child) {
+            var item = getItemByPid(getItems(shoppingCart), pars.pid);
+
+            html = $('<label>')
+                .addClass('deliveryReserveButton')
+                .addClass(btnClass)
+                .data('label', pars.label || data.title)
+                .data('pid', pars.pid)
+                .data('signature', pars.signature)
+                .data('child', pars.child)
+                .append(
+                    $('<input>')
+                        .attr('type', 'checkbox')
+                        .prop('checked', item && (item.children.indexOf(pars.child) >= 0))
+                )
+                .append(
+                    $('<span>').text(btnText)
+                );
+        }
+        else {
+            html = $('<button>')
+                .addClass('deliveryReserveButton')
+                .addClass(btnClass)
+                .data('label', pars.label || data.title)
+                .data('pid', pars.pid)
+                .data('signature', pars.signature)
+                .val(btnText)
+                .text(btnText);
+        }
+
+        return html;
+    }
+
+    function updateItemHtml(shoppingCart, item) {
+        var classStart = onShoppingCart(shoppingCart, 'reservationCart', 'reproductionCart');
+        var itemsContainer = $(DeliveryProps.getShoppingCartDiv()).find('.' + classStart + '_items');
+        var itemDiv = getItemElem(shoppingCart, item.pid);
+        var itemAdded = !!getItemByPid(getItems(shoppingCart), item.pid);
+
+        if (!itemAdded && (itemDiv.length > 0))
+            itemDiv.remove();
+
+        if (itemAdded) {
+            if (itemDiv.length === 0) {
+                itemDiv = $('<div>')
+                    .addClass('itemRow item')
+                    .data('pid', item.pid)
+                    .append(
+                        $('<div>')
+                            .addClass('itemCol')
+                            .append(
+                                $('<a>').attr("href", item.handle).text(item.name)
+                            )
+                            .append(
+                                $('<div>').addClass("children")
+                            )
+                    )
+                    .append(
+                        $('<div>')
+                            .addClass('itemCol item-remove')
+                            .append(
+                                $('<a>')
+                                    .addClass(classStart + "_remove")
+                                    .attr("href", "javascript:;")
+                                    .data('pid', item.pid)
+                                    .text(Rsrc.getString('cart_button_remove'))
+                            )
+                    );
+                itemsContainer.append(itemDiv);
             }
+
+            updateItemChildrenHtml(shoppingCart, item, itemDiv);
         }
-        else if (pars.show_reservation && (data.restrictionType === 'RESTRICTED'))
-        {
-            html  = "<span class=\"deliveryResponseText deliveryStatRestricted\">";
-            html += Rsrc.getString('stat_restricted');
-            html += " ";
-            html += " <button type=\"submit\" class=\"deliveryPermissionButton\" value=\"";
-            html += Rsrc.getString('button_permission');
-            html += "\" name=\"RequestItem\" onclick=\"requestReservation('";
-            html += pars.pid;
-            html += "', '";
-            html += pars.signature;
-            html += ");\" >";
-            html += Rsrc.getString('button_request');
-            html += "<\/button>";
-            html += ".</span>";
-        }
-        else if (pars.show_reservation || pars.show_reproduction) // CLOSED
-        {
-            html += "<span class=\"deliveryResponseText deliveryStatClosed\">";
-            if (!!data.embargo)
-            {
-                html += Rsrc.getString('stat_closed_embargo', formatted_date(data.embargo));
+    }
+
+    function updateItemChildrenHtml(shoppingCart, item, itemDiv) {
+        var allChildren = onShoppingCart(shoppingCart,
+            reservationChildrenByPid[item.pid], reproductionChildrenByPid[item.pid]);
+        var children = item.children.sort(function (a, b) { return allChildren.indexOf(a) - allChildren.indexOf(b); });
+        var childrenDiv = itemDiv.find('.children');
+
+        var rangeDivIdx = 0, rangeStart, lastNumber;
+        children.forEach(function (child) {
+            if (!rangeStart) {
+                lastNumber = child;
+                rangeStart = child;
+                return;
             }
-            else
-            {
-                html += Rsrc.getString('stat_closed');
+
+            if (allChildren.indexOf(child) === (allChildren.indexOf(lastNumber) + 1)) {
+                lastNumber = child;
             }
-            html += ".</span>";
+            else {
+                createUpdateChildrenRangeHtml(rangeDivIdx++, rangeStart, lastNumber);
+                lastNumber = child;
+                rangeStart = child;
+            }
+        });
+
+        if (rangeStart && lastNumber)
+            createUpdateChildrenRangeHtml(rangeDivIdx++, rangeStart, lastNumber);
+
+        childrenDiv.find('.range').slice(rangeDivIdx).remove();
+
+        function createUpdateChildrenRangeHtml(idx, from, until) {
+            var rangesDivs = childrenDiv.find('.range');
+            if (idx < rangesDivs.length) {
+                var rangeDiv = rangesDivs.eq(idx);
+                rangeDiv.find('input.from').val(from);
+                rangeDiv.find('input.until').val(until);
+                rangeDiv.find('a').data('children', item.children.slice(
+                    item.children.indexOf(from), item.children.indexOf(until) + 1
+                ).join(','))
+            }
+            else {
+                var classStart = onShoppingCart(shoppingCart, 'reservationCart', 'reproductionCart');
+                childrenDiv.append(
+                    $('<div>')
+                        .addClass('range')
+                        .append($('<span>').text(Rsrc.getString('cart_children')))
+                        .append($('<input>').attr('type', 'text').prop('disabled', true).addClass('from').val(from))
+                        .append($('<span>').text('-').addClass('divider'))
+                        .append($('<input>').attr('type', 'text').prop('disabled', true).addClass('until').val(until))
+                        .append(
+                            $('<a>')
+                                .addClass(classStart + "_remove")
+                                .attr("href", "javascript:;")
+                                .data('pid', item.pid)
+                                .data('children', item.children.slice(
+                                    item.children.indexOf(from), item.children.indexOf(until) + 1
+                                ).join(','))
+                                .text(Rsrc.getString('cart_button_remove'))
+                        )
+                )
+            }
+
+            var dividerAndUntil = childrenDiv.find('.range').eq(idx).find('.divider, .until');
+            (from === until) ? dividerAndUntil.hide() : dividerAndUntil.show();
         }
     }
-    $(pars.field).html(html);
-} /* button_callback */
 
-function record_callback(pars, data, holding)
-{
-    var rec;
+    function updateButtonHtml(shoppingCart, item) {
+        var classBtn = onShoppingCart(shoppingCart, 'reservationBtn', 'reproductionBtn');
 
-    syslog("record_callback: field=" + pars.field);
-    rec  = "<i>Response:<br />";
-    if (data === null)
-    {
-        rec += "pid=" + pars.pid + "<br />";
-        rec += "signature=" + pars.signature + "<br />";
-        rec += "status=NOT_FOUND<br />";
-    }
-    else
-    {
-        rec += "pid=" + data.pid + "<br />";
-        rec += "signature=" + holding.signature + "<br />";
-        rec += "title=" + data.title + "<br />";
-        if (!!data.embargo) rec += "embargo=" + data.embargo + "<br />";
-        rec += "restrictionType=" + data.restrictionType + "<br />";
-        rec += "usageRestriction=" + holding.usageRestriction + "<br />";
-        rec += "publicationStatus=" + data.publicationStatus + "<br />";
-        rec += "status=" + holding.status + "<br />";
-    }
-    rec += "</i>";
-    $(pars.field).html(rec);
-} /* record_callback */
+        $('.deliveryReserveButton.' + classBtn + ' input:checked')
+            .filter(function () { return $(this).closest('label').data('pid') === item.pid; })
+            .prop('checked', false);
 
-function show_delivery_page(pids, isReservation)
-{
-    var url;
-
-    url  = window.location.protocol + "//" + DeliveryProps.getDeliveryHost();
-    url += isReservation ? "/reservation/createform/" : "/reproduction/createform/";
-    url += encodeURIComponent(pids);
-    url += "?locale=" + DeliveryProps.getLanguage();
-    // window.location = url;
-    window.open(url);
-} /* show_delivery_page */
-
-function show_permission_page(pids)
-{
-    var url;
-
-    url  = window.location.protocol + "//" + DeliveryProps.getDeliveryHost();
-    url += "/permission/createform/";
-    url += encodeURIComponent(pids);
-    url += "?locale=" + DeliveryProps.getLanguage();
-    // window.location = url;
-    window.open(url);
-} /* show_permission_page */
-
-function show_hide_cart_buttons(cart)
-{
-    if (DeliveryProps.getShowHideButtons() === true)
-    {
-        if (cart.quantity() > 0)
-        {
-            $("#deliveryCartButtons").show();
-        }
-        else
-        {
-            $("#deliveryCartButtons").hide();
+        if (getItemByPid(getItems(shoppingCart), item.pid)) {
+            $('.deliveryReserveButton.' + classBtn)
+                .filter(function () {
+                    var isPid = $(this).data('pid') === item.pid;
+                    var isChild = item.children.indexOf($(this).data('child')) >= 0;
+                    return isPid && isChild;
+                })
+                .find('input')
+                .prop('checked', true);
         }
     }
-    else
-    {
-        $("#deliveryCartButtons").show();
+
+    function showDeliveryPage(shoppingCart, pids) {
+        var url = window.location.protocol + "//" + DeliveryProps.getDeliveryHost();
+        url += (shoppingCart === DeliveryShoppingCart.RESERVATIONS)
+            ? "/reservation/createform/" : "/reproduction/createform/";
+        url += encodeURIComponent(pids);
+        url += "?locale=" + DeliveryProps.getLanguage();
+        window.open(url);
     }
-} /* show_hide_cart_buttons */
 
-function get_json_data(reqtype, url, pars)
-{
-    url = DeliveryProps.getDeliveryHost() + "/" + url;
-    syslog("get_json_data: url=" + url + " pars=" + pars);
-
-    if ($.jsonp === undefined)
-    {
+    function getJSONData(reqtype, url, pars) {
+        url = DeliveryProps.getDeliveryHost() + "/" + url;
         $.ajax({
-            type:        reqtype,
-            url:         window.location.protocol + "//" + url,
-            dataType:    'jsonp',
-            crossDomain: true,
-            cache:       true,
-            timeout:     10000,
-            success:     function(data, stat, xhr) {handle_complete(data, stat, xhr, pars);},
-            error:       function(xhr, stat, err) {handle_error(xhr, stat, err, pars);},
-            // complete:      function(xhr, stat) {syslog("Complete " + xhr.status);},
-            statusCode: {
-                404: function(xhr, stat, err) {handle_error(xhr, stat, err, pars);}
+            type: reqtype,
+            dataType: 'jsonp',
+            url: window.location.protocol + "//" + url,
+            cache: true,
+            timeout: 10000,
+            success: function (data, stat, xhr) {
+                handleComplete(data, stat, xhr, pars);
+            },
+            error: function (xhr, stat, err) {
+                handleError(xhr, stat, err, pars);
             }
         });
     }
-    else
-    {
-        $.jsonp({
-            type:              reqtype,
-            url:               window.location.protocol + "//" + url,
-            callbackParameter: "callback",
-            cache:             true,
-            timeout:           10000,
-            success:           function(data, stat, xhr) {handle_complete(data, stat, xhr, pars);},
-            error:             function(xhr, stat, err)  {handle_error(xhr, stat, err, pars);}
-            // complete:          function(xhr, stat) {syslog("Complete " + xhr + " stat=" + stat);},
-        });
-    }
-} /* get_json_data */
 
-function handle_complete(data, stat, xhr, pars)
-{
-    syslog("handle_complete: stat=" + stat);
-    syslog("handle_complete: pid=" + data[0].pid);
-    for(var hld in data[0].holdings)
-    {
-        if (pars.pid === data[0].pid && pars.signature === data[0].holdings[hld].signature)
-        {
-            pars.result(pars, data[0], data[0].holdings[hld]);
+    function handleComplete(data, stat, xhr, pars) {
+        for (var hld in data[0].holdings) {
+            var pidEquals = (pars.pid === data[0].pid);
+            var signatureEquals =
+                (!pars.signature || (pars.signature === '') || (pars.signature === data[0].holdings[hld].signature));
+            if (pidEquals && signatureEquals) {
+                pars.result(pars, data[0], data[0].holdings[hld]);
+            }
         }
     }
-} /* handle_complete */
 
-function handle_error(xhr, stat, err, pars)
-{
-    syslog("handle_error: stat=" + stat);
-    var msg = stat;
-    if (err !== "") msg += ": " + err;
-    if (xhr.status !== 0) msg += " (" + xhr.status + ")";
-    syslog("handle_error: msg=" + msg);
-    syslog("handle_error: pid=" + pars.pid);
-    pars.error = stat;
-    pars.result(pars, null, null);
-} /* handle_error */
-
-function syslog(msg)
-{
-    if (!!window.console) window.console.log(msg);
-} /* syslog */
-
-function formatted_date(dd)
-{
-    if (!!$.datepicker)
-    {
-        return($.datepicker.formatDate(Rsrc.getString('date_format'), new Date(dd)));
+    function handleError(xhr, stat, err, pars) {
+        var msg = stat;
+        if (err !== "") msg += ": " + err;
+        if (xhr.status !== 0) msg += " (" + xhr.status + ")";
+        console.log("handleError: msg=" + msg);
+        console.log("handleError: pid=" + pars.pid);
+        pars.error = stat;
+        pars.result(pars, null, null);
     }
-    return(dd);
-} /* formatted_date */
+})(jQuery);

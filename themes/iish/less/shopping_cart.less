@@ -1,0 +1,208 @@
+@mainBorder: #39a8ff;
+
+.holdings-container {
+  .holding {
+    margin-bottom: 25px;
+    display: inline-block;
+
+    .state,
+    .callnumber {
+      display: inline-block;
+    }
+
+    .callnumber,
+    .deliveryResponseText,
+    .deliveryReserveButton {
+      margin-right: 10px;
+    }
+  }
+
+  &.archive .holding {
+    margin: 2px 0;
+  }
+
+  .deliveryStatReserved,
+  .deliveryStatUsageRestriction,
+  .deliveryStatClosed {
+    color: #D10018;
+  }
+}
+
+#delivery_cart_wrapper {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  background-color: white;
+  border: 1px solid @border-color;
+  border-radius: @border-radius-base;
+  padding: 3px;
+  z-index: 999;
+  display: none;
+  width: 100%;
+  max-height: 60vh;
+
+  @media (min-width: @screen-sm-min) {
+    width: 400px;
+  }
+
+  h3 {
+    &:hover {
+      cursor: pointer;
+    }
+
+    &:after {
+      font-family: 'Glyphicons Halflings';
+      float: right;
+      color: white;
+      margin-right: 5px;
+      font-weight: normal;
+    }
+  }
+
+  &.open h3:after {
+    content: "\e114";
+  }
+
+  &.closed h3:after {
+    content: "\e113";
+  }
+
+  h3,
+  h5 {
+    margin-top: 1px;
+    background: #73A1C7;
+    color: white;
+    padding: 3px;
+    margin-bottom: 0;
+    width: 100%;
+    font-weight: bold;
+  }
+}
+
+#delivery_cart {
+  font-size: small;
+  padding: 1px;
+  max-height: 50vh;
+  overflow: auto;
+
+  .itemRow {
+    .make-row(@gutter: 2px);
+
+    &.header {
+      font-weight: bold;
+    }
+
+    &.item {
+      &:nth-child(odd) {
+        background-color: #ffffff;
+      }
+
+      &:nth-child(even) {
+        background-color: #f9f4f2;
+      }
+    }
+  }
+
+  .itemCol {
+    text-align: left;
+    padding: 2px;
+
+    &.item-remove {
+      text-align: center;
+    }
+
+    &:first-child {
+      .make-xs-column(9, @gutter: 4px);
+    }
+
+    &:last-child {
+      .make-xs-column(3, @gutter: 4px);
+    }
+  }
+
+  .children .range {
+    margin: 3px 0;
+    font-size: smaller;
+
+    input {
+      width: 110px;
+      height: 18px;
+      margin: 0 5px;
+      padding: 0 5px;
+      border: 1px solid @mainBorder;
+      background-color: white;
+    }
+  }
+
+  .deliveryCartButtons {
+    button {
+      margin: 2px;
+    }
+  }
+}
+
+.deliveryReserveButton {
+  display: inline-block;
+  padding: 1px 5px;
+  color: black;
+  border: 1px solid @mainBorder;
+  background-color: #ffffff;
+  font-size: small;
+  font-weight: normal;
+  cursor: pointer;
+
+  &:hover {
+    color: black;
+    text-decoration: none;
+    border: 1px solid #62c5eb;
+    background: #ccf;
+  }
+
+  input {
+    vertical-align: middle;
+    margin-right: 5px;
+    cursor: pointer;
+  }
+
+  label& {
+    margin: 0;
+  }
+}
+
+.reservationCart,
+.reproductionCart {
+  background-color: #e5eCf9;
+  margin-top: 5px;
+  padding: 1px;
+}
+
+.reservationCart_checkout,
+.reproductionCart_checkout {
+  border: 1px solid @mainBorder;
+  background-color: #ffffff;
+  margin: 1px;
+
+  &:hover {
+    border: 1px solid #62c5eb;
+    background: #ccf;
+  }
+}
+
+.reservationCart_empty,
+.reproductionCart_empty {
+  border: 1px solid @mainBorder;
+  background-color: #ffffff;
+  margin: 1px;
+
+  &:hover {
+    border: 1px solid #62c5eb;
+    background: #ccf;
+  }
+}
+
+.reservationCart_items table,
+.reproductionCart_items table {
+  width: 100%;
+  border-collapse: collapse;
+  border-color: #003399;
+}

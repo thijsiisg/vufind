@@ -101,17 +101,29 @@
       <td>
         <xsl:variable name="colid" select="ead:archdesc/ead:did/ead:unitid"/>
         <xsl:variable name="identifier" select="ead:eadheader/ead:eadid/@identifier"/>
-        <div id="holdings-container">
+        <div>
           <xsl:attribute name="class">
             <xsl:choose>
-              <xsl:when test="$digital_items>0">archive online-content-available</xsl:when>
-              <xsl:otherwise>archive</xsl:otherwise>
+              <xsl:when test="$digital_items>0">
+                holdings-container no-children archive online-content-available
+              </xsl:when>
+              <xsl:otherwise>
+                holdings-container no-children archive
+              </xsl:otherwise>
             </xsl:choose>
           </xsl:attribute>
           <div class="holding">
+            <xsl:if test="ead:archdesc/ead:dsc/ead:c01">
+              <a class="deliveryReserveButton reservationBtn" href="{concat($baseUrl, '/', 'ArchiveContentList')}">
+                <xsl:call-template name="language">
+                  <xsl:with-param name="key" select="'request_reservation'"/>
+                </xsl:call-template>
+              </a>
+            </xsl:if>
+
             <div class="state hidden-print">
               <xsl:attribute name="data-label">
-                <xsl:value-of select="$title"/> - <xsl:value-of select="$colid"/>
+                <xsl:value-of select="$title"/>
               </xsl:attribute>
               <xsl:attribute name="data-pid">
                 <xsl:value-of select="substring($identifier, 5)"/>
@@ -119,7 +131,12 @@
               <xsl:attribute name="data-signature">
                 <xsl:value-of select="$colid"/>
               </xsl:attribute>
-              <xsl:attribute name="data-show-reservation">false</xsl:attribute>
+              <xsl:attribute name="data-show-reservation">
+                <xsl:choose>
+                  <xsl:when test="ead:archdesc/ead:dsc/ead:c01">false</xsl:when>
+                  <xsl:otherwise>true</xsl:otherwise>
+                </xsl:choose>
+              </xsl:attribute>
               <xsl:attribute name="data-show-reproduction">true</xsl:attribute>
             </div>
           </div>
