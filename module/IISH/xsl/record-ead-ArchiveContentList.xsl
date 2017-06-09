@@ -187,6 +187,9 @@
       </xsl:when>
       <xsl:when test="../../@level = 'item'">
         <xsl:apply-templates/>
+        <xsl:if test="following-sibling::ead:unittitle">
+          <br/>
+        </xsl:if>
       </xsl:when>
     </xsl:choose>
   </xsl:template>
