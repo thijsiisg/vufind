@@ -122,10 +122,10 @@
   <xsl:template match="ead:unittitle">
     <xsl:choose>
       <xsl:when test="../../@level = 'file' or ../../@level = 'item'">
-        <xsl:if test="preceding-sibling::ead:unittitle and not(preceding::ead:note)">
+        <xsl:apply-templates/>
+        <xsl:if test="following-sibling::*[1][not(local-name() = 'physdesc')]">
           <br/>
         </xsl:if>
-        <xsl:apply-templates/>
       </xsl:when>
 
       <xsl:when test="../../@level = 'series'">
@@ -190,6 +190,7 @@
     <span class="physdesc">
       <xsl:apply-templates/>
     </span>
+    <br/>
   </xsl:template>
 
   <xsl:template match="ead:note">
