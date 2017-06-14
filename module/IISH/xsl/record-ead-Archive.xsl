@@ -131,7 +131,7 @@
   <xsl:template match="ead:head"/>
 
   <xsl:template match="ead:daogrp">
-    <div class="digital loading hidden-print"
+    <div class="digital block loading hidden-print"
          data-record="{normalize-space($id)}"
          data-item="{normalize-space(../ead:unitid)}">
       <span class="loading-text">Loading...</span>

@@ -86,7 +86,7 @@
       </xsl:when>
       <xsl:otherwise>
         <xsl:variable name="t">
-          <xsl:apply-templates select="ead:did/ead:unittitle"/>
+          <xsl:apply-templates select="ead:did/*[not(local-name() = 'unitid' or local-name() = 'daogrp')]"/>
         </xsl:variable>
 
         <div class="k{@level}">
@@ -96,24 +96,15 @@
             </xsl:if>
           </a>
         </div>
+
         <xsl:if test="string-length($t)>1">
           <div class="v{@level}">
             <xsl:copy-of select="$t"/>
-            <xsl:text> </xsl:text>
-            <xsl:apply-templates select="ead:did/ead:physdesc"/>
-
-            <xsl:if test="ead:did/ead:note"><br/></xsl:if>
-            <xsl:apply-templates select="ead:did/ead:note"/>
-
-            <xsl:if test="ead:accessrestrict"><br/></xsl:if>
             <xsl:apply-templates select="ead:accessrestrict"/>
-
-            <br/>
-            <xsl:apply-templates select="ead:did/ead:daogrp"/>
             <xsl:call-template name="delivery"/>
+            <xsl:apply-templates select="ead:did/ead:daogrp"/>
           </div>
         </xsl:if>
-
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -123,24 +114,20 @@
   </xsl:template>
 
   <xsl:template match="ead:unitid">
-    <xsl:choose>
-      <xsl:when test="../../@level = 'file'">
-        <xsl:apply-templates/>
-      </xsl:when>
-      <xsl:when test="../../@level = 'item'">
-        <xsl:apply-templates/>
-      </xsl:when>
-    </xsl:choose>
+    <xsl:if test="../../@level = 'file' or ../../@level = 'item'">
+      <xsl:apply-templates/>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="ead:unittitle">
     <xsl:choose>
       <xsl:when test="../../@level = 'file' or ../../@level = 'item'">
-        <xsl:apply-templates/>
-        <xsl:if test="following-sibling::ead:unittitle">
+        <xsl:if test="preceding-sibling::ead:unittitle and not(preceding::ead:note)">
           <br/>
         </xsl:if>
+        <xsl:apply-templates/>
       </xsl:when>
+
       <xsl:when test="../../@level = 'series'">
         <h2>
           <xsl:call-template name="aname">
@@ -151,6 +138,7 @@
           </xsl:call-template>
         </h2>
       </xsl:when>
+
       <xsl:when test="../../@level = 'subseries'">
         <xsl:choose>
           <xsl:when
@@ -166,6 +154,7 @@
               </xsl:call-template>
             </h5>
           </xsl:when>
+
           <xsl:when test="ancestor::ead:c02">
             <h3>
               <xsl:call-template name="aname">
@@ -176,6 +165,7 @@
               </xsl:call-template>
             </h3>
           </xsl:when>
+
           <xsl:when test="ancestor::ead:c03">
             <h4>
               <xsl:call-template name="aname">
@@ -196,12 +186,16 @@
   </xsl:template>
 
   <xsl:template match="ead:physdesc">
-    <span class="physdesc"><xsl:apply-templates/></span>
+    <xsl:text> </xsl:text>
+    <span class="physdesc">
+      <xsl:apply-templates/>
+    </span>
   </xsl:template>
 
   <xsl:template match="ead:note">
-    <xsl:apply-templates/>
-    <xsl:if test="../../@level = 'series' or @level = 'subseries'"><br/></xsl:if>
+    <div class="note">
+      <xsl:apply-templates/>
+    </div>
   </xsl:template>
 
   <xsl:template match="ead:p">
@@ -209,7 +203,9 @@
   </xsl:template>
 
   <xsl:template match="ead:accessrestrict">
-    <span class="warning"><xsl:apply-templates/></span>
+    <div class="warning">
+      <xsl:apply-templates/>
+    </div>
   </xsl:template>
 
   <xsl:template match="ead:extent">
