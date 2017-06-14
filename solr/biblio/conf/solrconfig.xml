@@ -466,7 +466,7 @@
     </lst>
 
     <lst name="lcc">
-      <str name="DBpath">${solr.solr.datasolr.solr.home::./solr}/alphabetical_browse/lcc_browse.db</str>
+      <str name="DBpath">${solr.solr.data:/usr/local/vufind/solr}/alphabetical_browse/lcc_browse.db</str>
       <str name="field">callnumber-a</str>
     </lst>
 
