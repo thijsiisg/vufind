@@ -135,8 +135,11 @@
 
   <xsl:template match="ead:unittitle">
     <xsl:choose>
-      <xsl:when test="../../@level = 'file'">
+      <xsl:when test="../../@level = 'file' or ../../@level = 'item'">
         <xsl:apply-templates/>
+        <xsl:if test="following-sibling::ead:unittitle">
+          <br/>
+        </xsl:if>
       </xsl:when>
       <xsl:when test="../../@level = 'series'">
         <h2>
@@ -184,12 +187,6 @@
             </h4>
           </xsl:when>
         </xsl:choose>
-      </xsl:when>
-      <xsl:when test="../../@level = 'item'">
-        <xsl:apply-templates/>
-        <xsl:if test="following-sibling::ead:unittitle">
-          <br/>
-        </xsl:if>
       </xsl:when>
     </xsl:choose>
   </xsl:template>
