@@ -100,7 +100,9 @@
         <xsl:if test="string-length($t)>1">
           <div class="v{@level}">
             <xsl:copy-of select="$t"/>
-            <xsl:apply-templates select="ead:accessrestrict"/>
+
+            <xsl:apply-templates select="ead:scopecontent|ead:odd"/>
+
             <xsl:call-template name="delivery"/>
             <xsl:apply-templates select="ead:did/ead:daogrp"/>
           </div>
@@ -211,6 +213,18 @@
 
   <xsl:template match="ead:extent">
     <xsl:value-of select="normalize-space(text())"/>
+  </xsl:template>
+
+  <xsl:template match="ead:scopecontent">
+    <div class="scopecontent">
+      <xsl:apply-templates/>
+    </div>
+  </xsl:template>
+
+  <xsl:template match="ead:odd">
+    <div class="odd">
+      <xsl:apply-templates/>
+    </div>
   </xsl:template>
 </xsl:stylesheet>
 

@@ -12,10 +12,23 @@
 #arch {
   ul {
     margin: 0;
-    padding: 0;
 
-    li {
-      list-style: none;
+    &.tree {
+      padding: 0;
+
+      li {
+        list-style: none;
+      }
+    }
+  }
+
+  table.table {
+    font-size: 100%;
+    margin-bottom: 0;
+
+    th {
+      color: black;
+      font-weight: bold;
     }
   }
 
@@ -87,6 +100,11 @@
 
   .b {
     color: #000000;
+  }
+
+  .scopecontent,
+  .odd {
+    margin: 2px 0;
   }
 
   .warning {

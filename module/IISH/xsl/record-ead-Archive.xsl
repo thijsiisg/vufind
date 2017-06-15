@@ -87,6 +87,12 @@
     </li>
   </xsl:template>
 
+  <xsl:template match="ead:table">
+    <table class="table table-condensed table-striped">
+      <xsl:apply-templates select="node()|@*"/>
+    </table>
+  </xsl:template>
+
   <xsl:template match="ead:tgroup">
     <xsl:apply-templates select="node()"/>
   </xsl:template>
@@ -98,9 +104,18 @@
   </xsl:template>
 
   <xsl:template match="ead:entry">
-    <td>
-      <xsl:apply-templates select="node()|@*"/>
-    </td>
+    <xsl:choose>
+      <xsl:when test="local-name(../..) = 'thead'">
+        <th>
+          <xsl:apply-templates select="node()|@*"/>
+        </th>
+      </xsl:when>
+      <xsl:otherwise>
+        <td>
+          <xsl:apply-templates select="node()|@*"/>
+        </td>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="ead:extref">
@@ -128,7 +143,9 @@
     <xsl:apply-templates select="node()"/>
   </xsl:template>
 
-  <xsl:template match="ead:head"/>
+  <xsl:template match="ead:head">
+    <xsl:apply-templates select="node()"/>
+  </xsl:template>
 
   <xsl:template match="ead:daogrp">
     <div class="digital block loading hidden-print"
