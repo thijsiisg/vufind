@@ -201,6 +201,17 @@
     </div>
   </xsl:template>
 
+  <xsl:template match="ead:head">
+    <h5>
+      <xsl:call-template name="aname">
+        <xsl:with-param name="value">
+          <xsl:value-of select="normalize-space(text())"/>
+        </xsl:with-param>
+        <xsl:with-param name="tag" select="'1'"/>
+      </xsl:call-template>
+    </h5>
+  </xsl:template>
+
   <xsl:template match="ead:p">
     <xsl:apply-templates/>
   </xsl:template>

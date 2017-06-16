@@ -76,7 +76,7 @@
   </xsl:template>
 
   <xsl:template match="ead:list">
-    <ul>
+    <ul class="list">
       <xsl:apply-templates select="node()|@*"/>
     </ul>
   </xsl:template>
@@ -88,7 +88,7 @@
   </xsl:template>
 
   <xsl:template match="ead:table">
-    <table class="table table-condensed table-striped">
+    <table class="ead-table table table-condensed table-striped">
       <xsl:apply-templates select="node()|@*"/>
     </table>
   </xsl:template>
