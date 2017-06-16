@@ -101,7 +101,7 @@
           <div class="v{@level}">
             <xsl:copy-of select="$t"/>
 
-            <xsl:apply-templates select="ead:scopecontent|ead:odd"/>
+            <xsl:apply-templates select="ead:accessrestrict|ead:scopecontent|ead:odd"/>
 
             <xsl:call-template name="delivery"/>
             <xsl:apply-templates select="ead:did/ead:daogrp"/>

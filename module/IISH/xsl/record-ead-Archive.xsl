@@ -143,10 +143,6 @@
     <xsl:apply-templates select="node()"/>
   </xsl:template>
 
-  <xsl:template match="ead:head">
-    <xsl:apply-templates select="node()"/>
-  </xsl:template>
-
   <xsl:template match="ead:daogrp">
     <div class="digital block loading hidden-print"
          data-record="{normalize-space($id)}"
