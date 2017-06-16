@@ -212,10 +212,6 @@
     </h5>
   </xsl:template>
 
-  <xsl:template match="ead:p">
-    <xsl:apply-templates/>
-  </xsl:template>
-
   <xsl:template match="ead:accessrestrict">
     <div class="warning">
       <xsl:apply-templates/>
