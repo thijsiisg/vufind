@@ -64,7 +64,7 @@
     };
 
     var getAvUrl = function (item, internal) {
-        if (internal) {
+        if (false && internal) {
             return item.url
                 .replace('http://hdl.handle.net/', '/AV/')
                 .replace('?locatt=view:level1', '');
@@ -78,10 +78,14 @@
             return;
         }
 
+        test(getAvUrl(view.items[0], true), callback);
+    };
+
+    var test = function (url, callback) {
         $.ajax({
             type: 'HEAD',
             cache: false,
-            url: getAvUrl(view.items[0], true),
+            url: url,
             success: function () {
                 callback(true);
             },
@@ -200,28 +204,42 @@
                         .appendTo(avElem);
                     $('<span>No audio playback capabilities</span>')
                         .appendTo(avElem);
+
+                    add();
                 }
                 else {
-                    avElem = $('<video controls preload="metadata" width="100%" height="100%"></video>')
-                        .attr('poster', item.stillsUrl);
-                    $('<source/>')
-                        .attr('src', getAvUrl(item, internal))
-                        .attr('type', item.contentType)
-                        .appendTo(avElem);
-                    $('<img title="No video playback capabilities"/>')
-                        .attr('src', item.stillsUrl)
-                        .appendTo(avElem);
+                    test(item.stillsUrl, function (hasStills) {
+                        avElem = $('<video controls preload="metadata" width="100%" height="100%"></video>');
+                        if (hasStills) {
+                            avElem.attr('poster', item.stillsUrl);
+                        }
+
+                        $('<source/>')
+                            .attr('src', getAvUrl(item, internal))
+                            .attr('type', item.contentType)
+                            .appendTo(avElem);
+
+                        if (hasStills) {
+                            $('<img title="No video playback capabilities"/>')
+                                .attr('src', item.stillsUrl)
+                                .appendTo(avElem);
+                        }
+
+                        add();
+                    });
                 }
 
-                avContainer.hide().appendTo(container);
-                avElem.appendTo(avContainer).mediaelementplayer({
-                    videoWidth: '100%',
-                    audioWidth: '100%',
-                    enableAutosize: true,
-                    success: function () {
-                        avContainer.show();
-                    }
-                });
+                function add() {
+                    avContainer.hide().appendTo(container);
+                    avElem.appendTo(avContainer).mediaelementplayer({
+                        videoWidth: '100%',
+                        audioWidth: '100%',
+                        enableAutosize: true,
+                        success: function () {
+                            avContainer.show();
+                        }
+                    });
+                }
             }
         });
         container.insertAfter(parent);
