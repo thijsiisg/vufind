@@ -136,5 +136,7 @@
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:template match="ead:head"/>
+
 </xsl:stylesheet>
 

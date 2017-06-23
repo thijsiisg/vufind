@@ -141,5 +141,7 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:template match="ead:head"/>
+
 </xsl:stylesheet>
 

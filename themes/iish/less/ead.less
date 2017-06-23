@@ -65,12 +65,18 @@
   .vitem {
     margin-bottom: 2px;
 
-    &:nth-of-type(4n) {
-      background-color: #f5f5f5;
-    }
-
     &:last-child {
       margin-bottom: 0;
+    }
+  }
+
+  .series-group,
+  .subseries-group {
+    .vfile,
+    .vitem {
+      &:nth-of-type(4n+2) {
+        background-color: #f5f5f5;
+      }
     }
   }
 
