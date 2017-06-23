@@ -64,7 +64,7 @@
     };
 
     var getAvUrl = function (item, internal) {
-        if (false && internal) {
+        if (internal) {
             return item.url
                 .replace('http://hdl.handle.net/', '/AV/')
                 .replace('?locatt=view:level1', '');
