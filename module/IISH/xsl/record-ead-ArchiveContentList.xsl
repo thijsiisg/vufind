@@ -46,11 +46,27 @@
     <xsl:variable name="value">
       <xsl:apply-templates select="." mode="l"/>
     </xsl:variable>
+
     <xsl:if test="$value">
       <xsl:copy-of select="$value"/>
-      <xsl:for-each select="*[starts-with(local-name(), 'c')]">
-        <xsl:call-template name="cxx"/>
-      </xsl:for-each>
+
+      <xsl:variable name="group">
+        <xsl:for-each select="*[starts-with(local-name(), 'c')]">
+          <xsl:call-template name="cxx"/>
+        </xsl:for-each>
+      </xsl:variable>
+
+      <xsl:choose>
+        <xsl:when test="@level = 'series' or @level = 'subseries'">
+          <div class="{@level}-group">
+            <xsl:copy-of select="$group"/>
+          </div>
+        </xsl:when>
+
+        <xsl:otherwise>
+          <xsl:copy-of select="$group"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:if>
   </xsl:template>
 
