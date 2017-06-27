@@ -64,7 +64,8 @@
     };
 
     var getAvUrl = function (item, internal) {
-        if (internal) {
+        // TODO: Go directly to disseminate for now, prevent proxy of Search
+        if (false && internal) {
             return item.url
                 .replace('http://hdl.handle.net/', '/AV/')
                 .replace('?locatt=view:level1', '');
