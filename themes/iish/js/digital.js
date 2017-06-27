@@ -70,7 +70,8 @@
                 .replace('http://hdl.handle.net/', '/AV/')
                 .replace('?locatt=view:level1', '');
         }
-        return item.url;
+        return item.url.replace('http://', 'https://');
+        //return item.url;
     };
 
     var testAccess = function (view, callback) {
@@ -209,6 +210,10 @@
                     add();
                 }
                 else {
+                    if (item.stillsUrl) {
+                        item.stillsUrl = item.stillsUrl.replace('http://', 'https://');
+                    }
+
                     test(item.stillsUrl, function (hasStills) {
                         avElem = $('<video controls preload="metadata" width="100%" height="100%"></video>');
                         if (hasStills) {
