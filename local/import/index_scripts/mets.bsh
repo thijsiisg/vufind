@@ -308,6 +308,14 @@ private InputStream getInputStreamfromUrl(String url) throws Exception {
         URLConnection urlConnection = new URL(url).openConnection();
         urlConnection.setConnectTimeout(10000); // 10 seconds is long enough
         urlConnection.setReadTimeout(10000); // 10 seconds is long enough
+
+        int status = urlConnection.getResponseCode();
+        if (status == HttpURLConnection.HTTP_MOVED_TEMP || status == HttpURLConnection.HTTP_MOVED_PERM
+                || status == HttpURLConnection.HTTP_SEE_OTHER) {
+            url = urlConnection.getHeaderField("Location");
+            return getInputStreamfromUrl(url);
+        }
+
         inputStream = urlConnection.getInputStream();
     } catch (Exception e) {
         closeStream(inputStream);
