@@ -64,14 +64,12 @@
     };
 
     var getAvUrl = function (item, internal) {
-        // TODO: Go directly to disseminate for now, prevent proxy of Search
-        if (false && internal) {
+        if (internal) {
             return item.url
                 .replace('http://hdl.handle.net/', '/AV/')
                 .replace('?locatt=view:level1', '');
         }
         return item.url.replace('http://', 'https://');
-        //return item.url;
     };
 
     var testAccess = function (view, callback) {
