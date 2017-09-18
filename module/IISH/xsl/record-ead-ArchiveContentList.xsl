@@ -102,7 +102,12 @@
       </xsl:when>
       <xsl:otherwise>
         <xsl:variable name="t">
-          <xsl:apply-templates select="ead:did/*[not(local-name() = 'unitid' or local-name() = 'daogrp')]"/>
+          <xsl:apply-templates select="ead:did/*[local-name() = 'unittitle' or local-name() = 'physdesc']"/>
+        </xsl:variable>
+
+        <xsl:variable name="m">
+          <xsl:apply-templates select="ead:did/*[not(local-name() = 'unitid' or local-name() = 'daogrp'
+                                       or local-name() = 'unittitle' or local-name() = 'physdesc')]"/>
         </xsl:variable>
 
         <div class="k{@level}">
@@ -116,6 +121,10 @@
         <xsl:if test="string-length($t)>1">
           <div class="v{@level}">
             <xsl:copy-of select="$t"/>
+
+            <div class="m">
+              <xsl:copy-of select="$m"/>
+            </div>
 
             <xsl:apply-templates select="ead:accessrestrict|ead:scopecontent|ead:odd"/>
 
@@ -141,7 +150,7 @@
     <xsl:choose>
       <xsl:when test="../../@level = 'file' or ../../@level = 'item'">
         <xsl:apply-templates/>
-        <xsl:if test="following-sibling::*[1][not(local-name() = 'physdesc')]">
+        <xsl:if test="not(../ead:physdesc)">
           <br/>
         </xsl:if>
       </xsl:when>
@@ -206,9 +215,23 @@
   <xsl:template match="ead:physdesc">
     <xsl:text> </xsl:text>
     <span class="physdesc">
-      <xsl:apply-templates/>
+      <xsl:value-of select="normalize-space(*/text())"/>
     </span>
     <br/>
+  </xsl:template>
+
+  <xsl:template match="ead:origination">
+    <div class="origination">
+      <span class="l"><xsl:value-of select="@label"/>: </span>
+      <span class="v"><xsl:value-of select="normalize-space(text()|*/text())"/></span>
+    </div>
+  </xsl:template>
+
+  <xsl:template match="ead:langmaterial">
+    <div class="langmaterial">
+      <span class="l"><xsl:value-of select="@label" />: </span>
+      <span class="v"><xsl:value-of select="normalize-space(text()|*/text())"/></span>
+    </div>
   </xsl:template>
 
   <xsl:template match="ead:note">
@@ -232,10 +255,6 @@
     <div class="warning">
       <xsl:apply-templates/>
     </div>
-  </xsl:template>
-
-  <xsl:template match="ead:extent">
-    <xsl:value-of select="normalize-space(text())"/>
   </xsl:template>
 
   <xsl:template match="ead:scopecontent">
