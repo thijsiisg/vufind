@@ -122,9 +122,11 @@
           <div class="v{@level}">
             <xsl:copy-of select="$t"/>
 
-            <div class="m">
-              <xsl:copy-of select="$m"/>
-            </div>
+            <xsl:if test="string($m)">
+              <div class="m">
+                <xsl:copy-of select="$m"/>
+              </div>
+            </xsl:if>
 
             <xsl:apply-templates select="ead:accessrestrict|ead:scopecontent|ead:odd"/>
 
