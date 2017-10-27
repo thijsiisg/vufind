@@ -35,7 +35,8 @@
   h4,
   h5 {
     font-weight: bold;
-    padding-top: 10px;
+    padding-top: 0;
+    margin-top: 0;
   }
 
   h2 {
@@ -70,11 +71,12 @@
     }
   }
 
-  p {
-    #archivecontentlist-tab & {
-      font-style: italic;
-    }
+  #archivecontentlist-tab p {
+    font-style: italic;
+  }
 
+  .vfile p,
+  .vitem p {
     &:last-child {
       margin-bottom: 0;
     }
@@ -82,6 +84,10 @@
 
   .m {
     color: #666;
+  }
+
+  .did {
+    margin-bottom: 8px;
   }
 
   &,
@@ -92,6 +98,15 @@
       &:nth-of-type(4n+2) {
         background-color: #f5f5f5;
       }
+    }
+  }
+
+  .series-group,
+  .subseries-group {
+    margin-bottom: 10px;
+
+    &:last-child {
+      margin-bottom: 0;
     }
   }
 

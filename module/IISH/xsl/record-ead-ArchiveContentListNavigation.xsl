@@ -85,22 +85,10 @@
     <xsl:apply-templates/>
   </xsl:template>
 
-  <xsl:template match="ead:unitid">
-    <!--        <xsl:choose>
-                <xsl:when test="../../@level = 'file'">
-                    <xsl:apply-templates/>
-                </xsl:when>
-                <xsl:when test="../../@level = 'item'">
-                    <xsl:apply-templates/>
-                </xsl:when>
-            </xsl:choose>-->
-  </xsl:template>
+  <xsl:template match="ead:unitid"/>
 
   <xsl:template match="ead:unittitle">
     <xsl:choose>
-      <!--            <xsl:when test="../../@level = 'file'">
-                      <xsl:apply-templates/>
-                  </xsl:when>-->
       <xsl:when test="../../@level = 'series'">
         <li>
           <xsl:call-template name="ahref">
@@ -148,20 +136,15 @@
           </xsl:when>
         </xsl:choose>
       </xsl:when>
-      <!--            <xsl:when test="../../@level = 'item'">
-                      <xsl:apply-templates/>
-                  </xsl:when>-->
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="ead:unitdate">
-    <!--<xsl:value-of select="normalize-space(text())"/>-->
-  </xsl:template>
+  <xsl:template match="ead:unitdate"/>
 
-  <xsl:template match="ead:physdesc/ead:extent">
-    <!--<xsl:text> </xsl:text><xsl:value-of select="normalize-space(text())"/>-->
-  </xsl:template>
+  <xsl:template match="ead:physdesc/ead:extent"/>
 
   <xsl:template match="ead:note"/>
+
+  <xsl:template match="ead:scopecontent"/>
 
 </xsl:stylesheet>

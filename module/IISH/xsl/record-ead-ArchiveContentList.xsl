@@ -139,7 +139,9 @@
   </xsl:template>
 
   <xsl:template match="ead:did">
-    <xsl:apply-templates/>
+    <div class="did">
+      <xsl:apply-templates/>
+    </div>
   </xsl:template>
 
   <xsl:template match="ead:unitid">
