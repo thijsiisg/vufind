@@ -161,8 +161,11 @@ class Loader extends Cacheable {
 
 		// get the href from the archive pdf file group
 		foreach ($xmlDocument->fileSec->fileGrp as $fileGrp) {
-			if ($fileGrp->attributes()->{'USE'} == 'archive pdf') {
-				$ret = (string)($fileGrp->file->FLocat->attributes('http://www.w3.org/1999/xlink')->{'href'});
+			if ($fileGrp->attributes()->{'USE'} == 'archive pdf' || $fileGrp->attributes()->{'USE'} == 'archive application' ) {
+			    if ($fileGrp->file->attributes()->{'MIMETYPE'} == 'application/pdf'
+                    || $fileGrp->file->attributes()->{'MIMETYPE'} == 'application/x-pdf') {
+                    $ret = (string)($fileGrp->file->FLocat->attributes('http://www.w3.org/1999/xlink')->{'href'});
+                }
 			}
 		}
 
