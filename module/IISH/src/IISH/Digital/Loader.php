@@ -234,7 +234,7 @@ class Loader extends Cacheable {
 		$this->isAudio = $this->isDocumentOfType($xmlDocument, array('reference audio'));
 		$this->isVideo = $this->isDocumentOfType($xmlDocument, array('reference video'));
 		$this->isHires = $this->isDocumentOfType($xmlDocument, array('hires reference image'));
-		$this->isArchivePdf = $this->isDocumentOfType($xmlDocument, array('archive pdf'));
+		$this->isArchivePdf = $this->isDocumentOfType($xmlDocument, array('archive pdf', 'archive application'));
 	}
 
 	/*
@@ -257,7 +257,22 @@ class Loader extends Cacheable {
             return null;
 		} else {
 
-			if ($this->isAudio || $this->isVideo) {
+            if ($this->isArchivePdf) {
+                    // ARCHIVE PDF
+
+                    // try to find pdf link in mets file
+                $pdf = $this->getPdfLinkFromMetsFile($xmlDocument);
+                // if no pdf link create link
+                if ($pdf == '') {
+                    $pdf = 'http://hdl.handle.net/10622/' . $this->item . '?locatt=view:pdf';
+                }
+
+                //
+                return array(
+                    'pdf' => ($this->checkRemoteFileExists($pdf) ? $pdf : null)
+                , 'view' => null
+                );
+            } elseif ($this->isAudio || $this->isVideo) {
 				// AUDIO VIDEO
 
 				// get audio or video files
@@ -282,21 +297,6 @@ class Loader extends Cacheable {
 						'mets' => ($this->checkRemoteFileExists($metsUrl) ? $metsUrl : null)
 						, 'items' => null
 					));
-			} elseif ($this->isArchivePdf) {
-				// ARCHIVE PDF
-
-				// try to find pdf link in mets file
-				$pdf = $this->getPdfLinkFromMetsFile($xmlDocument);
-				// if no pdf link create link
-				if ($pdf == '') {
-					$pdf = 'http://hdl.handle.net/10622/' . $this->item . '?locatt=view:pdf';
-				}
-
-				//
-				return array(
-					'pdf' => ($this->checkRemoteFileExists($pdf) ? $pdf : null)
-					, 'view' => null
-					);
 			} else {
 				// ELSE
 				return array();
