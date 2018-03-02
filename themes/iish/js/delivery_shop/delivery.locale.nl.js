@@ -6,7 +6,7 @@ var string_table_nl = {
 	button_request_reproduction:  "Bestel reproductie",
 	stat_open_reserved:           "* Item uitgeleend, neem contact op met",
 	stat_open_restricted:         "* Niet ter inzage",
-	stat_open_publication_status: "* U kunt dit item niet aanvragen vanwege copyright beperkingen",
+	stat_open_publication_status: "* U kunt geen reproductie voor dit item aanvragen vanwege copyright beperkingen",
 	stat_notfound:                "* Item niet gevonden",
     stat_open_reserved_child:     "Uitgeleend",
 	cart_title:                   "Titel",

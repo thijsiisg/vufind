@@ -6,7 +6,7 @@ var string_table_en = {
 	button_request_reproduction:  "Order reproduction",
 	stat_open_reserved:           "* Item already reserved, please contact",
 	stat_open_restricted:         "* Cannot be requested",
-	stat_open_publication_status: "* You cannot request this item because of copyright restrictions",
+	stat_open_publication_status: "* You cannot request a reproduction of this item because of copyright restrictions",
 	stat_notfound:                "* Item not found",
     stat_open_reserved_child:     "Reserved",
 	cart_title:                   "Title",
