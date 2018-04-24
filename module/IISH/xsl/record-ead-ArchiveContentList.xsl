@@ -107,7 +107,8 @@
 
         <xsl:variable name="m">
           <xsl:apply-templates select="ead:did/*[not(local-name() = 'unitid' or local-name() = 'daogrp'
-                                       or local-name() = 'unittitle' or local-name() = 'physdesc')]"/>
+                                       or local-name() = 'unittitle' or local-name() = 'physdesc'
+                                       or local-name() = 'container')]"/>
         </xsl:variable>
 
         <div class="k{@level}">
