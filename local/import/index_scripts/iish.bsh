@@ -269,17 +269,52 @@ public Set getAllSearchableFieldsAsSet(Record record, String lowerBoundStr, Stri
 }
 
 private Document loadDocument(String url) throws Exception {
-    final URL oai_url = new URL(url);
-    final URLConnection connection = oai_url.openConnection();
-    connection.setConnectTimeout(10000); // 10 seconds is long enough
-    connection.setReadTimeout(10000); // 10 seconds is long enough
 
     DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     dbf.setIgnoringComments(true);
     dbf.setNamespaceAware(true);
     dbf.setValidating(false);
     DocumentBuilder db = dbf.newDocumentBuilder();
-    return db.parse(connection.getInputStream());
+    InputStream inputStream = getInputStreamfromUrl(url);
+    return db.parse(inputStream);
+}
+
+private InputStream getInputStreamfromUrl(String url) throws Exception {
+    URLConnection urlConnection = null;
+    InputStream inputStream = null;
+
+    try {
+        URLConnection urlConnection = new URL(url).openConnection();
+        urlConnection.setConnectTimeout(10000); // 10 seconds is long enough
+        urlConnection.setReadTimeout(10000); // 10 seconds is long enough
+
+        int status = urlConnection.getResponseCode();
+        if (status == HttpURLConnection.HTTP_MOVED_TEMP || status == HttpURLConnection.HTTP_MOVED_PERM
+                || status == HttpURLConnection.HTTP_SEE_OTHER) {
+            url = urlConnection.getHeaderField("Location");
+            return getInputStreamfromUrl(url);
+        }
+
+        inputStream = urlConnection.getInputStream();
+    } catch (Exception e) {
+        closeStream(inputStream);
+
+        if (urlConnection != null) {
+            urlConnection.disconnect();
+        }
+
+        throw e;
+    }
+
+    return inputStream;
+}
+
+private void closeStream(InputStream inputStream) {
+    if (inputStream != null) {
+        try {
+            inputStream.close();
+        } catch (IOException ioe) { }
+    }
 }
 
 
@@ -544,7 +579,7 @@ public Set barcodesHaveMets(Record record) {
                 final Iterator subfieldsIter = subfields.iterator();
                 while (subfieldsIter.hasNext()) {
                     final Subfield subfield = subfield(subfieldsIter.next());
-                    String metsUrl = "http://hdl.handle.net/10622/" + subfield.getData() + "?locatt=view:mets";
+                    String metsUrl = "https://hdl.handle.net/10622/" + subfield.getData() + "?locatt=view:mets";
 
                     try {
                         HttpURLConnection urlConnection = (HttpURLConnection) new URL(metsUrl).openConnection();
@@ -594,7 +629,7 @@ private String subfieldU(DataField datafield) {
                 if (data.contains("10622/3005100")) 
                     return "Image";
                     
-                if (data.startsWith("http://hdl.handle.net/10622/")) 
+                if (data.startsWith("http://hdl.handle.net/10622/") || data.startsWith("https://hdl.handle.net/10622/"))
                     return "Image";
             }
         }
