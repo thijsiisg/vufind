@@ -9,66 +9,181 @@
 
 header {
   margin-top: 0;
+  background: #000;
+  background-image: url('../../images/building-iisg.jpg');
+  overflow: hidden;
+  filter: grayscale(100%);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+
+  .container {
+    margin-top: 0;
+    background: #000;
+    filter: grayscale(75%);
+    background-size: cover;
+    background-position: center center;
+    width: 100%;
+  }
+
+  .searchbox {
+    margin-top: 0;
+    background: #fff;
+    filter: grayscale(75%);
+    background-size: cover;
+    background-position: center center;
+  }
+
+  .breadcrumb {
+    border: 1px solid white;
+    margin-bottom: 0px;
+    padding: 0 0 0 8%;
+  }
 
   .navbar {
     border-radius: 0;
+    background: #000;
+    filter: opacity(75%);
+    width: 100%;
+  }
 
-    .navbar-brand {
-      background: no-repeat center;
+  .navbar-nav > li > a {
+    padding: 12px 6px;
+    color: #fff;
+  }
 
-      @media (max-width: 350px) {
-        max-width: 100%;
+  .navbar-brand {
+    background: no-repeat center;
+
+    @media (max-width: 350px) {
+      max-width: 100%;
+      background-size: contain;
+    }
+
+    @media (min-width: 351px) and (max-width: @screen-xs-max) {
+      width: 250px;
+      background-size: contain;
+    }
+
+    &.en,
+    &.nl {
+      background-image: url('../../images/IISG-logo.png');
+
+      @media (min-width: @screen-sm-min) {
+        width: 342px;
         background-size: contain;
-      }
-
-      @media (min-width: 351px) and (max-width: @screen-xs-max) {
-        width: 250px;
-        background-size: contain;
-      }
-
-      &.en {
-        background-image: url('../../images/IISG-logo-en.jpg');
-
-        @media (min-width: @screen-sm-min) {
-          width: 314px;
-          background-size: contain;
-        }
-      }
-
-      &.nl {
-        background-image: url('../../images/IISG-logo-nl.jpg');
-
-        @media (min-width: @screen-sm-min) {
-          width: 342px;
-          background-size: contain;
-        }
       }
     }
   }
 
   .sub-header {
-    margin-top: 8px;
-    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 6rem;
+    text-align: center;
+    font-weight: 100;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    line-height: 1;
     color: @iish-logo-color;
+    font-family: "Apercu", Helvetica, Arial, "Nimbus Sans L", sans-serif;
+    position: center center;
+
+    a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .slogan {
+      font-size: 1.9rem;
+      line-height: 1.8;
+      text-transform: initial;
+    }
+  }
+
+  .navbar-form {
+    padding: 30px 0 30px 10%;
+
+    .radio,
+    .checkbox {
+      margin: 12px 2px 0 5px;
+    }
   }
 }
 
-.navbar-form {
-  .radio,
-  .checkbox {
-    margin: 12px 2px 0 3px;
+nav {
+  border-radius: 0;
+  background: #fff;
+  filter: opacity(75%);
+  width: 100%;
+
+  .searchbox {
+    border-radius: 0;
+    background: #fff;
+    filter: opacity(75%);
+    width: 100%;
   }
 }
 
 div.main {
   .container {
-    border-radius: 0 0 10px 10px;
+    border-radius: 0 0 0 0;
+    width: 100%;
+  }
+}
+
+body {
+  font-size: 1.3rem;
+  line-height: 1.8;
+  font-family: "Roboto Slab", serif;
+  color: #000;
+  letter-spacing: 0.4px;
+
+  h2 {
+    font-family: "Apercu", Helvetica, Arial, "Nimbus Sans L", sans-serif;
+    color: #000;
+    font-size: 2.08rem;
+    margin: 10px 10px 20px;
+    line-height: 1.33;
+    letter-spacing: 1.4px;
+    font-weight: 600;
+    text-align: center;
+    text-transform: lowercase;
+  }
+
+  li > a {
+    color: #000;
+    text-decoration: none;
+  }
+
+  li > a:hover {
+    color: #000;
+    text-decoration: underline;
+  }
+
+  .top-row {
+    padding: 0;
   }
 }
 
 footer {
   margin: 0;
-  font-size: 90%;
+  font-size: 1.5rem;
+  background-color: #000;
+  color: #6799c8;
+  line-height: 1.8;
+  font-family: "Apercu", Helvetica, Arial, "Nimbus Sans L", sans-serif;
+  letter-spacing: 0.4px;
+
+  li > a {
+    color: #fff;
+    text-decoration: none;
+  }
+
+  li > a:hover {
+    color: #fff;
+    text-decoration: underline;
+  }
 
   .container {
     border: none;
@@ -94,7 +209,11 @@ footer {
 
 #searchForm_type,
 #searchForm_lookfor {
-  border: 1px solid @input-border;
+  border: 3px solid #000;
+  border-radius: 0px;
+  font-family: "Apercu", Helvetica, Arial, "Nimbus Sans L", sans-serif;
+  height: 60px;
+  padding: 13px 20px;
 }
 
 #messageOfTheDay,
@@ -109,7 +228,7 @@ footer {
   margin-right: 10px;
 
   .facetList {
-    max-height: 250px;
+    max-height: 400px;
     overflow: hidden;
   }
 
@@ -144,10 +263,96 @@ footer {
   [name="searchForm"] {
     .btn-primary,
     .form-control {
+      border: 3px solid #fff;
+      font-family: "Apercu", Helvetica, Arial, "Nimbus Sans L", sans-serif;
+      font-size: 1.6rem;
       margin-top: 2px;
       margin-bottom: 2px;
+      height: 60px;
+      padding: 13px 20px;
     }
   }
+}
+
+[name=searchForm] .btn-primary, [name=searchForm] .form-control {
+  border: 3px solid #000;
+  font-family: "Apercu", Helvetica, Arial, "Nimbus Sans L", sans-serif;
+  font-size: 1.6rem;
+  height: 60px;
+  padding: 13px 20px;
+}
+
+.btn-primary {
+  color: #000;
+  background-color: #fff;
+  border: 3px solid #000;
+  font-weight: bold;
+  height: 60px;
+  padding: 13px 20px;
+}
+
+.btn-primary:hover {
+  color: #fff;
+  background-color: #000;
+  border: 3px solid #000;
+  font-weight: bold;
+  height: 60px;
+  padding: 13px 20px;
+}
+
+.form-control {
+  border: 3px solid #000;
+  font-family: "Apercu", Helvetica, Arial, "Nimbus Sans L", sans-serif;
+  font-size: 1.6rem;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  height: 60px;
+  padding: 13px 20px;
+}
+
+.btn-sm {
+  color: #000;
+  background-color: #fff;
+  border: 3px solid #000;
+  font-family: "Apercu", Helvetica, Arial, "Nimbus Sans L", sans-serif;
+  font-size: 1.6rem;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  height: 35px;
+  padding: 5px 12px;
+}
+
+.btn-sm:hover {
+  color: #fff;
+  background-color: #000;
+  border: 3px solid #000;
+  font-family: "Apercu", Helvetica, Arial, "Nimbus Sans L", sans-serif;
+  font-size: 1.6rem;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  height: 35px;
+  padding: 5px 12px;
+}
+
+.jumpMenu {
+  color: #000;
+  background-color: #fff;
+  border: 3px solid #000;
+  font-family: "Apercu", Helvetica, Arial, "Nimbus Sans L", sans-serif;
+  font-size: 1.6rem;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  height: 35px;
+  padding: 5px 12px;
+}
+
+.col-sm-8 {
+  .btn-primary {
+    color: #000;
+    background-color: #fff;
+    border: 3px solid #000;
+  }
+  padding: 0 0 0 3%;
 }
 
 .dropdown-menu > .active > a {
@@ -166,9 +371,15 @@ footer {
 
 h2,
 .lead {
-  font-size: 24px;
+  font-family: "Apercu", Helvetica, Arial, "Nimbus Sans L", sans-serif;
+  color: #000;
+  font-size: 2.08rem;
   margin: 10px 10px 20px;
-  line-height: 1;
+  line-height: 1.33;
+  letter-spacing: 1.4px;
+  font-weight: 600;
+  text-align: center;
+  text-transform: lowercase;
 }
 
 .table {
@@ -176,9 +387,9 @@ h2,
   font-size: 90%;
 
   th {
-    color: @btn-primary-color;
+    color: #000;
     font-style: normal;
-    font-weight: normal;
+    font-weight: 600;
   }
 }
 
@@ -270,6 +481,8 @@ div.digital {
 .form-inline {
   .btn.btn-default {
     margin-bottom: 5px;
+    height: 32px;
+    padding: 5px 8px;
   }
 }
 
@@ -287,7 +500,7 @@ div.digital {
 
 .mets-players {
   .av-container {
-    margin: 1em 0 ;
+    margin: 1em 0;
 
     audio, video {
       width: 100%;
@@ -316,8 +529,34 @@ div.digital {
 
 .row.grid-container > .grid > .inner-grid {
   padding: 3px;
-  border: 1px solid @list-group-border;
-  border-radius: 3px;
+  border-bottom: 1px solid #000;
+  border-radius: 0px;
+}
+
+.col-sm-9 {
+  font-family: "Apercu", Helvetica, Arial, "Nimbus Sans L", sans-serif;
+  font-size: 1.5rem;
+  padding-left: 0px;
+  padding-right: 0px;
+
+  a {
+    color: #000;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.8rem;
+  }
+
+  a:hover {
+    color: #000;
+    text-decoration: underline;
+    font-weight: bold;
+    font-size: 1.8rem;
+  }
+}
+
+.row:not(.top-row) {
+  padding: 0 10px 0 10px;
+  margin: 0 -4px;
 }
 
 .sidebar .list-group-item,
@@ -325,6 +564,40 @@ div.digital {
   .badge a {
     margin-left: 2px;
   }
+}
+
+.badge {
+  display: inline-block;
+  min-width: 10px;
+  padding: 3px 7px;
+  font-family: "Apercu", Helvetica, Arial, "Nimbus Sans L", sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #000;
+  line-height: 1;
+  vertical-align: baseline;
+  white-space: nowrap;
+  text-align: center;
+  background-color: #d2dce7;
+  border-radius: 0px;
+}
+
+.sidebar .list-group-item {
+  font-family: "Apercu", Helvetica, Arial, "Nimbus Sans L", sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.sidebar {
+  background-color: #d2dce7;
+  border-left: 1px solid #000;
+  border-radius: 0px;
+}
+
+.list-group-item {
+  background-color: #d2dce7;
+  border-bottom: 1px solid #000;
+  border-radius: 0px;
 }
 
 .form-group.required .control-label:after {
@@ -339,9 +612,11 @@ div.digital {
 
   input[type=text] {
     max-width: none;
-    font-size: 14px;
-    height: 32px;
-    padding: 5px 8px;
+    font-size: 1.6rem;
+    height: 60px;
+    padding: 13px 20px;
+    line-height: 1.8;
+    font-family: "Apercu", Helvetica, Arial, "Nimbus Sans L", sans-serif;
   }
 
   .btn {
@@ -382,7 +657,7 @@ div.digital {
     color: #000;
     background-color: #fff;
     border: 2px solid #06C;
-    border-radius: 3px;
+    border-radius: 0px;
   }
 
   &.left .tooltip-arrow {
@@ -406,4 +681,14 @@ div.digital {
   font-style: italic;
   font-size: smaller;
   color: grey;
+}
+
+form {
+  span.twitter-typeahead {
+    border: 0px solid #000;
+    font-family: "Apercu", Helvetica, Arial, "Nimbus Sans L", sans-serif;
+    padding: 0px 0px;
+    font-size: 1.6rem;
+    line-height: 1.8;
+  }
 }
