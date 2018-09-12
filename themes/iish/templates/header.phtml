@@ -4,9 +4,11 @@
     <span class="sr-only">Toggle navigation</span>
     <i class="fa fa-bars"></i>
   </button>
-  <? $langClass = ($this->layout()->userLang === 'nl') ? 'nl' : 'en'; ?>
-  <a role="logo" class="navbar-brand <?=$langClass?>" href="<?=$this->url('home')?>">
+  <a role="logo" class="navbar-brand logo-iish" href="<?=$this->url('home')?>">
     <?=$this->transEsc('International Institute of Social History')?>
+  </a>
+  <a role="logo" class="navbar-brand logo-huc" href="<?=$this->url('home')?>">
+    <?=$this->transEsc('KNAW Humanities Cluster')?>
   </a>
 </div>
 <? if ($this->layout()->searchbox !== false): ?>

@@ -1,6 +1,7 @@
 @import "bootprint";
 @import "iish-variables";
 @import "iish-icons";
+@import "iish-fonts";
 @import "ead";
 @import "navigation";
 @import "eci";
@@ -65,12 +66,20 @@ header {
       background-size: contain;
     }
 
-    &.en,
-    &.nl {
+    &.logo-iish {
       background-image: url('../../images/IISG-logo.png');
 
       @media (min-width: @screen-sm-min) {
         width: 342px;
+        background-size: contain;
+      }
+    }
+
+    &.logo-huc {
+      background-image: url('../../images/HUC-logo.svg');
+
+      @media (min-width: @screen-sm-min) {
+        width: 55px;
         background-size: contain;
       }
     }
