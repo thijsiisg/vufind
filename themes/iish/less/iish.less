@@ -46,43 +46,43 @@ header {
     background: #000;
     filter: opacity(75%);
     width: 100%;
+
+    .navbar-brand {
+      background: no-repeat center;
+
+      @media (max-width: 350px) {
+        max-width: 100%;
+        background-size: contain;
+      }
+
+      @media (min-width: 351px) and (max-width: @screen-xs-max) {
+        width: 150px;
+        background-size: contain;
+      }
+
+      &.logo-iish {
+        background-image: url('../../images/IISG-logo.png');
+
+        @media (min-width: @screen-sm-min) {
+          width: 342px;
+          background-size: contain;
+        }
+      }
+
+      &.logo-huc {
+        background-image: url('../../images/HUC-logo.svg');
+
+        @media (min-width: @screen-sm-min) {
+          width: 90px;
+          background-size: contain;
+        }
+      }
+    }
   }
 
   .navbar-nav > li > a {
     padding: 12px 6px;
     color: #fff;
-  }
-
-  .navbar-brand {
-    background: no-repeat center;
-
-    @media (max-width: 350px) {
-      max-width: 100%;
-      background-size: contain;
-    }
-
-    @media (min-width: 351px) and (max-width: @screen-xs-max) {
-      width: 250px;
-      background-size: contain;
-    }
-
-    &.logo-iish {
-      background-image: url('../../images/IISG-logo.png');
-
-      @media (min-width: @screen-sm-min) {
-        width: 342px;
-        background-size: contain;
-      }
-    }
-
-    &.logo-huc {
-      background-image: url('../../images/HUC-logo.svg');
-
-      @media (min-width: @screen-sm-min) {
-        width: 55px;
-        background-size: contain;
-      }
-    }
   }
 
   .sub-header {
