@@ -97,6 +97,9 @@ var DeliveryShoppingCart = {RESERVATIONS: 0, REPRODUCTIONS: 1};
                             )
                         )
                         .append(
+                            $('<div>').addClass(init.classStart + "Cart_messages").append($('<p>'))
+                        )
+                        .append(
                             $('<div>').addClass(init.classStart + "Cart_items").append(
                                 $('<div>').addClass("header itemRow")
                                     .append(

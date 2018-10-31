@@ -40,7 +40,7 @@ $this->jsTranslations()->addStrings(array(
     <img src="<?=$this->imageLink('IISG-logo-' . $langClass . '.jpg')?>"/>
   </div>
 
-  <div class="col-sm-12">
+  <div class="col-sm-12" data-extent="<?=floatval($this->driver->getExtent())?>">
     <h3 property="name"><?=$this->escapeHtml($this->driver->getShortTitle() . ' ' . $this->driver->getSubtitle() . ' ' . $this->driver->getTitleSection())?></h3>
 
     <? if ($this->userlist()->getMode() !== 'disabled'): ?>

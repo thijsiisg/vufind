@@ -4,6 +4,29 @@
         var reproductionItems = $.getShoppingCartItems(DeliveryShoppingCart.REPRODUCTIONS);
         var deliveryCartWrapper = $('#delivery_cart_wrapper');
 
+        var hasItemWithChildren = false;
+        for (var i = 0; i < reservationItems.length; i++) {
+            var item = reservationItems[i];
+            if (item.children.length > 0) {
+                hasItemWithChildren = true;
+            }
+        }
+
+        var extent = parseFloat($('[data-extent]').data('extent'));
+
+        deliveryCartWrapper.find('.reproductionCart_messages').hide();
+        if (hasItemWithChildren) {
+            deliveryCartWrapper.find('.reservationCart_messages p')
+                .text(delivery.archiveInventoryMessage).parent().show();
+        }
+        else if (extent && (extent > 1)) {
+            deliveryCartWrapper.find('.reservationCart_messages p')
+                .text(delivery.archiveNoInventoryMessage).parent().show();
+        }
+        else {
+            deliveryCartWrapper.find('.reservationCart_messages').hide();
+        }
+
         if ((reservationItems.length > 0) || (reproductionItems.length > 0)) {
             deliveryCartWrapper.show();
 
