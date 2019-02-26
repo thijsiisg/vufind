@@ -257,6 +257,8 @@ var DeliveryShoppingCart = {RESERVATIONS: 0, REPRODUCTIONS: 1};
             return JSON.parse(localStorage.getItem(key));
         }
         catch (err) {
+            if (err.name === 'NS_ERROR_FILE_CORRUPTED')
+                localStorage.clear();
             return null;
         }
     }

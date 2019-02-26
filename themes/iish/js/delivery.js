@@ -78,7 +78,15 @@
         var deliveryCartWrapper = $('#delivery_cart_wrapper');
         var deliveryCart = $('#delivery_cart');
 
-        var state = localStorage.getItem('delivery_cart_state');
+        var state;
+        try {
+            state = localStorage.getItem('delivery_cart_state');
+        }
+        catch (e) {
+            state = 'closed';
+            localStorage.clear();
+        }
+
         if (state !== 'open' && state !== 'closed') state = 'open';
         deliveryCartWrapper.addClass(state);
 
