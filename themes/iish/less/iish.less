@@ -355,6 +355,10 @@ footer {
   padding: 5px 12px;
 }
 
+.col-sm-2 {
+  margin-top: 50px;
+}
+
 .col-sm-8 {
   .btn-primary {
     color: #000;
@@ -568,6 +572,10 @@ div.digital {
   margin: 0 -4px;
 }
 
+.row.result:nth-child(even){
+  background-color: #f5f5f5;
+}
+
 .sidebar .list-group-item,
 .top-row {
   .badge a {
@@ -588,25 +596,37 @@ div.digital {
   white-space: nowrap;
   text-align: center;
   background-color: #d2dce7;
-  border-radius: 0px;
+  border-radius: 0px 0px 0px 0px;
 }
 
 .sidebar .list-group-item {
   font-family: "Apercu", Helvetica, Arial, "Nimbus Sans L", sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   font-weight: bold;
+  border-radius: 0px 0px 0px 0px;
+  border-top: 1px solid #939aa1;
+  border-right: 1px solid #d2dce7;
+  border-bottom: 1px solid #939aa1;
+  border-left: 1px solid #d2dce7;
+  background-color: #d2dce7;
+}
+
+.sidebar .list-group:not(.filters) .title {
+    cursor: pointer;
+    background-color: #fff;
+    border-right: 3px solid #000;
+    border-top: 1px solid #fff;
 }
 
 .sidebar {
   background-color: #d2dce7;
   border-left: 1px solid #000;
-  border-radius: 0px;
+  border-radius: 0px 0px 0px 0px;
 }
 
 .list-group-item {
   background-color: #d2dce7;
-  border-bottom: 1px solid #000;
-  border-radius: 0px;
+  border-radius: 0px 0px 0px 0px;
 }
 
 .form-group.required .control-label:after {
@@ -700,4 +720,9 @@ form {
     font-size: 1.6rem;
     line-height: 1.8;
   }
+}
+
+.tt-suggestion.tt-cursor {
+    background-color: #000;
+    color: #FFF;
 }
