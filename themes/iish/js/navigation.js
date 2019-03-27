@@ -1,17 +1,15 @@
 (function ($) {
-    var navigationObj = function (container, navigation, loading) {
+    var navigationObj = function (navigation, loading) {
         return {
-            container : container,
             navigation: navigation,
             loading   : loading,
 
             resize: function () {
                 var spaceBetweenElements = 20;
-                var availableSpaceWidth = this.container.offset().left;
-                var availableSpaceHeight = $(window).height() - this.container.offset().top;
+                var availableSpaceHeight = $(window).height() - this.navigation.parent().offset().top;
 
                 this.navigation.css({
-                    'width'     : (availableSpaceWidth - spaceBetweenElements) + 'px',
+                    'width'     : this.navigation.parent().width(),
                     'max-height': (availableSpaceHeight - spaceBetweenElements) + 'px'
                 });
             },
@@ -73,24 +71,23 @@
             loadFailure: function () {
                 this.navigation.children().addClass('hidden');
 
-                this.navigation.addClass('hidden');
-                this.navigation.removeClass('visible-lg invisible');
+                this.navigation.addClass('invisible');
+                this.navigation.removeClass('visible-lg hidden');
             }
         };
     };
 
     $(document).ready(function () {
-        var container = $('.main .container');
         var navigation = $('#navigation');
         var loading = navigation.find('.loading');
 
         navigation.affix({
             offset: {
-                top: container.offset().top
+                top: navigation.parent().offset().top - 60
             }
         });
 
-        var obj = navigationObj(container, navigation, loading);
+        var obj = navigationObj(navigation, loading);
 
         obj.resize();
         $(window).resize(function () {

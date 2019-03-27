@@ -19,10 +19,22 @@
     '<li>' . $this->getLastSearchLink($this->transEsc('Search Results'), '', '</li> ') .
     '<li class="active">' . $this->recordLink()->getBreadcrumb($this->driver) . '</li> ';
   $this->layout()->title = $this->driver->getShortTitle();
+
+  $isEAD = $this->driver instanceof \IISH\RecordDriver\SolrEad;
 ?>
 
 <div class="row">
-  <div class="<?=$this->layoutClass('mainbody')?>">
+  <? if ($isEAD): ?>
+    <div id="navigation-container" class="col-sm-2 hidden-print">
+      <div id="navigation">
+        <div class="loading text-center">
+          <img src="<?=$this->imageLink('ajax_spinner.gif')?>" alt="Loading" />
+        </div>
+      </div>
+    </div>
+  <? endif; ?>
+
+  <div class="<?=$isEAD ? 'col-sm-7' : $this->layoutClass('mainbody')?>">
     <div class="record-well well well-sm hidden-print">
       <?=$this->record($this->driver)->getToolbar()?>
 
