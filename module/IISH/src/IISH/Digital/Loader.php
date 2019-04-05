@@ -394,8 +394,8 @@ class Loader extends Cacheable {
 		if ($result !== false) {
 			// if request was ok, check response code
 			$statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-			// REMARK: check not only for 200 but also for 303 (redirect)
-			if ( in_array($statusCode, array('200', '303') )) {
+			// REMARK: check not only for 200 but also for 301, 302 and 303 (redirects)
+			if ( in_array($statusCode, array('200', '301', '302', '303') )) {
 				$ret = true;
 			}
 		}

@@ -80,6 +80,18 @@ class SolrEad extends SolrMarc {
     }
 
     /**
+     * Returns the extent.
+     *
+     * @return string|null The extent.
+     */
+    public function getExtent() {
+        $extent = $this->getFieldArray('300', array('a'), false);
+        $extent = count($extent) > 0 ? $extent[0] : null;
+
+        return $extent;
+    }
+
+    /**
      * Check for a pdf. Either it is on file, or it is not.
      *
      * @return true or false

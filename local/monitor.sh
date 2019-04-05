@@ -63,16 +63,10 @@ else
     echo "Restart event history:" >> $body
     cat $s >> $body
 
-    service vufind stop
-    sleep 7
-    killall java
-    sleep 7
-    service vufind start
-    service apache2 restart
-    sleep 30
-
     subject="${HOSTNAME} - Automatic restart by ${0}"
     /usr/bin/sendmail --body "$body" --from "search@${HOSTNAME}" --to "$MAIL_TO" --subject "$subject" --mail_relay "$VUFIND_MAIL_HOST"
+
+    /sbin/reboot --reboot
 
     exit 1
 fi
