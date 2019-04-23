@@ -24,10 +24,11 @@ body=/tmp/body.txt
 content=/tmp/content.txt
 headers=/tmp/headers.txt
 s=/opt/status.txt
-q="http://127.0.0.1:8080/solr/biblio/select"
+q="http://127.0.0.1:8080/solr/biblio/select?q=*:*&rows=1"
 
 rm -f $content $headers
 wget -S -T 5 -t 3 -O $content $q 2>$headers
+grep '<str name="rows">1</str>' "$content"
 rc=$?
 if [[ $rc == 0 ]] ; then
     echo "$(date)">$f
@@ -65,8 +66,10 @@ else
 
     subject="${HOSTNAME} - Automatic restart by ${0}"
     /usr/bin/sendmail --body "$body" --from "search@${HOSTNAME}" --to "$MAIL_TO" --subject "$subject" --mail_relay "$VUFIND_MAIL_HOST"
-
-    /sbin/reboot --reboot
+	service vufind stop
+	killall java
+	sleep 5
+	service vufind restart
 
     exit 1
 fi
