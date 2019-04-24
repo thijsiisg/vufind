@@ -15,7 +15,7 @@ fi
 
 
 f=$1
-if [ -z "$f" ] ; then
+if [[ -z "$f" ]] ; then
     echo "Warning. No file parameter found. Usage: ./monitor.sh /path/to/root/of/the/webapplication/status.txt"
     exit 1
 fi
@@ -66,10 +66,9 @@ else
 
     subject="${HOSTNAME} - Automatic restart by ${0}"
     /usr/bin/sendmail --body "$body" --from "search@${HOSTNAME}" --to "$MAIL_TO" --subject "$subject" --mail_relay "$VUFIND_MAIL_HOST"
-	service vufind stop
+	/usr/sbin/service vufind stop
 	killall java
 	sleep 5
-	service vufind restart
-
-    exit 1
+	/usr/sbin/service vufind start
+    exit 0
 fi
