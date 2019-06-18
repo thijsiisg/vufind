@@ -156,6 +156,11 @@
                            <xsl:value-of select="." />
                        </field>
                    </xsl:if>
+                   <xsl:if test="substring(., 1, 22) = &quot;http://hdl.handle.net&quot;">
+                       <field name="url">
+                           <xsl:value-of select="." />
+                       </field>
+                   </xsl:if>
                </xsl:for-each>
             </doc>
         </add>

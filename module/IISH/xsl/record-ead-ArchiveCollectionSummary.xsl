@@ -23,7 +23,7 @@
   <xsl:param name="title"/>
 
   <xsl:variable name="digital_items"
-                select="count(//ead:daogrp[starts-with(ead:daoloc/@xlink:href, 'http://hdl.handle.net/10622/')])"/>
+                select="count(//ead:daogrp[starts-with(ead:daoloc/@xlink:href, 'https://hdl.handle.net/10622/')])"/>
 
   <xsl:template match="/">
     <xsl:apply-templates select="//ead:ead"/>

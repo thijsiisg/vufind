@@ -67,6 +67,7 @@
         if (internal) {
             return item.url
                 .replace('http://hdl.handle.net/', '/AV/')
+                .replace('https://hdl.handle.net/', '/AV/')
                 .replace('?locatt=view:level1', '');
         }
         return item.url.replace('http://', 'https://');

@@ -264,7 +264,7 @@ class Loader extends Cacheable {
                 $pdf = $this->getPdfLinkFromMetsFile($xmlDocument);
                 // if no pdf link create link
                 if ($pdf == '') {
-                    $pdf = 'http://hdl.handle.net/10622/' . $this->item . '?locatt=view:pdf';
+                    $pdf = 'https://hdl.handle.net/10622/' . $this->item . '?locatt=view:pdf';
                 }
 
                 //
@@ -328,7 +328,7 @@ class Loader extends Cacheable {
 	 */
 	protected function createMarc() {
 		// urls
-		$mainUrl = "http://hdl.handle.net/10622/" . $this->item;
+		$mainUrl = "https://hdl.handle.net/10622/" . $this->item;
 		$pdfUrl = $mainUrl . '?locatt=view:pdf';
 		$metsUrl =  $mainUrl. '?locatt=view:mets';
 

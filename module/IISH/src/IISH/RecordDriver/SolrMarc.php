@@ -497,7 +497,7 @@ class SolrMarc extends VuFindSolrMarc {
     public function getImageURL() {
         $pid = $this->getIsShownBy();
         if (!empty($pid)) {
-            $url = 'http://hdl.handle.net/10622/' . $pid;
+            $url = 'https://hdl.handle.net/10622/' . $pid;
 
             switch ($this->getLargestPossibleSize()) {
                 case 'large':
