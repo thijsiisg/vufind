@@ -23,7 +23,7 @@
   <xsl:param name="title"/>
 
   <xsl:variable name="digital_items"
-                select="count(//ead:daogrp[starts-with(ead:daoloc/@xlink:href, 'https://hdl.handle.net/10622/')])"/>
+                select="count(//ead:daogrp[starts-with(ead:daoloc/@xlink:href, 'http://hdl.handle.net/10622/') or starts-with(ead:daoloc/@xlink:href, 'https://hdl.handle.net/10622/')])"/>
 
   <xsl:template match="/">
     <xsl:apply-templates select="//ead:ead"/>
@@ -81,7 +81,7 @@
         </xsl:for-each>
         ];
         function swap() {
-        $('#teaser img').attr('src', urls[Math.round(Math.random() * urls.length)]);
+        $('#teaser img').attr('src', urls[Math.round(Math.random() * urls.length)].replace('http', 'https'));
         }
         swap();
         $('#teaser img').click(function(){
