@@ -1,4 +1,4 @@
-/*global path, vufindString */
+/*global path, delivery, vufindString */
 
 (function ($) {
     var inViewport = function (elem) {
@@ -31,6 +31,16 @@
                     url: path + '/Record/' + record + '/Digital',
                     data: {item: item},
                     success: function (message) {
+                        var iiifArchive = null;
+                        if ((message.iiifArchive !== undefined) && (message.iiifArchive !== null)) {
+                            iiifArchive = getIIIFArchive(message, record, item);
+                        }
+
+                        var iiif = null;
+                        if ((message.iiif !== undefined) && (message.iiif !== null)) {
+                            iiif = getIIIF(message);
+                        }
+
                         var pdf = null;
                         if ((message.pdf !== undefined) && (message.pdf !== null)) {
                             pdf = getPdf(message);
@@ -48,11 +58,11 @@
                                         view.prepend(document.createTextNode(' | '));
                                     }
                                 }
-                                setDigitalHtml(element, pdf, view);
+                                setDigitalHtml(element, iiifArchive, iiif, pdf, view);
                             });
                         }
                         else {
-                            setDigitalHtml(element, pdf, view);
+                            setDigitalHtml(element, iiifArchive, iiif, pdf, view);
                         }
                     },
                     error: function () {
@@ -94,6 +104,46 @@
                 callback(false);
             }
         });
+    };
+
+    var getIIIFArchive = function (message, record, item) {
+        var view = $('<span>');
+
+        view.append(
+            $('<a href="#"></a>')
+                .text(vufindString.iiif)
+                .click(function (event) {
+                    event.preventDefault();
+                    window.open(message.iiifArchive, record + '.' + item);
+                })
+        );
+
+        view.append(document.createTextNode(' | '));
+
+        var url = 'https://' + delivery.url + '/permission/createform/10622%2F' + record + '.' + item
+            + '?locale=' + delivery.lang;
+        view.append(
+            $('<a target="_blank"></a>')
+                .attr('href', url)
+                .text(delivery.requestAccess)
+        );
+
+        return view;
+    };
+
+    var getIIIF = function (message) {
+        var view = $('<span>');
+
+        view.append(
+            $('<a href="#"></a>')
+                .text(vufindString.iiif)
+                .click(function (event) {
+                    event.preventDefault();
+                    window.open(message.iiif, message.iiif);
+                })
+        );
+
+        return view;
     };
 
     var getPdf = function (message) {
@@ -250,10 +300,16 @@
         container.insertAfter(parent);
     };
 
-    var setDigitalHtml = function (element, pdf, view) {
+    var setDigitalHtml = function (element, iiifArchive, iiif, pdf, view) {
         element.html('');
-        if ((pdf !== null) || (view !== null)) {
+        if ((iiifArchive !== null) || (iiif !== null) || (pdf !== null) || (view !== null)) {
             element.append(document.createTextNode('[ '));
+            if (iiifArchive !== null) {
+                element.append(iiifArchive);
+            }
+            if (iiif !== null) {
+                element.append(iiif);
+            }
             if (pdf !== null) {
                 element.append(pdf);
             }
@@ -273,7 +329,7 @@
     });
 
     var scrollTimeout;
-    $(window).scroll(function() {
+    $(window).scroll(function () {
         clearTimeout(scrollTimeout);
         scrollTimeout = setTimeout(function () {
             loadDigital();

@@ -17,15 +17,16 @@ class Loader extends Cacheable {
 	private $isVideo;
 	private $isHires;
 	private $isArchivePdf;
+	private $isDigitalBorn;
 
-    /**
-     * Constructor.
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     */
-    public function __construct(ServiceLocatorInterface $serviceLocator) {
-        parent::__construct($serviceLocator, 'Digital');
-    }
+	/**
+	 * Constructor.
+	 *
+	 * @param ServiceLocatorInterface $serviceLocator
+	 */
+	public function __construct(ServiceLocatorInterface $serviceLocator) {
+		parent::__construct($serviceLocator, 'Digital');
+	}
 
 	/**
 	 * Set record code
@@ -63,20 +64,20 @@ class Loader extends Cacheable {
 	}
 
 	/**
-     * The key of the cached record.
-     *
-     * @return string The key.
-     */
-    protected function getKey() {
-	    $key = $this->record . '_' . $this->item;
-        return preg_replace('/[^a-z0-9_\+\-]/i', '_', $key);
+	 * The key of the cached record.
+	 *
+	 * @return string The key.
+	 */
+	protected function getKey() {
+		$key = $this->record . '_' . $this->item;
+		return preg_replace('/[^a-z0-9_\+\-]/i', '_', $key);
 	}
 
 	/*
 	 * Return array of daoloc hrefs
 	 */
 	protected function getDaolocHrefs() {
-		$daoloc = array();
+		$daoloc = [];
 
 		$xml = simplexml_import_dom($this->ead);
 		$xml->registerXPathNamespace('ead', 'urn:isbn:1-931666-22-9');
@@ -84,7 +85,7 @@ class Loader extends Cacheable {
 		//
 		$match = $xml->xpath('//ead:did/ead:unitid[text()="' . $this->item . '"]/../ead:daogrp/ead:daoloc');
 		foreach ($match as $key => $value) {
-			$daoloc[(string)($value->attributes('http://www.w3.org/1999/xlink')->{'label'})] = (string)($value->attributes('http://www.w3.org/1999/xlink')->{'href'});
+			$daoloc[(string) ($value->attributes('http://www.w3.org/1999/xlink')->{'label'})] = (string) ($value->attributes('http://www.w3.org/1999/xlink')->{'href'});
 		}
 
 		return $daoloc;
@@ -95,55 +96,57 @@ class Loader extends Cacheable {
 	 */
 	protected function isDocumentOfType($xmlDocument, $type) {
 		// if type not an array, make it an array
-		if ( !is_array($type)) {
-			$type = array($type);
+		if (!is_array($type)) {
+			$type = [$type];
 		}
 
 		// try to find out if there is a fileGrp with the specified type
 		foreach ($xmlDocument->fileSec->fileGrp as $fileGrp) {
-			if ( in_array($fileGrp->attributes()->{'USE'}, $type)) {
-				return true;
+			if (in_array($fileGrp->attributes()->{'USE'}, $type)) {
+				return TRUE;
 			}
 		}
 
-		return false;
+		return FALSE;
 	}
 
 	/*
 	 * Create array of all audio files of specified type found in the mets document
 	 */
 	private function createListOfAllAudioVideoFilesInMetsDocument($xmlDocument, $type) {
-		$arr = array();
+		$arr = [];
 
 		// if type not an array, make it an array
-		if ( !is_array($type)) {
-			$type = array($type);
+		if (!is_array($type)) {
+			$type = [$type];
 		}
 
 		foreach ($xmlDocument->fileSec->fileGrp as $fileGrp) {
-			if ( in_array((string)($fileGrp->attributes()->{'USE'}), $type)) {
+			if (in_array((string) ($fileGrp->attributes()->{'USE'}), $type)) {
 				foreach ($fileGrp->file as $file) {
 					foreach ($file->FLocat as $flocat) {
 
 						// url to object
-						$url = (string)($flocat->attributes('http://www.w3.org/1999/xlink')->{'href'});
+						$url = (string) ($flocat->attributes('http://www.w3.org/1999/xlink')->{'href'});
 
 						// audio
 						if ($this->isAudio) {
-							$arr[(string)($file->attributes()->{'ID'})] = array (
+							$arr[(string) ($file->attributes()->{'ID'})] = [
 								'url' => $url
-								, 'contentType' => (string)($file->attributes()->{'MIMETYPE'})
-								);
+								,
+								'contentType' => (string) ($file->attributes()->{'MIMETYPE'}),
+							];
+						}
 						// video
-						} elseif ($this->isVideo) {
+						elseif ($this->isVideo) {
 							$baseUrl = $this->getUriBasename($url);
 
-							$arr[(string)($file->attributes()->{'ID'})] = array (
-								'url' => $url
-								, 'contentType' => (string)($file->attributes()->{'MIMETYPE'})
-								, 'stillsUrl' => $baseUrl . '?locatt=view:level2'
-								, 'thumbnailUrl' => $baseUrl . '?locatt=view:level3'
-								);
+							$arr[(string) ($file->attributes()->{'ID'})] = [
+								'url' => $url,
+								'contentType' => (string) ($file->attributes()->{'MIMETYPE'}),
+								'stillsUrl' => $baseUrl . '?locatt=view:level2',
+								'thumbnailUrl' => $baseUrl . '?locatt=view:level3',
+							];
 						}
 					}
 				}
@@ -161,11 +164,11 @@ class Loader extends Cacheable {
 
 		// get the href from the archive pdf file group
 		foreach ($xmlDocument->fileSec->fileGrp as $fileGrp) {
-			if ($fileGrp->attributes()->{'USE'} == 'archive pdf' || $fileGrp->attributes()->{'USE'} == 'archive application' ) {
-			    if ($fileGrp->file->attributes()->{'MIMETYPE'} == 'application/pdf'
-                    || $fileGrp->file->attributes()->{'MIMETYPE'} == 'application/x-pdf') {
-                    $ret = (string)($fileGrp->file->FLocat->attributes('http://www.w3.org/1999/xlink')->{'href'});
-                }
+			if ($fileGrp->attributes()->{'USE'} == 'archive pdf' || $fileGrp->attributes()->{'USE'} == 'archive application') {
+				if ($fileGrp->file->attributes()->{'MIMETYPE'} == 'application/pdf'
+					|| $fileGrp->file->attributes()->{'MIMETYPE'} == 'application/x-pdf') {
+					$ret = (string) ($fileGrp->file->FLocat->attributes('http://www.w3.org/1999/xlink')->{'href'});
+				}
 			}
 		}
 
@@ -176,18 +179,18 @@ class Loader extends Cacheable {
 	 * Get list of audio or video files from xml document
 	 */
 	protected function getAudioVideoFilesFromMetsFile($xmlDocument) {
-		$arr = array();
-		$arrOfFptrs = array();
-		$physicalProccessed = false;
+		$arr = [];
+		$arrOfFptrs = [];
+		$physicalProccessed = FALSE;
 
 		// get fptrs
 		foreach ($xmlDocument->structMap as $structMap) {
 			if ($structMap->attributes()->{'TYPE'} == 'physical' && !$physicalProccessed) {
 				foreach ($structMap->div->div as $div) {
 					foreach ($div->fptr as $fptr) {
-						$arrOfFptrs[(string)($div->attributes()->{'ORDER'})][] = (string)($fptr->attributes()->{'FILEID'});
+						$arrOfFptrs[(string) ($div->attributes()->{'ORDER'})][] = (string) ($fptr->attributes()->{'FILEID'});
 					}
-					$physicalProccessed = true;
+					$physicalProccessed = TRUE;
 				}
 			}
 		}
@@ -196,7 +199,10 @@ class Loader extends Cacheable {
 		ksort($arrOfFptrs);
 
 		// get list of all audio files with specified type
-		$list = $this->createListOfAllAudioVideoFilesInMetsDocument($xmlDocument, array('reference audio', 'reference video'));
+		$list = $this->createListOfAllAudioVideoFilesInMetsDocument($xmlDocument, [
+			'reference audio',
+			'reference video',
+		]);
 
 		// create array with urls
 		foreach ($arrOfFptrs as $key => $fptrs) {
@@ -205,20 +211,21 @@ class Loader extends Cacheable {
 
 					// audio
 					if ($this->isAudio) {
-						$arr[] = array(
-							'url' => $list[$fptr]['url']
-							, 'contentType' => $list[$fptr]['contentType']
-							, 'order' => $key
-							);
+						$arr[] = [
+							'url' => $list[$fptr]['url'],
+							'contentType' => $list[$fptr]['contentType'],
+							'order' => $key,
+						];
+					}
 					// video
-					} elseif ($this->isVideo) {
-						$arr[] = array(
-							'url' => $list[$fptr]['url']
-							, 'contentType' => $list[$fptr]['contentType']
-							, 'stillsUrl' => $list[$fptr]['stillsUrl']
-							, 'thumbnailUrl' => $list[$fptr]['thumbnailUrl']
-							, 'order' => $key
-							);
+					elseif ($this->isVideo) {
+						$arr[] = [
+							'url' => $list[$fptr]['url'],
+							'contentType' => $list[$fptr]['contentType'],
+							'stillsUrl' => $list[$fptr]['stillsUrl'],
+							'thumbnailUrl' => $list[$fptr]['thumbnailUrl'],
+							'order' => $key,
+						];
 					}
 				}
 			}
@@ -231,96 +238,127 @@ class Loader extends Cacheable {
 	 *
 	 */
 	protected function setIsAudioVideoHiresOrArchivePdf($xmlDocument) {
-		$this->isAudio = $this->isDocumentOfType($xmlDocument, array('reference audio'));
-		$this->isVideo = $this->isDocumentOfType($xmlDocument, array('reference video'));
-		$this->isHires = $this->isDocumentOfType($xmlDocument, array('hires reference image'));
-		$this->isArchivePdf = $this->isDocumentOfType($xmlDocument, array('archive pdf', 'archive application'));
+		$this->isAudio = $this->isDocumentOfType($xmlDocument, ['reference audio']);
+		$this->isVideo = $this->isDocumentOfType($xmlDocument, ['reference video']);
+		$this->isHires = $this->isDocumentOfType($xmlDocument, ['hires reference image']);
+		$this->isArchivePdf = $this->isDocumentOfType($xmlDocument, [
+			'archive pdf',
+			'archive application',
+		]);
 	}
 
 	/*
 	 * Create dataset
 	 */
-	protected function createDataset($xmlDocument, $pdfUrl, $metsUrl) {
-		// check wath type of document it is
-		$this->setIsAudioVideoHiresOrArchivePdf($xmlDocument);
-
+	protected function createDataset($xmlDocument, $pdfUrl, $metsUrl, $manifestUrl) {
 		// check if mets and pfd file exist
-		if ( !$this->checkRemoteFileExists($metsUrl)) {
+		if (!$this->checkRemoteFileExists($metsUrl)) {
 			$metsUrl = '';
 		}
-		if ( !$this->checkRemoteFileExists($pdfUrl)) {
+		if (!$this->checkRemoteFileExists($manifestUrl, 'json')) {
+			$manifestUrl = '';
+		}
+		if (!$this->checkRemoteFileExists($pdfUrl)) {
 			$pdfUrl = '';
 		}
 
-		if ( empty($metsUrl)) {
-			// if empty, return null
-            return null;
-		} else {
+		// check wath type of document it is
+		if (!empty($metsUrl)) {
+			$this->setIsAudioVideoHiresOrArchivePdf($xmlDocument);
+		}
 
-            if ($this->isArchivePdf) {
-                    // ARCHIVE PDF
+		if ($this->isDigitalBorn) {
+			return [
+				'iiifArchive' => 'https://iiif.socialhistory.org/archivalviewer/?manifest=' .
+					'https://iiif.socialhistory.org/iiif/presentation/collection/' .
+					$this->record . '.' . $this->item,
+			];
+		}
 
-                    // try to find pdf link in mets file
-                $pdf = $this->getPdfLinkFromMetsFile($xmlDocument);
-                // if no pdf link create link
-                if ($pdf == '') {
-                    $pdf = 'https://hdl.handle.net/10622/' . $this->item . '?locatt=view:pdf';
-                }
+		if (!empty($manifestUrl)) {
+			return [
+				'iiif' => 'https://access.iisg.amsterdam/universalviewer/#?manifest=' .
+					$manifestUrl,
+			];
+		}
 
-                //
-                return array(
-                    'pdf' => ($this->checkRemoteFileExists($pdf) ? $pdf : null)
-                , 'view' => null
-                );
-            } elseif ($this->isAudio || $this->isVideo) {
-				// AUDIO VIDEO
-
-				// get audio or video files
-				$arr = $this->getAudioVideoFilesFromMetsFile($xmlDocument);
-
-				// if audio return no pdf link
-				if ($this->isAudio) {
-					$pdfUrl = '';
+		if (empty($metsUrl)) {
+			return NULL;
+		}
+		else {
+			if ($this->isArchivePdf) {
+				// try to find pdf link in mets file
+				$pdf = $this->getPdfLinkFromMetsFile($xmlDocument);
+				// if no pdf link create link
+				if ($pdf == '') {
+					$pdf = 'https://hdl.handle.net/10622/' . $this->item . '?locatt=view:pdf';
 				}
 
-				return array(
-					'pdf' => ($this->checkRemoteFileExists($pdfUrl) ? $pdfUrl : null)
-					, 'view' => array(
-						'mets' => ($this->checkRemoteFileExists($metsUrl) ? $metsUrl : null)
-						, 'items' => $arr
-					));
-			} elseif ($this->isHires) {
-				// HIRES SCANS
-				return array(
-					'pdf' => ($this->checkRemoteFileExists($pdfUrl) ? $pdfUrl : null)
-					, 'view' => array(
-						'mets' => ($this->checkRemoteFileExists($metsUrl) ? $metsUrl : null)
-						, 'items' => null
-					));
-			} else {
-				// ELSE
-				return array();
+				return [
+					'pdf' => ($this->checkRemoteFileExists($pdf) ? $pdf : NULL),
+					'view' => NULL,
+				];
+			}
+			else {
+				if ($this->isAudio || $this->isVideo) {
+					// get audio or video files
+					$arr = $this->getAudioVideoFilesFromMetsFile($xmlDocument);
+
+					// if audio return no pdf link
+					if ($this->isAudio) {
+						$pdfUrl = '';
+					}
+
+					return [
+						'pdf' => ($this->checkRemoteFileExists($pdfUrl) ? $pdfUrl : NULL),
+						'view' => [
+							'mets' => ($this->checkRemoteFileExists($metsUrl) ? $metsUrl : NULL),
+							'items' => $arr,
+						],
+					];
+				}
+				elseif ($this->isHires) {
+					return [
+						'pdf' => ($this->checkRemoteFileExists($pdfUrl) ? $pdfUrl : NULL),
+						'view' => [
+							'mets' => ($this->checkRemoteFileExists($metsUrl) ? $metsUrl : NULL),
+							'items' => NULL,
+						],
+					];
+				}
 			}
 		}
+
+		return [];
 	}
 
 	/*
 	 * Return output for EAD
 	 */
 	protected function createEad() {
-		$xmlDocument = '';
+		$manifestUrl = "http://hdl.handle.net/10622/" . $this->record . '.' . $this->item . "?locatt=view:manifest";
+		$xmlMets = '';
 
 		// load the daoloc hrefs
 		$daoloc = $this->getDaolocHrefs();
 
 		// check if there is a mets document
-		if ( isset($daoloc['mets']) && !empty($daoloc['mets'])) {
+		if (isset($daoloc['mets']) && !empty($daoloc['mets'])) {
 			// load mets document
-			$xmlDocument = simplexml_load_file($daoloc['mets']);
+			$xmlMets = simplexml_load_file($daoloc['mets']);
 		}
 
+		// check if it is digital born
+		// TODO: Disable digital born for now
+		$this->isDigitalBorn = FALSE; // TODO: (strpos($this->item, 'dig') === 0);
+
 		// return dataset
-		return $this->createDataset($xmlDocument, $daoloc['pdf'], $daoloc['mets']);
+		return $this->createDataset(
+			$xmlMets,
+			isset($daoloc['pdf']) ? $daoloc['pdf'] : NULL,
+			isset($daoloc['mets']) ? $daoloc['mets'] : NULL,
+			$manifestUrl
+		);
 	}
 
 	/*
@@ -330,27 +368,33 @@ class Loader extends Cacheable {
 		// urls
 		$mainUrl = "https://hdl.handle.net/10622/" . $this->item;
 		$pdfUrl = $mainUrl . '?locatt=view:pdf';
-		$metsUrl =  $mainUrl. '?locatt=view:mets';
+		$metsUrl = $mainUrl . '?locatt=view:mets';
+		$manifestUrl = $mainUrl . '?locatt=view:manifest';
 
-		// load mets document
-		$xmlDocument = simplexml_load_file($metsUrl);
+		// load mets and manifest document
+		$xmlMets = simplexml_load_file($metsUrl);
 
 		// return dataset
-		return $this->createDataset($xmlDocument, $pdfUrl, $metsUrl);
+		return $this->createDataset(
+			$xmlMets,
+			$pdfUrl,
+			$metsUrl,
+			$manifestUrl
+		);
 	}
 
-    /**
-     * Loads the record.
-     *
-     * @return mixed
-     */
-    protected function create() {
-	    // check type of document
-	    if ( !in_array($this->type, array('ead', 'marc'))) {
-	    	$this->type = 'marc';
-	    }
+	/**
+	 * Loads the record.
+	 *
+	 * @return mixed
+	 */
+	protected function create() {
+		// check type of document
+		if (!in_array($this->type, ['ead', 'marc'])) {
+			$this->type = 'marc';
+		}
 
-	    // create EAD or Marc
+		// create EAD or Marc
 		switch ($this->type) {
 			case "ead":
 				return $this->createEad();
@@ -358,45 +402,52 @@ class Loader extends Cacheable {
 			default:
 				return $this->createMarc();
 		}
-    }
+	}
 
-    /*
-     * create List
-     */
-    public function getList() {
+	/*
+	 * create List
+	 */
+	public function getList() {
 		return $this->get();
-    }
+	}
 
-    /*
-     * Check if remote file exists
-     * @source http://stackoverflow.com/questions/981954/how-can-one-check-to-see-if-a-remote-file-exists-using-php
-     * modified version of function
-     */
-	protected function checkRemoteFileExists($url) {
+	/*
+	 * Check if remote file exists
+	 * @source http://stackoverflow.com/questions/981954/how-can-one-check-to-see-if-a-remote-file-exists-using-php
+	 * modified version of function
+	 */
+	protected function checkRemoteFileExists($url, $type=null) {
 		if ($url == '') {
-			return false;
+			return FALSE;
 		}
 
-		$ret = false;
+		$ret = FALSE;
 
 		$curl = curl_init($url);
 
 		// don't fetch the actual page, you only want to check the connection is ok
-		curl_setopt($curl, CURLOPT_NOBODY, true);
+		curl_setopt($curl, CURLOPT_NOBODY, TRUE);
 		// timeout is not necessary !
 		curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 3); // The number of seconds to wait while trying to connect. Use 0 to wait indefinitely.
 		curl_setopt($curl, CURLOPT_TIMEOUT, 10); // The maximum number of seconds to allow cURL functions to execute.
+
+		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
 
 		// do request
 		$result = curl_exec($curl);
 
 		// if request did not fail
-		if ($result !== false) {
+		if ($result !== FALSE) {
 			// if request was ok, check response code
 			$statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 			// REMARK: check not only for 200 but also for 301, 302 and 303 (redirects)
-			if ( in_array($statusCode, array('200', '301', '302', '303') )) {
-				$ret = true;
+			if (in_array($statusCode, ['200', '301', '302', '303'])) {
+				$ret = TRUE;
+			}
+
+			if ($ret && !is_null($type)) {
+				$contentType = curl_getinfo($curl, CURLINFO_CONTENT_TYPE);
+				$ret = strpos($contentType, $type) !== false;
 			}
 		}
 

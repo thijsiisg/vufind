@@ -30,6 +30,7 @@ class DeliveryInit extends AbstractTranslatorHelper {
         $this->view->jsobject()->addProps(array(
             'url'  => $this->deliveryUrl,
             'lang' => $this->view->layout()->userLang,
+            'requestAccess' => $this->getTranslator()->translate('Request access'),
             'warningOnlineContent' => $this->getTranslator()->translate('Content available'),
             'reservationTooltip' =>  $this->getTranslator()->translate('ReservationTooltip'),
             'reproductionTooltip' =>  $this->getTranslator()->translate('ReproductionTooltip'),
