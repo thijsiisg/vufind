@@ -133,6 +133,15 @@
 
             <xsl:call-template name="delivery"/>
             <xsl:apply-templates select="ead:did/ead:daogrp"/>
+
+            <!-- TODO: PIDs not yet in EAD -->
+            <xsl:if test="$id = 'ARCH00293' or $id = 'ARCH00393'">
+              <div class="digital block loading hidden-print"
+                   data-record="{normalize-space($id)}"
+                   data-item="{normalize-space(ead:did/ead:unitid)}">
+                <span class="loading-text">Loading...</span>
+              </div>
+            </xsl:if>
           </div>
         </xsl:if>
       </xsl:otherwise>
