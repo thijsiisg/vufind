@@ -135,7 +135,7 @@
             <xsl:apply-templates select="ead:did/ead:daogrp"/>
 
             <!-- TODO: PIDs not yet in EAD -->
-            <xsl:if test="$id = 'ARCH00293' or $id = 'ARCH00393'">
+            <xsl:if test="$id='ARCH00293' or $id='ARCH00393' or $id='COLL00143' or $id='COLL00571'">
               <div class="digital block loading hidden-print"
                    data-record="{normalize-space($id)}"
                    data-item="{normalize-space(ead:did/ead:unitid)}">
