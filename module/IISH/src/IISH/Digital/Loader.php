@@ -258,9 +258,6 @@ class Loader extends Cacheable {
 		if (!$this->checkRemoteFileExists($manifestUrl, 'json')) {
 			$manifestUrl = '';
 		}
-		if (!$this->checkRemoteFileExists($pdfUrl)) {
-			$pdfUrl = '';
-		}
 
 		// check wath type of document it is
 		if (!empty($metsUrl)) {
@@ -295,7 +292,7 @@ class Loader extends Cacheable {
 				}
 
 				return [
-					'pdf' => ($this->checkRemoteFileExists($pdf) ? $pdf : NULL),
+					'pdf' => ($this->checkRemoteFileExists($pdf, NULL, TRUE) ? $pdf : NULL),
 					'view' => NULL,
 				];
 			}
@@ -310,7 +307,7 @@ class Loader extends Cacheable {
 					}
 
 					return [
-						'pdf' => ($this->checkRemoteFileExists($pdfUrl) ? $pdfUrl : NULL),
+						'pdf' => ($this->checkRemoteFileExists($pdfUrl, NULL, TRUE) ? $pdfUrl : NULL),
 						'view' => [
 							'mets' => ($this->checkRemoteFileExists($metsUrl) ? $metsUrl : NULL),
 							'items' => $arr,
@@ -319,7 +316,7 @@ class Loader extends Cacheable {
 				}
 				elseif ($this->isHires) {
 					return [
-						'pdf' => ($this->checkRemoteFileExists($pdfUrl) ? $pdfUrl : NULL),
+						'pdf' => ($this->checkRemoteFileExists($pdfUrl, NULL, TRUE) ? $pdfUrl : NULL),
 						'view' => [
 							'mets' => ($this->checkRemoteFileExists($metsUrl) ? $metsUrl : NULL),
 							'items' => NULL,
@@ -416,7 +413,7 @@ class Loader extends Cacheable {
 	 * @source http://stackoverflow.com/questions/981954/how-can-one-check-to-see-if-a-remote-file-exists-using-php
 	 * modified version of function
 	 */
-	protected function checkRemoteFileExists($url, $type=null) {
+	protected function checkRemoteFileExists($url, $type=NULL, $pdfOr=FALSE) {
 		if ($url == '') {
 			return FALSE;
 		}
@@ -442,6 +439,9 @@ class Loader extends Cacheable {
 			$statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 			// REMARK: check not only for 200 but also for 301, 302 and 303 (redirects)
 			if (in_array($statusCode, ['200', '301', '302', '303'])) {
+				$ret = TRUE;
+			}
+			else if ($pdfOr && curl_getinfo($curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD) != NULL) {
 				$ret = TRUE;
 			}
 
