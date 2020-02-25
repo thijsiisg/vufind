@@ -81,7 +81,7 @@
         </xsl:for-each>
         ];
         function swap() {
-        $('#teaser img').attr('src', urls[Math.round(Math.random() * urls.length)].replace('http', 'https'));
+        $('#teaser img').attr('src', urls[Math.round(Math.random() * urls.length)].replace('http:', 'https:'));
         }
         swap();
         $('#teaser img').click(function(){
