@@ -57,6 +57,21 @@ class Loader extends Cacheable {
      */
     protected function create() {
         try {
+			// Override message concerning corona virus
+			if ($this->getLang() == 'nl') {
+				return array(
+					'title'   => 'IISG TIJDELIJK GESLOTEN',
+					'content' => 'In lijn met het landelijke beleid met betrekking tot het coronavirus is het IISG voor het publiek gesloten van maandag 16 maart tot en met 31 maart 2020.',
+					'lang'    => $this->getLang()
+				);
+			}
+
+			return array(
+				'title'   => 'IISH TEMPORARILY CLOSED',
+				'content' => 'Following the national policy concerning the coronavirus, IISH will be closed to the public from Monday 16 March until 31 March 2020.',
+				'lang'    => $this->getLang()
+			);
+
             $graph = \EasyRdf_Graph::newAndLoad($this->uri);
 
             $title = $graph->label();

@@ -137,7 +137,9 @@
                   <xsl:otherwise>true</xsl:otherwise>
                 </xsl:choose>
               </xsl:attribute>
-              <xsl:attribute name="data-show-reproduction">true</xsl:attribute>
+              <!-- Override concerning corona virus -->
+              <!-- <xsl:attribute name="data-show-reproduction">true</xsl:attribute> -->
+              <xsl:attribute name="data-show-reproduction">false</xsl:attribute>
             </div>
           </div>
         </div>
