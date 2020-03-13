@@ -55,7 +55,8 @@
 
       <div id="arch" class="{$arch_class}">
         <table class="table table-striped">
-          <xsl:call-template name="reproduction"/>
+          <!-- Override concerning corona virus -->
+<!--          <xsl:call-template name="reproduction"/>-->
           <xsl:call-template name="creator"/>
           <xsl:call-template name="secondcreator"/>
           <xsl:call-template name="abstract"/>
@@ -131,12 +132,14 @@
               <xsl:attribute name="data-signature">
                 <xsl:value-of select="$colid"/>
               </xsl:attribute>
-              <xsl:attribute name="data-show-reservation">
-                <xsl:choose>
-                  <xsl:when test="ead:archdesc/ead:dsc/ead:c01">false</xsl:when>
-                  <xsl:otherwise>true</xsl:otherwise>
-                </xsl:choose>
-              </xsl:attribute>
+              <!-- Override concerning corona virus -->
+<!--              <xsl:attribute name="data-show-reservation">-->
+<!--                <xsl:choose>-->
+<!--                  <xsl:when test="ead:archdesc/ead:dsc/ead:c01">false</xsl:when>-->
+<!--                  <xsl:otherwise>true</xsl:otherwise>-->
+<!--                </xsl:choose>-->
+<!--              </xsl:attribute>-->
+              <xsl:attribute name="data-show-reservation">false</xsl:attribute>
               <!-- Override concerning corona virus -->
               <!-- <xsl:attribute name="data-show-reproduction">true</xsl:attribute> -->
               <xsl:attribute name="data-show-reproduction">false</xsl:attribute>
