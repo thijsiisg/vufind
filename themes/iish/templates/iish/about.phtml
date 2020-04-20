@@ -4,13 +4,17 @@
 
 <? if ($this->layout()->userLang === 'nl'): ?>
   <p>
-    <b>search.socialhistory.org</b> is de catalogus van het <a href="http://socialhistory.org/">Internationaal
-      Instituut voor Sociale Geschiedenis (IISG)</a>,
-    het <a href="http://www.neha.nl/">Nederlands Economisch Historisch Archief (NEHA)</a> en <a
-        href="http://www.persmuseum.nl/">Permsuseum</a>.<br/>
-    Voor praktische informatie en antwoorden op veel gestelde vragen met betrekking tot het raadplegen van deze
-    collecties zie <a href="http://socialhistory.org/nl/dienstverlening">Dienstverlening</a><br/>
-    De taalwissel heeft betrekking op de weergave van de labels in de interface. De taal van de data zelf
+    <b>zoeken.iisg.amsterdam</b> is de catalogus van het <a
+        href="https://iisg.amsterdam/nl">Internationaal Instituut voor Sociale
+      Geschiedenis (IISG)</a>,
+    het <a href="https://neha.nl/">Nederlands Economisch Historisch Archief
+      (NEHA)</a> en <a
+        href="https://www.beeldengeluid.nl/organisatie/persmuseum-en-beeld-en-geluid-verder-als-een-organisatie">Permsuseum</a>.<br/>
+    Voor praktische informatie en antwoorden op veel gestelde vragen met
+    betrekking tot het raadplegen van deze
+    collecties zie <a href="https://iisg.amsterdam/nl/collecties">Collecties</a><br/>
+    De taalwissel heeft betrekking op de weergave van de labels in de interface.
+    De taal van de data zelf
     wijzigt niet.
   </p>
 
@@ -19,174 +23,221 @@
   <p>
     <b>
       <a href="<?= $this->url('search-results') . '?' .
-      http_build_query(array('type' => 'AllFields', 'filter[]' => 'format:"Archives"')); ?>">Archieven</a></b>
-    – beschrijvingen en
-    inventarissen van alle archiefcollecties van het IISG, NEHA en Persmuseum. <br/>
-    De Nederlandse archieven zijn voorzien van een korte beschrijving in het Nederlands, de buitenlandse
+	  http_build_query([
+		  'type' => 'AllFields',
+		  'filter[]' => 'format:"Archives"',
+	  ]); ?>">Archieven</a></b>
+    – beschrijvingen en inventarissen van alle archiefcollecties van het IISG,
+    NEHA en Persmuseum. <br/>
+    De Nederlandse archieven zijn voorzien van een korte beschrijving in het
+    Nederlands, de buitenlandse
     archieven hebben alleen een korte beschrijving in het Engels.<br/>
-    Van ruim 1200 archieven is eveneens een inventaris beschikbaar. De taal van de inventaris hangt af van het
+    Van ruim 1500 archieven is eveneens een inventaris beschikbaar. De taal van
+    de inventaris hangt af van het
     land van herkomst van het archief en kan Nederlands, Engels, Duits, Frans of
     Spaans zijn.<br/>
     De inhoud van <a href="<?= $this->url('search-results') . '?' .
-      http_build_query(array('type' => 'AllFields', 'filter' => array('format:"Archives"', 'downloadable:true'))); ?>">
-      ruim 160 archiefcollecties</a>
-    zijn via deze catalogus online beschikbaar. Meer informatie over de archieven:
-    <a href="http://socialhistory.org/nl/archieven">socialhistory.org/nl/archieven</a>.
+	  http_build_query([
+		  'type' => 'AllFields',
+		  'filter' => ['format:"Archives"', 'downloadable:true'],
+	  ]); ?>">
+      bijna 400 archiefcollecties</a> zijn via deze catalogus online
+    beschikbaar.<br\>
+    Meer informatie over de archieven:
+    <a href="https://iisg.amsterdam/nl/collecties/archieven">iisg.amsterdam/nl/collecties/archieven</a>.
   </p>
 
   <p>
     <b>
       <a href="<?=
-      $this->url('search-results') . '?' .
-      http_build_query(array('type' => 'AllFields', 'filter[]' => 'format:"Articles"')); ?>">Artikelen</a></b>
+	  $this->url('search-results') . '?' .
+	  http_build_query([
+		  'type' => 'AllFields',
+		  'filter[]' => 'format:"Articles"',
+	  ]); ?>">Artikelen</a></b>
     - van de volgende tijdschriften zijn online te raadplegen:<br/>
   <ul>
     <li>International Review of Social History, 1936-1939</li>
-    <li>Bulletin of the International Institute for Social History, 1937-1955</li>
-    <li>International Review of Social History, 1956-2009</li>
+    <li>Bulletin of the International Institute for Social History, 1937-1955
+    </li>
+    <li>International Review of Social History, 1956-2015</li>
     <li>Economisch-Historisch Jaarboek, 1915-1970</li>
     <li>Economisch- en Sociaal-Historisch Jaarboek, 1970-1993</li>
-    <li>NEHA-Bulletin. Orgaan ten behoeve van de economische geschiedenis in Nederland, 1987-2003</li>
+    <li>NEHA-Bulletin. Orgaan ten behoeve van de economische geschiedenis in
+      Nederland, 1987-2003
+    </li>
     <li>Jaarboek voor de Geschiedenis van Bedrijf en Techniek, 1984-1993</li>
     <li>Economic and Social History in the Netherlands, 1989-1996</li>
-    <li>NEHA-Jaarboek voor economische, bedrijfs- en techniekgeschiedenis, 1994-2003</li>
+    <li>NEHA-Jaarboek voor economische, bedrijfs- en techniekgeschiedenis,
+      1994-2003
+    </li>
   </ul>
   </p>
 
   <p>
     <b><a href="<?= $this->url('search-results') . '?' .
-        http_build_query(array('type' => 'AllFields', 'filter[]' => 'format:"Documentation"')); ?>">Documentatie</a></b>
-    – pamfletten,
-    flyers en kleine brochures uit de collectie van het IISG geordend op land / rubriek.<br/>
-    Een introductie tot deze collectie is te vinden op: <a
-        href="http://socialhistory.org/nl/collecties/documentatie">socialhistory.org/nl/collecties/documentatie</a>.
+		http_build_query([
+			'type' => 'AllFields',
+			'filter[]' => 'format:"Books and brochures"',
+		]); ?>">Boeken
+        en brochures</a></b> – gegevens van alle boeken en brochures in de
+    bibliotheek van het IISG, NEHA en Persmuseum.
   </p>
 
   <p>
     <b><a href="<?= $this->url('search-results') . '?' .
-        http_build_query(array('type' => 'AllFields', 'filter[]' => 'format:"Books and brochures"')); ?>">Boeken
-        en brochures</a></b> – gegevens
-    van alle boeken en brochures in de bibliotheek van het IISG, NEHA en Persmuseum.
+		http_build_query([
+			'type' => 'AllFields',
+			'filter[]' => 'format:"Serials"',
+		]); ?>">Periodieken</a></b>
+    – beschrijvingen van kranten, tijdschriften, jaarboeken en jaarverslagen in
+    de bibliotheek van het IISG, NEHA en Persmuseum.
   </p>
 
   <p>
     <b><a href="<?= $this->url('search-results') . '?' .
-        http_build_query(array('type' => 'AllFields', 'filter[]' => 'format:"Serials"')); ?>">Periodieken</a></b>
-    – 250.000 beschrijvingen
-    van kranten, tijdschriften, jaarboeken en jaarverslagen in de bibliotheek van het IISG, NEHA en Persmuseum.
-  </p>
-
-  <p>
-    <b><a href="<?= $this->url('search-results') . '?' .
-        http_build_query(array('type' => 'AllFields', 'filter[]' => 'format:"Visual documents"')); ?>">Beeldmateriaal</a></b>
-    – de beeldcollectie omvat
-    onder meer zo'n 250.000 foto's, 138.000 negatieven en 22.000 tekeningen, de grootste collecties affiches
-    (ca. 125.000) in Nederland en bewaart enkele honderden vaandels. Daarnaast omvat
-    de collectie aanzienlijke hoeveelheden film (ca. 2500), video's (ca. 4000) en buttons. Van de beeldcollectie
-    zijn meer dan 200.000 afbeeldingen digitaal beschikbaar.<br/>
+		http_build_query([
+			'type' => 'AllFields',
+			'filter[]' => 'format:"Visual documents"',
+		]); ?>">Beeldmateriaal</a></b>
+    – de beeldcollectie omvat onder meer foto's, negatieven en tekeningen, een
+    van de grootste collecties affiches in Nederland en enkele honderden
+    vaandels. Daarnaast omvat
+    de collectie aanzienlijke hoeveelheden film, video's en buttons. Van de
+    beeldcollectie zijn meer dan 270.000 afbeeldingen digitaal beschikbaar.<br/>
     Een overzicht van de gebruikte trefwoorden vindt u in de <a
-        href="http://socialhistory.org/sites/default/files/docs/thesaurus_image_and_sound_collections_0.doc">thesauruslijst</a><br/>
-    Meer informatie: <a href="http://socialhistory.org/nl/collecties/beeld-geluid">socialhistory.org/nl/collecties/beeld-geluid</a>.
+        href="https://iisg.amsterdam/files/2018-01/iish_thesaurus_image_and_sound_collections.pdf">thesauruslijst</a><br/>
+    Meer informatie: <a
+        href="https://iisg.amsterdam/nl/collecties/bladeren/beeld-geluid">iisg.amsterdam/nl/collecties/bladeren/beeld-geluid</a>.
   </p>
 
   <p>
     <b><a href="<?= $this->url('search-results') . '?' .
-        http_build_query(array('type' => 'AllFields', 'filter[]' => 'format:"Music and sound"')); ?>">Muziek
-        en geluid</a></b> - gegevens van de collectie
-    strijd- en protestliederen; historisch geluidsmateriaal, zowel documentair uitgegeven als originele opnames.
+		http_build_query([
+			'type' => 'AllFields',
+			'filter[]' => 'format:"Music and sound"',
+		]); ?>">Muziek en geluid</a></b>
+    - gegevens van de collectie strijd- en protestliederen; historisch
+    geluidsmateriaal, zowel documentair uitgegeven als originele opnames.
     Onder andere redevoeringen voorlieden, congressen en bijeenkomsten,
-    programma's rond voorlieden en gebeurtenissen, interview- en oral history projecten rond onderzoeken en
-    publicaties. <br/>
-    Meer informatie: <a
-        href="http://socialhistory.org/nl/collecties/geluid">socialhistory.org/nl/collecties/geluid</a>.
+    programma's rond voorlieden en gebeurtenissen, interview- en oral history
+    projecten rond onderzoeken en
+    publicaties.
   </p>
 <? else: ?>
   <p>
-    <b>search.socialhistory.org</b> is a search platform for the collections of the <a
-        href="http://socialhistory.org/en">International Institute of Social History
-      (IISH)</a>, <a href="http://www.neha.nl/">Netherlands Economic History Archive</a> (NEHA), and <a
-        href="http://www.persmuseum.nl/">Persmuseum</a>.<br/>
-    For practical information and answers to FAQs on accessing the collections please see <a
-        href="http://socialhistory.org/en/services">Services</a>.<br/>
-    The language switch applies to the labels on the website. The language of the data itself does not change.
+    <b>search.iisg.amsterdam</b> is a search platform for the collections of the
+    <a
+        href="https://iisg.amsterdam">International Institute of Social History
+      (IISH)</a>, <a href="https://neha.nl/">Netherlands Economic History
+      Archive</a> (NEHA), and <a
+        href="https://www.beeldengeluid.nl/organisatie/persmuseum-en-beeld-en-geluid-verder-als-een-organisatie">Persmuseum</a>.<br/>
+    For practical information and answers to FAQs on accessing the collections
+    please see <a
+        href="https://iisg.amsterdam/en/collections">Collections</a>.<br/>
+    The language switch applies to the labels on the website. The language of
+    the data itself does not change.
   </p>
 
   <h3>Additional information</h3>
 
   <p>
     <b><a href="<?= $this->url('search-results') . '?' .
-        http_build_query(array('type' => 'AllFields', 'filter[]' => 'format:"Archives"')); ?>">Archives</a></b>
-    – descriptions and inventories to
-    archival collections of IISH, NEHA and Persmuseum.<br/>
-    For Dutch archives a short description in Dutch is available, for all other archives the short description
-    is in English. A search aid is available for over 1200 archives and can be in
-    Dutch, English, German, French or Spanish, depending on the archives country of origin.<br/>
+		http_build_query([
+			'type' => 'AllFields',
+			'filter[]' => 'format:"Archives"',
+		]); ?>">Archives</a></b>
+    – descriptions and inventories to archival collections of IISH, NEHA and
+    Persmuseum.<br/>
+    For Dutch archives a short description in Dutch is available, for all other
+    archives the short description
+    is in English. An inventory is available for over 1500 archives and can be
+    in
+    Dutch, English, German, French or Spanish, depending on the archives country
+    of origin.<br/>
     The content of <a href="<?= $this->url('search-results') . '?' .
-      http_build_query(array('type' => 'AllFields', 'filter' => array('format:"Archives"', 'downloadable:true'))); ?>">
-      over 160 collections</a>
-    is online available through this catalogue.<br/>
-    More information: <a href="http://socialhistory.org/en/archives">socialhistory.org/en/archives</a>.
+	  http_build_query([
+		  'type' => 'AllFields',
+		  'filter' => ['format:"Archives"', 'downloadable:true'],
+	  ]); ?>">
+      almost 400 collections</a> is online available through this
+    catalogue.<br/>
+    More information: <a
+        href="https://iisg.amsterdam/en/collections/browsing/archives">iisg.amsterdam/en/collections/browsing/archives</a>.
   </p>
 
   <p>
     <b><a href="<?=
-        $this->url('search-results') . '?' .
-        http_build_query(array('type' => 'AllFields', 'filter[]' => 'format:"Articles"')); ?>">Articles</a></b>
+		$this->url('search-results') . '?' .
+		http_build_query([
+			'type' => 'AllFields',
+			'filter[]' => 'format:"Articles"',
+		]); ?>">Articles</a></b>
     - from the following serials are online available:<br/>
   <ul>
     <li>International Review of Social History, 1936-1939</li>
-    <li>Bulletin of the International Institute for Social History, 1937-1955</li>
-    <li>International Review of Social History, 1956-2009</li>
+    <li>Bulletin of the International Institute for Social History, 1937-1955
+    </li>
+    <li>International Review of Social History, 1956-2015</li>
     <li>Economisch-Historisch Jaarboek, 1915-1970</li>
     <li>Economisch- en Sociaal-Historisch Jaarboek, 1970-1993</li>
-    <li>NEHA-Bulletin. Orgaan ten behoeve van de economische geschiedenis in Nederland, 1987-2003</li>
+    <li>NEHA-Bulletin. Orgaan ten behoeve van de economische geschiedenis in
+      Nederland, 1987-2003
+    </li>
     <li>Jaarboek voor de Geschiedenis van Bedrijf en Techniek, 1984-1993</li>
     <li>Economic and Social History in the Netherlands, 1989-1996</li>
-    <li>NEHA-Jaarboek voor economische, bedrijfs- en techniekgeschiedenis, 1994-2003</li>
+    <li>NEHA-Jaarboek voor economische, bedrijfs- en techniekgeschiedenis,
+      1994-2003
+    </li>
   </ul>
   </p>
 
   <p>
     <b><a href="<?= $this->url('search-results') . '?' .
-        http_build_query(array('type' => 'AllFields', 'filter[]' => 'format:"Documentation"')); ?>">Leaflets,
-        Pamphlets</a></b>
-    – small brochures from IISH collections arranged according to country / category.<br/>
-    An introduction to this collection is available at <a
-        href="https://socialhistory.org/en/collections/ephemera">socialhistory.org/en/collections/ephemera</a>.
+		http_build_query([
+			'type' => 'AllFields',
+			'filter[]' => 'format:"Books and brochures"',
+		]); ?>">Books
+        and brochures</a></b> – contains records of all books and brochures in
+    the library of IISH, NEHA, and Persmuseum.
   </p>
 
   <p>
     <b><a href="<?= $this->url('search-results') . '?' .
-        http_build_query(array('type' => 'AllFields', 'filter[]' => 'format:"Books and brochures"')); ?>">Books
-        and brochures</a></b> – contains records
-    of all books and brochures in the library of IISH, NEHA, and Persmuseum.
-  </p>
-
-  <p>
-    <b><a href="<?= $this->url('search-results') . '?' .
-        http_build_query(array('type' => 'AllFields', 'filter[]' => 'format:"Serials"')); ?>">Serials</a></b>
-    – contains 250,000 records of
-    all newspapers, journal, yearbooks, and annual reports in the collections of IISH, NEHA, and, Persmuseum.
+		http_build_query([
+			'type' => 'AllFields',
+			'filter[]' => 'format:"Serials"',
+		]); ?>">Serials</a></b>
+    – contains descriptions of all newspapers, journals, yearbooks, and annual
+    reports in the collections of IISH, NEHA, and, Persmuseum.
   </p>
   <p>
     <b><a href="<?= $this->url('search-results') . '?' .
-        http_build_query(array('type' => 'AllFields', 'filter[]' => 'format:"Visual documents"')); ?>">Visual
+		http_build_query([
+			'type' => 'AllFields',
+			'filter[]' => 'format:"Visual documents"',
+		]); ?>">Visual
         Documents</a></b> – the image collection
-    held by the IISH includes about 250,000 photos, 138,000 negatives, and 22,000 drawings. The Institute has
-    one of the largest collections of posters in the Netherlands (ca. 125,000)
-    as well as several hundred banners. In addition, the collections include a considerable number of films (ca.
-    2500), videos (ca. 4000), and buttons. Over 200,000 images are available digitally.<br/>
+    held by the IISH includes about photos, negatives, and drawings. The
+    Institute has
+    one of the largest collections of posters in the Netherlands as well as
+    several hundred banners. In addition, the collections
+    include a considerable number of films, videos, and buttons. Over 270,000
+    images are available digitally.<br/>
     There is a subject index in the <a
-        href="http://socialhistory.org/sites/default/files/docs/thesaurus_image_and_sound_collections.doc">thesaurus</a>.<br/>
-    More information: <a href="http://socialhistory.org/en/collections/image-sound">socialhistory.org/en/collections/image-sound</a>.
+        href="https://iisg.amsterdam/files/2018-01/iish_thesaurus_image_and_sound_collections.pdf">thesaurus</a>.<br/>
+    More information: <a
+        href="https://iisg.amsterdam/en/collections/browsing/image-sound">iisg.amsterdam/en/collections/browsing/image-sound</a>.
   </p>
   <p>
     <b><a href="<?= $this->url('search-results') . '?' .
-        http_build_query(array('type' => 'AllFields', 'filter[]' => 'format:"Music and sound"')); ?>">Music
-        and sound</a></b> - songs of struggle and protest;
-    historical recordings, in original and published. Speeches party leaders, congresses and meetings,
-    interviews and oral history projects.<br/>
-    More information: <a
-        href="http://socialhistory.org/en/collections/sound">socialhistory.org/en/collections/sound</a>.
+		http_build_query([
+			'type' => 'AllFields',
+			'filter[]' => 'format:"Music and sound"',
+		]); ?>">Music
+        and sound</a></b> - songs of struggle and protest; historical
+    recordings, in original and published. Speeches party leaders, congresses
+    and meetings,
+    interviews and oral history projects.
   </p>
 <? endif ?>
