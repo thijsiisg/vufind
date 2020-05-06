@@ -251,10 +251,6 @@ class Loader extends Cacheable {
 	 * Create dataset
 	 */
 	protected function createDataset($xmlDocument, $pdfUrl, $metsUrl, $manifestUrl) {
-		// check if mets and pfd file exist
-		if (!$this->checkRemoteFileExists($metsUrl)) {
-			$metsUrl = '';
-		}
 		if (!$this->checkRemoteFileExists($manifestUrl, 'json')) {
 			$manifestUrl = '';
 		}

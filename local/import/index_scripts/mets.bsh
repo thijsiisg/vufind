@@ -52,7 +52,7 @@ private logit(String text) {
 
 public String getTextFromMarc(Record record) {
     String recordId = getId(record);
-    List metsItemUrls = new ArrayList();
+    List manifestItemUrls = new ArrayList();
 
     List fields = record.getVariableFields("852");
     for (DataField datafield : fields) {
@@ -65,22 +65,22 @@ public String getTextFromMarc(Record record) {
                 cn = callNumber.getData();
             }
 
-            String metsUrl = "https://hdl.handle.net/10622/" + barcode.getData() + "?locatt=view:mets";
-            metsItemUrls.add(new String[] {cn, metsUrl});
+            String manifestUrl = "https://hdl.handle.net/10622/" + barcode.getData() + "?locatt=view:manifest";
+            manifestItemUrls.add(new String[] {cn, manifestUrl});
         }
     }
 
-    return getTextFromMetsItemsUrls(recordId, metsItemUrls);
+    return getTextFromManifestUrls(recordId, manifestItemUrls);
 }
 
 public String getTextFromMarcAndParser(Record record, String parserFieldSpec, String parserExtension) {
-    String metsText = getTextFromMarc(record);
+    String text = getTextFromMarc(record);
     String parserText = indexer.getFulltext(record, parserFieldSpec, parserExtension);
 
     SolrServer solrServer = indexer.getSolrServer();
     indexFullText(solrServer, getId(record), null, null, parserText);
 
-    return (metsText + " " + parserText).trim();
+    return (text + " " + parserText).trim();
 }
 
 public String getTextFromEAD(Record record) {
@@ -88,25 +88,28 @@ public String getTextFromEAD(Record record) {
     String url = indexer.getFirstFieldVal(record, "856u");
     Document ead = loadEAD(recordId, url);
 
-    List metsItemUrls = new ArrayList();
+    List manifestItemUrls = new ArrayList();
     for (Element didElement : getElements(ead.getElementsByTagName("ead:did"))) {
         Element unitidElem = getElement(didElement.getElementsByTagName("ead:unitid"));
         String unitid = (unitidElem != null) ? unitidElem.getTextContent() : null;
 
-        String metsUrl = null;
+        String manifestUrl = null;
         for (Element daolocElement : getElements(didElement.getElementsByTagName("ead:daoloc"))) {
-            if (daolocElement.getAttribute("xlink:label").equals("mets"))
-                metsUrl = daolocElement.getAttribute("xlink:href");
+            if (daolocElement.getAttribute("xlink:label").equals("manifest"))
+                manifestUrl = daolocElement.getAttribute("xlink:href");
         }
 
-        if (unitid != null && metsUrl != null)
-            metsItemUrls.add(new String[] {unitid, metsUrl});
+        if (unitid != null && manifestUrl != null)
+            manifestItemUrls.add(new String[] {unitid, manifestUrl});
     }
 
-    return getTextFromMetsItemsUrls(recordId, metsItemUrls);
+    return getTextFromManifestUrls(recordId, manifestItemUrls);
 }
 
-private String getTextFromMetsItemsUrls(String recordId, List urls) {
+private String getTextFromManifestUrls(String recordId, List urls) {
+    // TODO: Fix when we are able to obtain the full text through IIIF
+    return "";
+
     SolrServer solrServer = indexer.getSolrServer();
 
     try {

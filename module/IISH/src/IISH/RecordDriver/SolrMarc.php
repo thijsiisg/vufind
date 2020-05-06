@@ -189,7 +189,7 @@ class SolrMarc extends VuFindSolrMarc {
      *
      * @return string[] All barcodes with METS.
      */
-    public function getBarcodesWithMets() {
+    public function getBarcodesWithManifest() {
         if (isset($this->fields['mets_barcodes'])) {
             return $this->fields['mets_barcodes'];
         }
@@ -674,7 +674,7 @@ class SolrMarc extends VuFindSolrMarc {
             }
         }
 
-        $barcodes = $this->getBarcodesWithMets();
+        $barcodes = $this->getBarcodesWithManifest();
         if (isset($barcodes[0])) {
             return $barcodes[0];
         }

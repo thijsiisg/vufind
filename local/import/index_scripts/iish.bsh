@@ -144,8 +144,8 @@ public String getRecordType(Record record) {
                 Iterator subfieldsIter = subfields.iterator();
                 String desc;
                 while (subfieldsIter.hasNext()) {
-                    desc = (subfield(subfieldsIter.next())).getData().toLowerCase();
-                    if (desc.contains("/10622/3005")) {
+                    desc = (subfield(subfieldsIter.next())).getData().toUpperCase();
+                    if (desc.contains("/10622/N3005")) {
                         return "av";
                     }
                 }
@@ -520,7 +520,7 @@ public String downloadableBiblio(Record record ){
         }
     }
 
-    final Set barcodes = barcodesHaveMets(record);
+    final Set barcodes = barcodesHaveManifest(record);
     if (!barcodes.isEmpty())
         return "true";
     
@@ -567,7 +567,7 @@ public String getAlphabetical(Record record) {
     return null;
 }
 
-public Set barcodesHaveMets(Record record) {
+public Set barcodesHaveManifest(Record record) {
     final Set result = new LinkedHashSet();
     final List fields = record.getVariableFields("852");
     if (fields != null) {
@@ -579,15 +579,15 @@ public Set barcodesHaveMets(Record record) {
                 final Iterator subfieldsIter = subfields.iterator();
                 while (subfieldsIter.hasNext()) {
                     final Subfield subfield = subfield(subfieldsIter.next());
-                    String metsUrl = "https://hdl.handle.net/10622/" + subfield.getData() + "?locatt=view:mets";
+                    String manifestUrl = "https://hdl.handle.net/10622/" + subfield.getData() + "?locatt=view:manifest";
 
                     try {
-                        HttpURLConnection urlConnection = (HttpURLConnection) new URL(metsUrl).openConnection();
+                        HttpURLConnection urlConnection = (HttpURLConnection) new URL(manifestUrl).openConnection();
                         urlConnection.setRequestMethod("HEAD");
                         urlConnection.connect();
                         String contentType = urlConnection.getContentType();
 
-                        if (contentType.equals("application/xml") || contentType.equals("text/xml")) {
+                        if (contentType.equals("application/json") || contentType.startsWith("application/ld+json")) {
                             result.add(subfield.getData());
                         }
                     }
@@ -626,7 +626,7 @@ private String subfieldU(DataField datafield) {
                 final Subfield subfield = subfield( subfieldsIter.next());
                 final String data = subfield.getData();
                 
-                if (data.contains("10622/3005100")) 
+                if (data.contains("10622/N30051"))
                     return "Image";
                     
                 if (data.startsWith("http://hdl.handle.net/10622/") || data.startsWith("https://hdl.handle.net/10622/"))
