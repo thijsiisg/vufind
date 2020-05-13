@@ -329,7 +329,7 @@ class Loader extends Cacheable {
 	 * Return output for EAD
 	 */
 	protected function createEad() {
-		$manifestUrl = "http://hdl.handle.net/10622/" . $this->record . '.' . $this->item . "?locatt=view:manifest";
+		$manifestUrl = "https://hdl.handle.net/10622/" . $this->record . '.' . $this->item . "?locatt=view:manifest";
 		$xmlMets = '';
 
 		// load the daoloc hrefs
