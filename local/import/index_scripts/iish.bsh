@@ -569,33 +569,6 @@ public String getAlphabetical(Record record) {
 
 public Set barcodesHaveManifest(Record record) {
     final Set result = new LinkedHashSet();
-    final List fields = record.getVariableFields("852");
-    if (fields != null) {
-        final Iterator fieldsIter = fields.iterator();
-        while (fieldsIter.hasNext()) {
-            final DataField physical = (DataField) fieldsIter.next();
-            final List subfields = physical.getSubfields('p');
-            if (subfields != null) {
-                final Iterator subfieldsIter = subfields.iterator();
-                while (subfieldsIter.hasNext()) {
-                    final Subfield subfield = subfield(subfieldsIter.next());
-                    String manifestUrl = "https://hdl.handle.net/10622/" + subfield.getData() + "?locatt=view:manifest";
-
-                    try {
-                        HttpURLConnection urlConnection = (HttpURLConnection) new URL(manifestUrl).openConnection();
-                        urlConnection.setRequestMethod("HEAD");
-                        urlConnection.connect();
-                        String contentType = urlConnection.getContentType();
-
-                        if (contentType.equals("application/json") || contentType.startsWith("application/ld+json")) {
-                            result.add(subfield.getData());
-                        }
-                    }
-                    catch (Exception e) { }
-                }
-            }
-        }
-    }
     return result;
 }
 
