@@ -61,14 +61,14 @@ class Loader extends Cacheable {
 			if ($this->getLang() == 'nl') {
 				return array(
 					'title'   => 'IISG TIJDELIJK GESLOTEN',
-					'content' => 'In lijn met het landelijke beleid met betrekking tot het coronavirus is het IISG voor het publiek gesloten van maandag 16 maart tot en met 20 mei 2020.',
+					'content' => 'Het IISG hervat vanaf juni geleidelijk de werkzaamheden in het gebouw. De studiezaal blijft voorlopig nog gesloten voor bezoekers.',
 					'lang'    => $this->getLang()
 				);
 			}
 
 			return array(
 				'title'   => 'IISH TEMPORARILY CLOSED',
-				'content' => 'Following the national policy concerning the coronavirus, IISH will be closed to the public from Monday 16 March until 20 May 2020.',
+				'content' => 'The IISH will gradually start working in the building from June. The reading room will remain closed to visitors until further notice.',
 				'lang'    => $this->getLang()
 			);
 
