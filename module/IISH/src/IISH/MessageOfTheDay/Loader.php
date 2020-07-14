@@ -61,14 +61,14 @@ class Loader extends Cacheable {
 			if ($this->getLang() == 'nl') {
 				return array(
 					'title'   => 'IISG TIJDELIJK GESLOTEN',
-					'content' => 'Het IISG hervat vanaf juni geleidelijk de werkzaamheden in het gebouw. De studiezaal blijft voorlopig nog gesloten voor bezoekers.',
+					'content' => 'IISG tijdelijk gesloten voor publiek; de studiezaal is beperkt en uitsluitend op afspraak geopend. > Tijdelijke dienstverlening zie: <a href="https://iisg.amsterdam/nl/collecties/covid-19">https://iisg.amsterdam/nl/collecties/covid-19</a>',
 					'lang'    => $this->getLang()
 				);
 			}
 
 			return array(
 				'title'   => 'IISH TEMPORARILY CLOSED',
-				'content' => 'The IISH will gradually start working in the building from June. The reading room will remain closed to visitors until further notice.',
+				'content' => 'IISH temporarily closed for the public; access to the reading room is limited and by appointment only. > Temporary Services see: <a href="https://iisg.amsterdam/en/collections/covid-19">https://iisg.amsterdam/en/collections/covid-19</a>',
 				'lang'    => $this->getLang()
 			);
 
