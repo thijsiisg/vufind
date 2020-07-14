@@ -147,4 +147,7 @@
 
   <xsl:template match="ead:scopecontent"/>
 
+  <!-- SEARCHM-240 -->
+ <xsl:template match="ead:odd"/>
+
 </xsl:stylesheet>
