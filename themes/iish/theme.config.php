@@ -10,7 +10,8 @@ return array(
     'helpers' => array(
         'factories'  => array(
             'deliveryinit' => 'IISH\View\Helper\IISH\Factory::getDeliveryInit',
-            'searchbox'    => 'IISH\View\Helper\IISH\Factory::getSearchBox'
+            'searchbox'    => 'IISH\View\Helper\IISH\Factory::getSearchBox',
+			'iishnetwork'     => 'IISH\View\Helper\IISH\Factory::getIISHNetwork'
         ),
         'invokables' => array(
             'jsobject' => 'IISH\View\Helper\IISH\JsObject'

@@ -1,6 +1,6 @@
 <?php
 namespace IISH\Controller;
-use IISH\Content\Covers\IISHContentAccessToken;
+use IISH\Content\IISHNetwork;
 use IISH\RecordDriver\SolrEad;
 use Zend\Config\Config;
 use Zend\View\Model\JsonModel;
@@ -133,8 +133,8 @@ class RecordController extends VuFindRecordController {
         }
 
         $iishConfig = $this->serviceLocator->get('VuFind\Config')->get('iish');
-        $contentAccessToken = new IISHContentAccessToken($iishConfig);
-        $arr['internal'] = $contentAccessToken->hasAccess();
+        $iishNetwork = new IISHNetwork($iishConfig);
+        $arr['internal'] = $iishNetwork->isInternal();
 
 	    return new JsonModel($arr);
     }

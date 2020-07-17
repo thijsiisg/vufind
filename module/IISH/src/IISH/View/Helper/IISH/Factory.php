@@ -1,5 +1,6 @@
 <?php
 namespace IISH\View\Helper\IISH;
+use IISH\Content\IISHNetwork;
 use Zend\ServiceManager\ServiceManager;
 
 /**
@@ -36,4 +37,17 @@ class Factory {
             $config->get('searchbox')->toArray()
         );
     }
+
+	/**
+	 * Construct the IISH Network helper.
+	 *
+	 * @param ServiceManager $sm Service manager.
+	 *
+	 * @return IISHNetwork
+	 */
+	public static function getIISHNetwork(ServiceManager $sm) {
+		$iishConfig = $sm->getServiceLocator()->get('VuFind\Config')->get('iish');
+
+		return new IISHNetwork($iishConfig);
+	}
 }
