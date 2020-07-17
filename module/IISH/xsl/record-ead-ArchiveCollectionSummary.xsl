@@ -21,6 +21,7 @@
   <xsl:param name="baseUrl"/>
   <xsl:param name="lang"/>
   <xsl:param name="title"/>
+  <xsl:param name="isInternal"/>
 
   <xsl:variable name="digital_items"
                 select="count(//ead:daogrp[starts-with(ead:daoloc/@xlink:href, 'http://hdl.handle.net/10622/') or starts-with(ead:daoloc/@xlink:href, 'https://hdl.handle.net/10622/')])"/>
@@ -57,6 +58,9 @@
         <table class="table table-striped">
           <!-- Override concerning corona virus -->
 <!--          <xsl:call-template name="reproduction"/>-->
+          <xsl:if test="$isInternal">
+            <xsl:call-template name="reproduction"/>
+          </xsl:if>
           <xsl:call-template name="creator"/>
           <xsl:call-template name="secondcreator"/>
           <xsl:call-template name="abstract"/>
@@ -139,10 +143,21 @@
 <!--                  <xsl:otherwise>true</xsl:otherwise>-->
 <!--                </xsl:choose>-->
 <!--              </xsl:attribute>-->
-              <xsl:attribute name="data-show-reservation">false</xsl:attribute>
+              <xsl:attribute name="data-show-reservation">
+                <xsl:choose>
+                  <xsl:when test="ead:archdesc/ead:dsc/ead:c01">false</xsl:when>
+                  <xsl:when test="$isInternal">true</xsl:when>
+                  <xsl:otherwise>false</xsl:otherwise>
+                </xsl:choose>
+              </xsl:attribute>
               <!-- Override concerning corona virus -->
               <!-- <xsl:attribute name="data-show-reproduction">true</xsl:attribute> -->
-              <xsl:attribute name="data-show-reproduction">false</xsl:attribute>
+              <xsl:attribute name="data-show-reproduction">
+                <xsl:choose>
+                  <xsl:when test="$isInternal">true</xsl:when>
+                  <xsl:otherwise>false</xsl:otherwise>
+                </xsl:choose>
+              </xsl:attribute>
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 <?php
 namespace IISH\RecordDriver;
 
+use IISH\Content\IISHNetwork;
 use IISH\OAI\Loader as OAI;
 use IISH\File\Loader as File;
 use IISH\XSLT\Processor as XSLTProcessor;
@@ -136,7 +137,8 @@ class SolrEad extends SolrMarc {
                 'id' => $this->getUniqueID(),
                 'action' => $name,
                 'baseUrl' => $this->siteURL . '/Record/' . $this->getUniqueID(),
-                'title' => preg_replace('/[\'"]/', '`', $this->getTitle())
+                'title' => preg_replace('/[\'"]/', '`', $this->getTitle()),
+				'isInternal' => $this->iishNetwork->isInternal()
             )
         );
 

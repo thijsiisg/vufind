@@ -32,8 +32,8 @@
                  $this->driver->getShortTitle()), 40))?> - <?=$this->escapeHtmlAttr($holding['j'])?>"
                data-pid="<?=$this->escapeHtmlAttr($this->driver->getIsShownAt())?>"
                data-signature="<?=$this->escapeHtmlAttr($holding['j'])?>"
-               data-show-reservation="<?=var_export(false) /* Override concerning corona virus var_export($reservationFormats || $reservationHoldings) */?>"
-               data-show-reproduction="<?=var_export(false) /* Override concerning corona virus var_export(($format !== 'articles') && ($format !== 'other')) */?>">
+               data-show-reservation="<?=var_export(($reservationFormats || $reservationHoldings) && $this->iishnetwork()->isInternal()) /* Override concerning corona virus var_export($reservationFormats || $reservationHoldings) */?>"
+               data-show-reproduction="<?=var_export(($format !== 'articles') && ($format !== 'other') && $this->iishnetwork()->isInternal()) /* Override concerning corona virus var_export(($format !== 'articles') && ($format !== 'other')) */?>">
           </div>
         </div>
 
