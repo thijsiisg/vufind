@@ -70,6 +70,7 @@ $config = array(
             'recordtab'      => array(
                 'invokables' => array(
                     'holdingsmarc'               => 'IISH\RecordTab\HoldingsMarc',
+                    'holdingsmarc'               => 'IISH\RecordTab\SerialMarc',
                     'archivecollectionsummary'   => 'IISH\RecordTab\ArchiveCollectionSummary',
                     'archivecontentlist'         => 'IISH\RecordTab\ArchiveContentList',
                     'archivecontentandstructure' => 'IISH\RecordTab\ArchiveContentAndStructure',

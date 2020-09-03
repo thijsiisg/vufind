@@ -21,6 +21,11 @@
               <a href="<?=$this->url('record', array('id' => $this->recordDriver->getUniqueID(), 'tab' => 'ArchiveContentList'), array('fragment' => $item))?>">
                 <?= $this->transEsc('item') . ' ' ?> <?= $item ?>
               </a>
+            <? elseif ($this->recordDriver instanceof \IISH\RecordDriver\SolrSerial): ?>
+                    <?= $this->transEsc('for') . ' '?>
+                    <a href="<?=$this->url('record', array('id' => $this->recordDriver->getUniqueID(), 'tab' => 'SerialMarc'), array('fragment' => $item))?>">
+                        <?= $this->transEsc('item') . ' ' ?> <?= $item ?>
+                    </a>
             <? else: ?>
               <?= $this->transEsc('for') . ' ' . $this->transEsc('item') . ' ' . $item ?>
             <? endif; ?>

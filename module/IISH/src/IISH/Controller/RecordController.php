@@ -2,6 +2,7 @@
 namespace IISH\Controller;
 use IISH\Content\IISHNetwork;
 use IISH\RecordDriver\SolrEad;
+use IISH\RecordDriver\SolrSerial;
 use Zend\Config\Config;
 use Zend\View\Model\JsonModel;
 use IISH\Search\Highlighting;
@@ -66,6 +67,7 @@ class RecordController extends VuFindRecordController {
             switch (strtolower($format)) {
                 case 'marcxml':
                 case 'ead':
+                case 'serial':
                 case 'eci':
                     return $this->exportFromOAI($format);
                 case 'pdf':
@@ -121,7 +123,12 @@ class RecordController extends VuFindRecordController {
 	        $digital->setType('ead');
 	        $ead = $driver->getEAD();
 	        $digital->setEad($ead);
-        } else {
+        } elseif ($driver instanceof SolrSerial) {
+            $digital->setType('serial');
+            $serial = $driver->getEAD();
+            $digital->setEad($serial);
+        }
+        else {
 	        $digital->setType('marc');
         }
 	    $arr = $digital->getList();
