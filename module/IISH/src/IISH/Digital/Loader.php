@@ -255,6 +255,11 @@ class Loader extends Cacheable {
 			$manifestUrl = '';
 		}
 
+		// TODO: Serial test with record 1391181
+		if ($this->record === '1391181') {
+			$manifestUrl = 'https://access.iisg.amsterdam/iiif/presentation/collection/Z168896';
+		}
+
 		// check wath type of document it is
 		if (!empty($metsUrl)) {
 			$this->setIsAudioVideoHiresOrArchivePdf($xmlDocument);
