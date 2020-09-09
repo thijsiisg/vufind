@@ -1,7 +1,10 @@
 <?php
 namespace IISH\RecordDriver;
+
+use IISH\XSLT\Processor as XSLTProcessor;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use VuFind\RecordDriver\SolrMarc as VuFindSolrMarc;
+use IISH\OAI\Loader as OAI;
 use IISH\Content\IISHNetwork;
 
 /**
@@ -421,7 +424,57 @@ class SolrMarc extends VuFindSolrMarc {
         return $holdings;
     }
 
-    /**
+	/**
+	 * Returns all the available holding EADs.
+	 *
+	 * @return array All the holding EADs.
+	 */
+	public function getEADs() {
+		$eads = array();
+		$ids = $this->getFieldArray('852', array('p'));
+
+		foreach ($ids as $id) {
+			$oaiPrefix = isset($this->iishConfig->OAI->prefix)
+				? $this->iishConfig->OAI->prefix
+				: 'oai:socialhistoryservices.org:';
+
+			$oai = new OAI($this->serviceLocator);
+			$oai->setId($id);
+			$oai->setPid($oaiPrefix . '10622/' . $id);
+			$oai->setMetadataPrefix('ead');
+
+			$eads[$id] = $oai->getRecord();
+		}
+
+		return $eads;
+	}
+
+	/**
+	 * Get the EAD views by processing an XSLT with the EAD record.
+	 *
+	 * @return string[] The resulting views.
+	 */
+	public function getEADViewsForXSLT() {
+		$views = array();
+
+		foreach ($this->getEADs() as $id => $ead) {
+			$xslt = new XSLTProcessor(
+				$this->serviceLocator,
+				$ead,
+				'record-ead-ContentList.xsl',
+				array(
+					'id' => $this->getUniqueID(),
+					'item' => $id,
+					'isInternal' => $this->iishNetwork->isInternal()
+				)
+			);
+			$views[] = $xslt->process();
+		}
+
+		return $views;
+	}
+
+	/**
      * Returns the classifications.
      *
      * @return array The classifications.

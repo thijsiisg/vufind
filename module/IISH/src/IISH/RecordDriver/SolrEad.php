@@ -1,7 +1,6 @@
 <?php
 namespace IISH\RecordDriver;
 
-use IISH\Content\IISHNetwork;
 use IISH\OAI\Loader as OAI;
 use IISH\File\Loader as File;
 use IISH\XSLT\Processor as XSLTProcessor;

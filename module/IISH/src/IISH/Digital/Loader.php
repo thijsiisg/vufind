@@ -255,9 +255,9 @@ class Loader extends Cacheable {
 			$manifestUrl = '';
 		}
 
-		// TODO: Serial test with record 1391181
-		if ($this->record === '1391181') {
-			$manifestUrl = 'https://access.iisg.amsterdam/iiif/presentation/collection/Z168896';
+		// TODO: Serial test
+		if (strpos($this->item, 'Z') === 0 && strlen($this->item) === 7) {
+			$manifestUrl = 'https://access.iisg.amsterdam/iiif/presentation/collection/' . $this->item;
 		}
 
 		// check wath type of document it is
@@ -368,6 +368,11 @@ class Loader extends Cacheable {
 		$pdfUrl = $mainUrl . '?locatt=view:pdf';
 		$metsUrl = $mainUrl . '?locatt=view:mets';
 		$manifestUrl = $mainUrl . '?locatt=view:manifest';
+
+		// TODO: Serial tests
+		if (strpos($this->item, 'Z') === 0) {
+			$manifestUrl = "https://hdl.handle.net/10622/" . $this->item . "?locatt=view:manifest";
+		}
 
 		// load mets and manifest document
 		$xmlMets = simplexml_load_file($metsUrl);
