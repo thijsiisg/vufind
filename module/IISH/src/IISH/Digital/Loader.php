@@ -250,7 +250,7 @@ class Loader extends Cacheable {
 	/*
 	 * Create dataset
 	 */
-	protected function createDataset($xmlDocument, $pdfUrl, $metsUrl, $manifestUrl) {
+	protected function createDatasetMarc($xmlDocument, $pdfUrl, $metsUrl, $manifestUrl) {
 		if (!$this->checkRemoteFileExists($manifestUrl, 'json')) {
 			$manifestUrl = '';
 		}
@@ -326,31 +326,50 @@ class Loader extends Cacheable {
 	}
 
 	/*
+	 * Create dataset
+	 */
+	protected function createDatasetEAD($pdfUrl, $manifestUrl) {
+
+		if ($this->isDigitalBorn) {
+			return [
+				'iiifArchive' => 'https://iiif.socialhistory.org/archivalviewer/?manifest=' .
+					'https://iiif.socialhistory.org/iiif/presentation/collection/' .
+					$this->record . '.' . $this->item,
+			];
+		}
+
+		if (!empty($manifestUrl)) {
+			return [
+				'iiif' => 'https://access.iisg.amsterdam/universalviewer/#?manifest=' .
+					$manifestUrl,
+			];
+		}
+
+		if (empty($pdfUrl)) {
+			return NULL;
+		}
+		else {
+				return [
+					'pdf' => $pdfUrl,
+					'view' => NULL,
+				];
+		}
+	}
+
+	/*
 	 * Return output for EAD
 	 */
 	protected function createEad() {
-		$manifestUrl = "https://hdl.handle.net/10622/" . $this->record . '.' . $this->item . "?locatt=view:manifest";
-		$xmlMets = '';
-
 		// load the daoloc hrefs
 		$daoloc = $this->getDaolocHrefs();
 
-		// check if there is a mets document
-		if (isset($daoloc['mets']) && !empty($daoloc['mets'])) {
-			// load mets document
-			$xmlMets = simplexml_load_file($daoloc['mets']);
-		}
-
-		// check if it is digital born
-		// TODO: Disable digital born for now
+		// TODO: check if it is digital born
 		$this->isDigitalBorn = FALSE; // TODO: (strpos($this->item, 'dig') === 0);
 
 		// return dataset
-		return $this->createDataset(
-			$xmlMets,
-			isset($daoloc['pdf']) ? $daoloc['pdf'] : NULL,
-			isset($daoloc['mets']) ? $daoloc['mets'] : NULL,
-			$manifestUrl
+		return $this->createDatasetEAD(
+			isset($daoloc['pdf']) && !empty($daoloc['pdf']) ? $daoloc['pdf'] : NULL,
+            isset($daoloc['manifest']) && !empty($daoloc['manifest']) ? $daoloc['manifest'] : NULL
 		);
 	}
 
@@ -368,7 +387,7 @@ class Loader extends Cacheable {
 		$xmlMets = simplexml_load_file($metsUrl);
 
 		// return dataset
-		return $this->createDataset(
+		return $this->createDatasetMarc(
 			$xmlMets,
 			$pdfUrl,
 			$metsUrl,
@@ -391,7 +410,6 @@ class Loader extends Cacheable {
 		switch ($this->type) {
 			case "ead":
 				return $this->createEad();
-				break;
 			default:
 				return $this->createMarc();
 		}

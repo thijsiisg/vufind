@@ -9,7 +9,7 @@
                 xmlns:ead="urn:isbn:1-931666-22-9"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xs="http://www.w3.org/1999/XSL/Transform"
-                xsi:schemaLocation="urn:isbn:1-931666-22-9 http://www.loc.gov/ead/ead.xsd"
+                xsi:schemaLocation="urn:isbn:1-931666-22-9 https://www.loc.gov/ead/ead.xsd"
                 xmlns:php="http://php.net/xsl"
                 exclude-result-prefixes="xsl ead xsi php xlink">
 
@@ -24,7 +24,7 @@
   <xsl:param name="isInternal"/>
 
   <xsl:variable name="digital_items"
-                select="count(//ead:daogrp[starts-with(ead:daoloc/@xlink:href, 'http://hdl.handle.net/10622/') or starts-with(ead:daoloc/@xlink:href, 'https://hdl.handle.net/10622/')])"/>
+                select="count(//ead:daogrp[starts-with(ead:daoloc/@xlink:href, 'https://hdl.handle.net/10622/')])"/>
 
   <xsl:template match="/">
     <xsl:apply-templates select="//ead:ead"/>

@@ -29,7 +29,7 @@ class IISH extends AbstractCover implements ResizableCover, AccessClosedCover {
 
     /**
      * Retrieve an audio\visual from the IISH.
-     * The interpretation is the handle: http://hdl.handle.net/10622/[pid]?locatt=view":[size]
+     * The interpretation is the handle: https://hdl.handle.net/10622/[pid]?locatt=view":[size]
      * We append an access token if the request comes from a known able network that is 'ours'.
      *
      * @param string $key  The API key.
