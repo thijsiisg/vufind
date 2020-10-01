@@ -14,7 +14,9 @@
 
         var extent = parseFloat($('[data-extent]').data('extent'));
 
-        deliveryCartWrapper.find('.reproductionCart_messages').hide();
+        deliveryCartWrapper.find('.reproductionCart_messages p')
+            .text(delivery.reproductionMessage).parent().show();
+
         if (hasItemWithChildren) {
             deliveryCartWrapper.find('.reservationCart_messages p')
                 .text(delivery.archiveInventoryMessage).parent().show();

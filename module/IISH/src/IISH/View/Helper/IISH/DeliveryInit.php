@@ -35,7 +35,8 @@ class DeliveryInit extends AbstractTranslatorHelper {
             'reservationTooltip' =>  $this->getTranslator()->translate('ReservationTooltip'),
             'reproductionTooltip' =>  $this->getTranslator()->translate('ReproductionTooltip'),
             'archiveInventoryMessage' =>  $this->getTranslator()->translate('ArchiveInventoryMessage'),
-            'archiveNoInventoryMessage' =>  $this->getTranslator()->translate('ArchiveNoInventoryMessage')
+            'archiveNoInventoryMessage' =>  $this->getTranslator()->translate('ArchiveNoInventoryMessage'),
+			'reproductionMessage' =>  $this->getTranslator()->translate('ReproductionMessage')
         ));
 
         $this->view->headScript()->appendScript($this->view->jsobject()->getScript('delivery'));
