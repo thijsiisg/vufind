@@ -114,9 +114,7 @@
             </xsl:choose>
           </xsl:attribute>
           <div class="holding">
-            <!-- Override concerning corona virus -->
-<!--            <xsl:if test="ead:archdesc/ead:dsc/ead:c01">-->
-            <xsl:if test="ead:archdesc/ead:dsc/ead:c01 and $isInternal">
+            <xsl:if test="ead:archdesc/ead:dsc/ead:c01">
               <a class="deliveryReserveButton reservationBtn" href="{concat($baseUrl, '/', 'ArchiveContentList')}">
                 <xsl:call-template name="language">
                   <xsl:with-param name="key" select="'request_reservation'"/>
@@ -134,18 +132,10 @@
               <xsl:attribute name="data-signature">
                 <xsl:value-of select="$colid"/>
               </xsl:attribute>
-              <!-- Override concerning corona virus -->
-<!--              <xsl:attribute name="data-show-reservation">-->
-<!--                <xsl:choose>-->
-<!--                  <xsl:when test="ead:archdesc/ead:dsc/ead:c01">false</xsl:when>-->
-<!--                  <xsl:otherwise>true</xsl:otherwise>-->
-<!--                </xsl:choose>-->
-<!--              </xsl:attribute>-->
               <xsl:attribute name="data-show-reservation">
                 <xsl:choose>
                   <xsl:when test="ead:archdesc/ead:dsc/ead:c01">false</xsl:when>
-                  <xsl:when test="$isInternal">true</xsl:when>
-                  <xsl:otherwise>false</xsl:otherwise>
+                  <xsl:otherwise>true</xsl:otherwise>
                 </xsl:choose>
               </xsl:attribute>
               <xsl:attribute name="data-show-reproduction">true</xsl:attribute>
