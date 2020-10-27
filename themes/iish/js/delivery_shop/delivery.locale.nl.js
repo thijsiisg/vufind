@@ -4,6 +4,7 @@ var string_table_nl = {
 	alert_noitems:                "Geen items geselecteerd",
 	button_request_reservation:   "Aanvragen",
 	button_request_reproduction:  "Bestel reproductie",
+	button_request_permission:    "Toestemming aanvragen",
 	stat_open_reserved:           "* Item uitgeleend, neem contact op met",
 	stat_open_restricted:         "* Niet ter inzage",
 	stat_open_publication_status: "* U kunt geen reproductie voor dit item aanvragen vanwege copyright beperkingen",

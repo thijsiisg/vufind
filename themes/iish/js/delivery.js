@@ -57,7 +57,8 @@
                 holdingState.data('pid'),
                 holdingState.data('signature'),
                 holdingState.data('showReservation'),
-                holdingState.data('showReproduction')
+                holdingState.data('showReproduction'),
+                holdingState.data('showPermission')
             );
         });
 
@@ -69,7 +70,8 @@
                 container.data('pid'),
                 container.data('signature'),
                 container.data('showReservation'),
-                container.data('showReproduction')
+                container.data('showReproduction'),
+                container.data('showPermission')
             );
         });
     };
@@ -145,14 +147,20 @@
         }
     });
 
-    $(document).on('mouseover', '.holdings-container.no-children .reservationBtn, .holdings-container.no-children .reproductionBtn', function (e) {
+    $(document).on('mouseover', '.holdings-container.no-children .reservationBtn, ' +
+        '.holdings-container.no-children .reproductionBtn, ' +
+        '.holdings-container.no-children .permissionBtn', function (e) {
         var elem = $(e.target);
-        if (!elem.hasClass('reservationBtn') && !elem.hasClass('reproductionBtn'))
-            elem = elem.closest('.reservationBtn, .reproductionBtn');
+        if (!elem.hasClass('reservationBtn') && !elem.hasClass('reproductionBtn') && !elem.hasClass('permissionBtn'))
+            elem = elem.closest('.reservationBtn, .reproductionBtn, .permissionBtn');
 
         if (elem.data('tooltipLoaded') === true) return;
 
-        var title = elem.hasClass('reservationBtn') ? delivery.reservationTooltip : delivery.reproductionTooltip;
+        var title = delivery.reproductionTooltip;
+        if (elem.hasClass('reservationBtn'))
+            title = delivery.reservationTooltip;
+        if (elem.hasClass('permissionBtn'))
+            title = delivery.permissionTooltip;
         elem.data('tooltipLoaded', true).tooltip({title: title}).trigger('mouseover');
     });
 })($);

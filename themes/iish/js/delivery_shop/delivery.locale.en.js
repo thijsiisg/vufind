@@ -4,6 +4,7 @@ var string_table_en = {
 	alert_noitems:                "No holdings selected",
 	button_request_reservation:   "Request",
 	button_request_reproduction:  "Order reproduction",
+	button_request_permission:    "Request permission",
 	stat_open_reserved:           "* Item already reserved, please contact",
 	stat_open_restricted:         "* Cannot be requested",
 	stat_open_publication_status: "* You cannot request a reproduction of this item because of copyright restrictions",
