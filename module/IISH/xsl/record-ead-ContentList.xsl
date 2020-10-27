@@ -26,7 +26,8 @@
 
   <xsl:template match="ead:ead">
     <div id="arch" class="holdings-container with-children archive"
-         data-show-reservation="false"  data-show-reproduction="false">
+         data-show-reservation="false" data-show-reproduction="false" data-show-permission="false">
+
        <xsl:for-each select="//ead:dsc[1]/ead:c01">
         <xsl:call-template name="cxx"/>
       </xsl:for-each>

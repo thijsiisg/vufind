@@ -169,6 +169,12 @@ var DeliveryShoppingCart = {RESERVATIONS: 0, REPRODUCTIONS: 1};
                         btn.data('pid'), btn.data('signature'), btn.data('child'));
                 });
         });
+
+        $(document).on('click', 'button.permissionBtn.deliveryReserveButton', function (e) {
+            e.preventDefault();
+            var btn = $(this);
+            showDeliveryPermissionPage(btn.data('pid'));
+        })
     };
 
     $.getShoppingCartItems = function (shoppingCart) {
@@ -179,7 +185,7 @@ var DeliveryShoppingCart = {RESERVATIONS: 0, REPRODUCTIONS: 1};
         return getItemElem(shoppingCart, pid);
     };
 
-    $.fn.determineButtons = function (label, pid, signature, show_reservation, show_reproduction) {
+    $.fn.determineButtons = function (label, pid, signature, show_reservation, show_reproduction, show_permission) {
         var pars = {
             label: label,
             pid: $.trim(pid),
@@ -187,12 +193,14 @@ var DeliveryShoppingCart = {RESERVATIONS: 0, REPRODUCTIONS: 1};
             field: $(this),
             show_reservation: (show_reservation || (show_reservation === undefined)),
             show_reproduction: (show_reproduction || (show_reproduction === undefined)),
+            show_permission: (show_permission || (show_permission === undefined)),
             result: buttonCallback
         };
         getJSONData("GET", "record/" + encodeURIComponent(pars.pid), pars);
     };
 
-    $.fn.determineChildButtons = function (field_selector, label, pid, signature, show_reservation, show_reproduction) {
+    $.fn.determineChildButtons = function (field_selector, label, pid, signature,
+                                           show_reservation, show_reproduction, show_permission) {
         var pars = {
             container: $(this),
             field_selector: field_selector,
@@ -201,6 +209,7 @@ var DeliveryShoppingCart = {RESERVATIONS: 0, REPRODUCTIONS: 1};
             signature: $.trim(signature),
             show_reservation: (show_reservation || (show_reservation === undefined)),
             show_reproduction: (show_reproduction || (show_reproduction === undefined)),
+            show_permission: (show_permission || (show_permission === undefined)),
             result: parentRecordCallback
         };
         getJSONData("GET", "record/" + encodeURIComponent(pars.pid), pars);
@@ -381,7 +390,8 @@ var DeliveryShoppingCart = {RESERVATIONS: 0, REPRODUCTIONS: 1};
                 child: field.data('child') ? field.data('child').toString() : null,
                 field: field,
                 show_reservation: parsParent.show_reservation,
-                show_reproduction: parsParent.show_reproduction
+                show_reproduction: parsParent.show_reproduction,
+                show_permission: parsParent.show_permission
             };
 
             var newData = null;
@@ -436,7 +446,7 @@ var DeliveryShoppingCart = {RESERVATIONS: 0, REPRODUCTIONS: 1};
                     .text(Rsrc.getString('stat_notfound'))
             );
         }
-        else if (pars.show_reservation || pars.show_reproduction) {
+        else if (pars.show_reservation || pars.show_reproduction || pars.show_permission) {
             if (data.restriction !== 'CLOSED') {
                 if (holding.usageRestriction === 'OPEN') {
                     if (pars.show_reservation) {
@@ -475,6 +485,10 @@ var DeliveryShoppingCart = {RESERVATIONS: 0, REPRODUCTIONS: 1};
                                     .text(Rsrc.getString('stat_open_publication_status'))
                             );
                         }
+                    }
+
+                    if (pars.show_permission) {
+                        html.push(createPermissionButtonHtml(pars, data));
                     }
                 }
                 else {
@@ -538,6 +552,17 @@ var DeliveryShoppingCart = {RESERVATIONS: 0, REPRODUCTIONS: 1};
         }
 
         return html;
+    }
+
+    function createPermissionButtonHtml(pars, data) {
+        return $('<button>')
+            .addClass('deliveryReserveButton')
+            .addClass('permissionBtn')
+            .data('label', pars.label || data.title)
+            .data('pid', pars.pid)
+            .data('signature', pars.signature)
+            .val(Rsrc.getString('button_request_permission'))
+            .text(Rsrc.getString('button_request_permission'));
     }
 
     function updateItemHtml(shoppingCart, item) {
@@ -673,6 +698,13 @@ var DeliveryShoppingCart = {RESERVATIONS: 0, REPRODUCTIONS: 1};
             ? "/reservation/createform/" : "/reproduction/createform/";
         url += encodeURIComponent(pids);
         url += "?locale=" + DeliveryProps.getLanguage();
+        window.open(url);
+    }
+
+    function showDeliveryPermissionPage(pid) {
+        var url = window.location.protocol + "//" + DeliveryProps.getDeliveryHost()
+            + "/permission/createform/" + encodeURIComponent(pid)
+            + "?locale=" + DeliveryProps.getLanguage();
         window.open(url);
     }
 

@@ -34,6 +34,7 @@ class DeliveryInit extends AbstractTranslatorHelper {
             'warningOnlineContent' => $this->getTranslator()->translate('Content available'),
             'reservationTooltip' =>  $this->getTranslator()->translate('ReservationTooltip'),
             'reproductionTooltip' =>  $this->getTranslator()->translate('ReproductionTooltip'),
+			'permissionTooltip' =>  $this->getTranslator()->translate('PermissionTooltip'),
             'archiveInventoryMessage' =>  $this->getTranslator()->translate('ArchiveInventoryMessage'),
             'archiveNoInventoryMessage' =>  $this->getTranslator()->translate('ArchiveNoInventoryMessage'),
 			'reproductionMessage' =>  $this->getTranslator()->translate('ReproductionMessage')

@@ -126,19 +126,35 @@
               <xsl:attribute name="data-label">
                 <xsl:value-of select="$title"/>
               </xsl:attribute>
+
               <xsl:attribute name="data-pid">
                 <xsl:value-of select="substring($identifier, 5)"/>
               </xsl:attribute>
+
               <xsl:attribute name="data-signature">
                 <xsl:value-of select="$colid"/>
               </xsl:attribute>
+
               <xsl:attribute name="data-show-reservation">
                 <xsl:choose>
                   <xsl:when test="ead:archdesc/ead:dsc/ead:c01">false</xsl:when>
                   <xsl:otherwise>true</xsl:otherwise>
                 </xsl:choose>
               </xsl:attribute>
+
               <xsl:attribute name="data-show-reproduction">true</xsl:attribute>
+
+              <xsl:variable name="access-restrict" select="ead:archdesc/ead:descgrp[@type='access_and_use']/ead:accessrestrict"/>
+              <xsl:variable name="top-access" select="normalize-space($access-restrict/ead:p[1]/text())"/>
+              <xsl:variable name="restricted-items" select="ead:archdesc/ead:dsc//ead:accessrestrict[@type='restricted']"/>
+
+              <xsl:attribute name="data-show-permission">
+                <xsl:choose>
+                  <xsl:when test="(not($access-restrict/@type) or $access-restrict/@type != 'part') and ($top-access = 'Restricted' or $top-access = 'Beperkt')">true</xsl:when>
+                  <xsl:when test="$access-restrict/@type = 'part' and $restricted-items">true</xsl:when>
+                  <xsl:otherwise>false</xsl:otherwise>
+                </xsl:choose>
+              </xsl:attribute>
             </div>
           </div>
         </div>

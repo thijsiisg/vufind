@@ -29,7 +29,7 @@
 
   <xsl:template match="ead:ead">
     <div id="arch" class="holdings-container with-children archive"
-         data-show-reservation="true" data-show-reproduction="false">
+         data-show-reservation="true" data-show-reproduction="false" data-show-permission="false">
       <xsl:attribute name="data-label">
         <xsl:value-of select="$title"/>
       </xsl:attribute>
