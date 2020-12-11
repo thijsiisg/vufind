@@ -161,6 +161,7 @@
 
               <xsl:attribute name="data-show-permission">
                 <xsl:choose>
+                  <xsl:when test="$colid = 'ARCH00293' or $colid = 'ARCH00393'">false</xsl:when>
                   <xsl:when test="(not($access-restrict/@type) or $access-restrict/@type != 'part') and ($top-access = 'Restricted' or $top-access = 'Beperkt')">true</xsl:when>
                   <xsl:when test="$access-restrict/@type = 'part' and $restricted-items">true</xsl:when>
                   <xsl:otherwise>false</xsl:otherwise>
