@@ -29,12 +29,12 @@ class SolrMarc extends VuFindSolrMarc {
      * Constructor.
      *
      * @param ServiceLocatorInterface $serviceLocator
-     * @param \Zend\Config\Config $mainConfig     VuFind main configuration. (omit for
+     * @param \Zend\Config\Config $mainConfig VuFind main configuration. (omit for
      *                                            built-in defaults)
-     * @param \Zend\Config\Config $recordConfig   Record-specific configuration file.
+     * @param \Zend\Config\Config $recordConfig Record-specific configuration file.
      *                                            (omit to use $mainConfig as $recordConfig)
      * @param \Zend\Config\Config $searchSettings Search-specific configuration file
-     * @param \Zend\Config\Config $iishConfig     IISH specific configuration.
+     * @param \Zend\Config\Config $iishConfig IISH specific configuration.
      */
     public function __construct(ServiceLocatorInterface $serviceLocator, $mainConfig = null, $recordConfig = null,
                                 $searchSettings = null, $iishConfig = null) {
@@ -68,7 +68,7 @@ class SolrMarc extends VuFindSolrMarc {
      * @return string The title.
      */
     public function getTitle() {
-        return $this->getTitleExtension(parent::getTitle());
+        return $this->origineleTaal('245-01') . $this->getTitleExtension(parent::getTitle());
     }
 
     /**
@@ -92,13 +92,46 @@ class SolrMarc extends VuFindSolrMarc {
     }
 
     /**
+     * Pak de originele taal. Deze is altijd te vinden in de 880 velden
+     *
+     * Voorbeeld
+     * 100    1         |6 880-02    |a TEXT_A
+     * 245    1    0    |6 880-01    |a TEXT_B
+     * 880    1    0    |6 100-02/$1 |a TEXT_D
+     * 880    1    0    |6 245-01/$  |a TEXT_C
+     *
+     * dan wordt in de weergave:
+     * TEXT_D = TEXT_A
+     * TEXT_C = TEXT_B
+     *
+     * @param string $tag The tag and index. E.g. 245-1
+     * @return string An prepend of the title.
+     */
+    public function origineleTaal($tag_index)
+    {
+        $field_880_6a = $this->getFieldArray('880', array('6', 'a'), false);
+        if ($field_880_6a) {
+            // E.g. ( [0] => 245-01/$ [1] => TEXT_D. [2] => 100-02/$1 [3] => TEXT_C. )
+            for ($i = 0; $i < count($field_880_6a); $i += 2) {
+                $element = $field_880_6a[$i];
+                $needle = explode('/', $element, 2)[0]; // 245-01/$ => 245-01
+                if ($needle == $tag_index) {
+                    return self::normalize($field_880_6a[$i + 1]) . ' = ';
+                }
+            }
+        }
+
+        return ''; // identity
+    }
+
+    /**
      * Get the short (pre-subtitle) title of the record.
      * If the title ends with a single character, remove it. (Usually /)
      *
      * @return string The short title escaped.
      */
     public function getShortTitle() {
-        return self::escape(parent::getShortTitle());
+        return $this->origineleTaal('245-01') . self::escape(parent::getShortTitle());
     }
 
     /**
