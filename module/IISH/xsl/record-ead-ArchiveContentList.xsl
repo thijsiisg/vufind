@@ -28,19 +28,8 @@
   </xsl:template>
 
   <xsl:template match="ead:ead">
-    <!-- Override concerning corona virus -->
-<!--    <div id="arch" class="holdings-container with-children archive"-->
-<!--         data-show-reservation="true" data-show-reproduction="false" data-show-permission="false">-->
     <div id="arch" class="holdings-container with-children archive"
-         data-show-reproduction="false"
-         data-show-permission="false">
-
-      <xsl:attribute name="data-show-reservation">
-        <xsl:choose>
-          <xsl:when test="$isInternal">true</xsl:when>
-          <xsl:otherwise>false</xsl:otherwise>
-        </xsl:choose>
-      </xsl:attribute>
+         data-show-reservation="true" data-show-reproduction="false" data-show-permission="false">
 
       <xsl:attribute name="data-label">
         <xsl:value-of select="$title"/>
