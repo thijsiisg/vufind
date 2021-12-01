@@ -27,15 +27,21 @@
           <? $reservationHoldings = (strpos($holding['j'], 'BG T') === 0) || (strpos($holding['j'], 'BG V') === 0) ||
               (strpos($holding['j'], 'BG GC') === 0) || (strpos($holding['j'], 'BG GB') === 0) ||
               (strpos($holding['j'], 'BG PK') === 0) || (strpos($holding['j'], 'BG PG') === 0);?>
-          <div class="state hidden-print"
-               data-label="<?=$this->escapeHtmlAttr($this->truncate(preg_replace('/[\'"]/', '`',
-                 $this->driver->getShortTitle()), 40))?> - <?=$this->escapeHtmlAttr($holding['j'])?>"
-               data-pid="<?=$this->escapeHtmlAttr($this->driver->getIsShownAt())?>"
-               data-signature="<?=$this->escapeHtmlAttr($holding['j'])?>"
-               data-show-reservation="<?=var_export(($reservationFormats || $reservationHoldings) && $this->iishnetwork()->isInternal() /* Override concerning corona virus: var_export($reservationFormats || $reservationHoldings*/)?>"
-               data-show-reproduction="<?=var_export(false /* Override concerning corona virus: ($format !== 'articles') && ($format !== 'other')*/)?>"
-               data-show-permission="false">
-          </div>
+
+        <? if ($format === 'visual documents'): ?>
+            <?=$this->transEsc('NoAudio')?>
+        <? else: ?>
+            <div class="state hidden-print"
+                 data-label="<?=$this->escapeHtmlAttr($this->truncate(preg_replace('/[\'"]/', '`',
+                     $this->driver->getShortTitle()), 40))?> - <?=$this->escapeHtmlAttr($holding['j'])?>"
+                 data-pid="<?=$this->escapeHtmlAttr($this->driver->getIsShownAt())?>"
+                 data-signature="<?=$this->escapeHtmlAttr($holding['j'])?>"
+                 data-show-reservation="<?=var_export(($reservationFormats || $reservationHoldings) && $this->iishnetwork()->isInternal() /* Override concerning corona virus: var_export($reservationFormats || $reservationHoldings*/)?>"
+                 data-show-reproduction="<?=var_export(false /* Override concerning corona virus: ($format !== 'articles') && ($format !== 'other')*/)?>"
+                 data-show-permission="false">
+            </div>
+        <? endif; ?>
+
         </div>
 
         <? if (isset($holding['note'])): ?>
