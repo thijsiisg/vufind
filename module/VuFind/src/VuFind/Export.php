@@ -112,10 +112,12 @@ class Export
         foreach ($ids as $id) {
             $params[] = urlencode('i[]') . '=' . urlencode($id);
         }
-        $serverUrlHelper = $view->plugin('serverurl');
+        // $serverUrlHelper = $view->plugin('serverurl');
         $urlHelper = $view->plugin('url');
-        $url = $serverUrlHelper($urlHelper('cart-doexport'))
-            . '?' . implode('&', $params);
+        // $url = $serverUrlHelper($urlHelper('cart-doexport'))
+        //    . '?' . implode('&', $params);
+				$url = $this->mainConfig->Site->url .
+					$urlHelper('cart-doexport') . '?' . implode('&', $params);
 
         return $this->needsRedirect($format)
             ? $this->getRedirectUrl($format, $url) : $url;

@@ -16,15 +16,26 @@
 
         deliveryCartWrapper.find('.reproductionCart_messages').hide();
         if (hasItemWithChildren) {
-            deliveryCartWrapper.find('.reservationCart_messages p')
+            // TODO: Temp corona message
+            deliveryCartWrapper.find('.reservationCart_messages p:not(.corona)')
                 .text(delivery.archiveInventoryMessage).parent().show();
         }
         else if (extent && (extent > 1)) {
-            deliveryCartWrapper.find('.reservationCart_messages p')
+            // TODO: Temp corona message
+            deliveryCartWrapper.find('.reservationCart_messages p:not(.corona)')
                 .text(delivery.archiveNoInventoryMessage).parent().show();
         }
+        // TODO: Temp disable Corona
         else {
-            deliveryCartWrapper.find('.reservationCart_messages').hide();
+            deliveryCartWrapper.find('.reservationCart_messages p:not(.corona)').text('');
+            // TODO: deliveryCartWrapper.find('.reservationCart_messages').hide();
+        }
+
+        // TODO: Temp message because of Corona
+        if (deliveryCartWrapper.find('.reservationCart_messages p.corona').length === 0) {
+            deliveryCartWrapper.find('.reservationCart_messages').prepend(
+                $('<p class="corona">').text(delivery.coronaMessage)
+            ).parent().show();
         }
 
         if ((reservationItems.length > 0) || (reproductionItems.length > 0)) {
