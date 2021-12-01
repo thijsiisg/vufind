@@ -22,7 +22,6 @@
             </div>
           <? endif; ?>
 
-          <? $formats = $this->driver->getFormats(); $format = strtolower($formats[0]); ?>
           <? $reservationFormats = ($format === 'books and brochures') || ($format === 'serials'); ?>
           <? $reservationHoldings = (strpos($holding['j'], 'BG T') === 0) || (strpos($holding['j'], 'BG V') === 0) ||
               (strpos($holding['j'], 'BG GC') === 0) || (strpos($holding['j'], 'BG GB') === 0) ||
