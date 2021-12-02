@@ -27,7 +27,7 @@
               (strpos($holding['j'], 'BG GC') === 0) || (strpos($holding['j'], 'BG GB') === 0) ||
               (strpos($holding['j'], 'BG PK') === 0) || (strpos($holding['j'], 'BG PG') === 0);?>
 
-            <? if ($format === 'visual documents'): ?><br/><?=$this->transEsc('no_audio')?><? else: ?>
+            <? if (strpos($holding['j'], 'BG V') === 0): ?><br/><?=$this->transEsc('no_audio')?><? else: ?>
           <div class="state hidden-print"
                data-label="<?=$this->escapeHtmlAttr($this->truncate(preg_replace('/[\'"]/', '`',
                  $this->driver->getShortTitle()), 40))?> - <?=$this->escapeHtmlAttr($holding['j'])?>"
