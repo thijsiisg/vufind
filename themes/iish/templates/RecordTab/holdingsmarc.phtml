@@ -34,7 +34,7 @@
                data-pid="<?=$this->escapeHtmlAttr($this->driver->getIsShownAt())?>"
                data-signature="<?=$this->escapeHtmlAttr($holding['j'])?>"
                data-show-reservation="<?=var_export($reservationFormats || $reservationHoldings)?>"
-               data-show-reproduction="<?=var_export(($format !== 'articles') && ($format !== 'other') && ($format !== 'visual documents'))?>"
+               data-show-reproduction="<?=var_export(($format !== 'articles') && ($format !== 'other'))?>"
                data-show-permission="false">
           </div><? endif; ?>
 
