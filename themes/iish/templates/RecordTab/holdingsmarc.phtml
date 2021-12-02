@@ -27,14 +27,14 @@
               (strpos($holding['j'], 'BG GC') === 0) || (strpos($holding['j'], 'BG GB') === 0) ||
               (strpos($holding['j'], 'BG PK') === 0) || (strpos($holding['j'], 'BG PG') === 0);?>
 
-            <? if ($format === 'visual documents'): ?><?=$this->transEsc('no_audio')?><? else: ?>
+            <? if ($format === 'visual documents'): ?><br/><?=$this->transEsc('no_audio')?><? else: ?>
           <div class="state hidden-print"
                data-label="<?=$this->escapeHtmlAttr($this->truncate(preg_replace('/[\'"]/', '`',
                  $this->driver->getShortTitle()), 40))?> - <?=$this->escapeHtmlAttr($holding['j'])?>"
                data-pid="<?=$this->escapeHtmlAttr($this->driver->getIsShownAt())?>"
                data-signature="<?=$this->escapeHtmlAttr($holding['j'])?>"
                data-show-reservation="<?=var_export($reservationFormats || $reservationHoldings)?>"
-               data-show-reproduction="<?=var_export(($format !== 'articles') && ($format !== 'other'))?>"
+               data-show-reproduction="<?=var_export(($format !== 'articles') && ($format !== 'other') && ($format !== 'visual documents'))?>"
                data-show-permission="false">
           </div><? endif; ?>
 
