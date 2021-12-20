@@ -15,6 +15,7 @@
           </div>
 
           <? if (isset($holding['p'])): ?>
+          <!-- gebouw sluiting: DELIVERYM-43 -->
 <!--            <div class="digital loading hidden-print"-->
 <!--                 data-record="--><?//=$this->escapeHtml($this->driver->getUniqueId())?><!--"-->
 <!--                 data-item="--><?//=$this->escapeHtml($holding['p'])?><!--">-->
@@ -28,6 +29,7 @@
               (strpos($holding['j'], 'BG PK') === 0) || (strpos($holding['j'], 'BG PG') === 0);?>
 
             <? if (strpos($holding['j'], 'BG V') === 0): ?><br/><?=$this->transEsc('no_audio')?><? else: ?>
+                <!-- gebouw sluiting: DELIVERYM-43 -->
 <!--          <div class="state hidden-print"-->
 <!--               data-label="--><?//=$this->escapeHtmlAttr($this->truncate(preg_replace('/[\'"]/', '`',
 //                 $this->driver->getShortTitle()), 40))?><!-- - --><?//=$this->escapeHtmlAttr($holding['j'])?><!--"-->

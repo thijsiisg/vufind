@@ -104,14 +104,15 @@
         <xsl:variable name="identifier" select="ead:eadheader/ead:eadid/@identifier"/>
         <div>
           <xsl:attribute name="class">
-            <xsl:choose>
-              <xsl:when test="$digital_items>0">
-                holdings-container no-children archive online-content-available
-              </xsl:when>
-              <xsl:otherwise>
-                holdings-container no-children archive
-              </xsl:otherwise>
-            </xsl:choose>
+            <!-- gebouw sluiting: DELIVERYM-43 -->
+<!--            <xsl:choose>-->
+<!--              <xsl:when test="$digital_items>0">-->
+<!--                holdings-container no-children archive online-content-available-->
+<!--              </xsl:when>-->
+<!--              <xsl:otherwise>-->
+<!--                holdings-container no-children archive-->
+<!--              </xsl:otherwise>-->
+<!--            </xsl:choose>-->
           </xsl:attribute>
           <div class="holding">
             <xsl:if test="ead:archdesc/ead:dsc/ead:c01">
