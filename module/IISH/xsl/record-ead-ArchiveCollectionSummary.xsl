@@ -116,11 +116,14 @@
           </xsl:attribute>
           <div class="holding">
             <xsl:if test="ead:archdesc/ead:dsc/ead:c01">
+              <!-- gebouw sluiting: DELIVERYM-43 -->
+<!--
               <a class="deliveryReserveButton reservationBtn" href="{concat($baseUrl, '/', 'ArchiveContentList')}">
                 <xsl:call-template name="language">
                   <xsl:with-param name="key" select="'request_reservation'"/>
                 </xsl:call-template>
               </a>
+-->
             </xsl:if>
 
             <div class="state hidden-print">
