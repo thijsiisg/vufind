@@ -16,11 +16,11 @@
 
           <? if (isset($holding['p'])): ?>
           <!-- gebouw sluiting: DELIVERYM-43 -->
-<!--            <div class="digital loading hidden-print"-->
-<!--                 data-record="--><?//=$this->escapeHtml($this->driver->getUniqueId())?><!--"-->
-<!--                 data-item="--><?//=$this->escapeHtml($holding['p'])?><!--">-->
-<!--              <i class="fa fa-spinner fa-spin"></i>-->
-<!--            </div>-->
+            <div class="digital loading hidden-print"
+                 data-record="<?=$this->escapeHtml($this->driver->getUniqueId())?>"
+                 data-item="<?=$this->escapeHtml($holding['p'])?>">
+              <i class="fa fa-spinner fa-spin"></i>
+            </div>
           <? endif; ?>
 
           <? $reservationFormats = ($format === 'books and brochures') || ($format === 'serials'); ?>
