@@ -43,8 +43,10 @@ catalog_file="${HARVEST_DIRECTORY}catalog.xml"
 #-----------------------------------------------------------------------------------------------------------------------
 find "$HARVEST_DIRECTORY" -type d -mtime 3 -exec rm -rf {} +
 if [ -d "$HARVEST_DIRECTORY" ] ; then
-	echo "Folder ${HARVEST_DIRECTORY} exists... a harvest may be in progress. Skipping todays harvest..." >> $log
-	exit 0
+  # todo: gebruik tee
+  message="Folder ${HARVEST_DIRECTORY} exists... a harvest may be in progress. Skipping todays harvest..."
+  echo "$message" && echo "$message" >> "$log"
+	exit 1
 fi
 
 
