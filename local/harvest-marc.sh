@@ -41,11 +41,10 @@ catalog_file="${HARVEST_DIRECTORY}catalog.xml"
 #-----------------------------------------------------------------------------------------------------------------------
 # If it is a harvest directory older than three days, we delete it because it has gone stale.
 #-----------------------------------------------------------------------------------------------------------------------
-find "$HARVEST_DIRECTORY" -type d -mtime 3 -exec rm -rf {} +
+find "$HARVEST_DIRECTORY" -type d -mtime +3 -exec rm -rf {} +
 if [ -d "$HARVEST_DIRECTORY" ] ; then
   # todo: gebruik tee
-  message="Folder ${HARVEST_DIRECTORY} exists... a harvest may be in progress. Skipping todays harvest..."
-  echo "$message" && echo "$message" >> "$log"
+  echo "Folder ${HARVEST_DIRECTORY} exists... a harvest may be in progress. Skipping todays harvest..." | tee -a "$log"
 	exit 1
 fi
 
