@@ -83,17 +83,16 @@
         <xsl:value-of select="ead:accessrestrict/@type"/>
       </xsl:variable>
 
-      <!-- gebouw sluiting: DELIVERYM-43 -->
-<!--      <xsl:if test="$child != '' and $child != '-' and $restriction != 'closed'">-->
-<!--        <div class="holding">-->
-<!--          <div class="state hidden-print">-->
-<!--            <xsl:attribute name="data-child">-->
-<!--              <xsl:value-of select="$child"/>-->
-<!--            </xsl:attribute>-->
-<!--            <wbr/>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </xsl:if>-->
+      <xsl:if test="$child != '' and $child != '-' and $restriction != 'closed'">
+        <div class="holding">
+          <div class="state hidden-print">
+            <xsl:attribute name="data-child">
+              <xsl:value-of select="$child"/>
+            </xsl:attribute>
+            <wbr/>
+          </div>
+        </div>
+      </xsl:if>
     </xsl:if>
   </xsl:template>
 
