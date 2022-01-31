@@ -60,14 +60,14 @@ class Loader extends Cacheable {
 			// Override message concerning corona virus
 			if ($this->getLang() == 'nl') {
 				return array(
-					'title'   => 'Het IISG gebouw is gesloten t/m 24 januari 2022',
+					'title'   => 'De studiezaal is alleen toegankelijk op afspraak.',
 					'content' => 'Ga naar voor > <a href="https://iisg.amsterdam/nl/collecties/gebruiken">meer informatie</a>',
 					'lang'    => $this->getLang()
 				);
 			}
 
 			return array(
-				'title'   => 'The IISH building is closed until 24 January 2022',
+				'title'   => 'The reading room is open on appointment only.',
 				'content' => 'Go to for > <a href="https://iisg.amsterdam/en/collections/using">more information</a>',
 				'lang'    => $this->getLang()
 			);
