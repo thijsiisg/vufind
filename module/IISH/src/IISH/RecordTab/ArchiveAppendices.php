@@ -28,7 +28,7 @@ class ArchiveAppendices extends ArchiveBase {
         if ($driver instanceof SolrEad) {
             $xml = simplexml_import_dom($driver->getEAD());
             $xml->registerXPathNamespace('ead', 'urn:isbn:1-931666-22-9');
-            $match = $xml->xpath('//ead:ead/ead:archdesc/ead:descgrp[@type=\'appendices\']/ead:odd');
+            $match = $xml->xpath('//ead:ead/ead:archdesc/ead:odd');
 
             return (($match !== false) && (count($match) > 0));
         }

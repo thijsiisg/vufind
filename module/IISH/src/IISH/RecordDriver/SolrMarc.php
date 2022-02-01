@@ -585,7 +585,7 @@ class SolrMarc extends VuFindSolrMarc {
             ? $this->iishConfig->OAI->prefix
             : 'oai:socialhistoryservices.org:';
 
-        return $oaiPrefix . $id;
+        return $oaiPrefix . $id . 'ARCHIVESSPACE'; # remove after evaluation
     }
 
     /**

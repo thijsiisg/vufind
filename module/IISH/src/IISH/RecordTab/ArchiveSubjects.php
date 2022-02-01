@@ -28,8 +28,7 @@ class ArchiveSubjects extends ArchiveBase {
         if ($driver instanceof SolrEad) {
             $xml = simplexml_import_dom($driver->getEAD());
             $xml->registerXPathNamespace('ead', 'urn:isbn:1-931666-22-9');
-            $match = $xml->xpath('//ead:ead/ead:archdesc/ead:descgrp[@type=\'content_and_structure\']' .
-                '/ead:controlaccess/ead:controlaccess/ead:geogname');
+            $match = $xml->xpath('//ead:ead/ead:archdesc/ead:controlaccess/ead:geogname');
 
             return (($match !== false) && (count($match) > 0));
         }

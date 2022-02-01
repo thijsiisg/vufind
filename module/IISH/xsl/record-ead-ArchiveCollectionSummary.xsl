@@ -9,7 +9,7 @@
                 xmlns:ead="urn:isbn:1-931666-22-9"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xs="http://www.w3.org/1999/XSL/Transform"
-                xsi:schemaLocation="urn:isbn:1-931666-22-9 http://www.loc.gov/ead/ead.xsd"
+                xsi:schemaLocation="urn:isbn:1-931666-22-9 https://www.loc.gov/ead/ead.xsd"
                 xmlns:php="http://php.net/xsl"
                 exclude-result-prefixes="xsl ead xsi php xlink">
 
@@ -144,13 +144,12 @@
 
               <xsl:attribute name="data-show-reproduction">true</xsl:attribute>
 
-              <xsl:variable name="access-restrict" select="ead:archdesc/ead:descgrp[@type='access_and_use']/ead:accessrestrict"/>
+              <xsl:variable name="access-restrict" select="ead:archdesc//ead:accessrestrict"/>
               <xsl:variable name="top-access" select="normalize-space($access-restrict/ead:p[1]/text())"/>
               <xsl:variable name="restricted-items" select="ead:archdesc/ead:dsc//ead:accessrestrict[@type='restricted']"/>
 
               <xsl:attribute name="data-show-permission">
                 <xsl:choose>
-                  <xsl:when test="$colid = 'ARCH00293' or $colid = 'ARCH00393'">false</xsl:when>
                   <xsl:when test="(not($access-restrict/@type) or $access-restrict/@type != 'part') and ($top-access = 'Restricted' or $top-access = 'Beperkt')">true</xsl:when>
                   <xsl:when test="$access-restrict/@type = 'part' and $restricted-items">true</xsl:when>
                   <xsl:otherwise>false</xsl:otherwise>
@@ -207,7 +206,7 @@
   <xsl:template name="abstract">
     <xsl:variable name="more">
       <xsl:value-of
-          select="php:function('IISH\XSLT\Import\IISH::truncate' , string(ead:archdesc/ead:descgrp[@type='content_and_structure']/ead:scopecontent/ead:p[1]), 300)"/>
+          select="php:function('IISH\XSLT\Import\IISH::truncate' , string(ead:archdesc[@type='inventory']/ead:scopecontent/ead:p[1]), 300)"/>
       <a href="{concat($baseUrl, '/', 'ArchiveContentAndStructure')}">
         <br/>
         <xsl:call-template name="language">
@@ -273,7 +272,7 @@
       <xsl:with-param name="value">
         <a href="{concat($baseUrl, '/', 'ArchiveAccessAndUse')}">
           <xsl:value-of
-              select="ead:archdesc/ead:descgrp[@type='access_and_use']/ead:accessrestrict/ead:p[1]/text()"/>
+              select="ead:archdesc/ead:accessrestrict/ead:p[1]/text()"/>
         </a>
       </xsl:with-param>
     </xsl:call-template>

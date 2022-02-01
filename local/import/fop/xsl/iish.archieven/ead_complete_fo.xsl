@@ -373,21 +373,7 @@
                         </xsl:choose>
                     </fo:block>
 
-                    <!-- <xsl:apply-templates select="ead:archdesc/ead:descgrp/ead:head"/>
-                     <xsl:apply-templates select="ead:archdesc/ead:descgrp/ead:accessrestrict"/>
-                     <xsl:apply-templates select="ead:archdesc/ead:descgrp/ead:userestrict"/>
-                     <xsl:apply-templates select="ead:archdesc/ead:descgrp/ead:acqinfo"/>
-                     <xsl:apply-templates select="ead:archdesc/ead:descgrp/ead:processinfo"/>
-                     <xsl:apply-templates select="ead:archdesc/ead:descgrp/ead:bioghist"/>
-                     <xsl:apply-templates select="ead:archdesc/ead:descgrp/ead:scopecontent"/>
-                     <xsl:apply-templates select="ead:archdesc/ead:descgrp/ead:arrangement"/>
-                     <xsl:apply-templates select="ead:archdesc/ead:descgrp/ead:controlaccess"/>
-                     <xsl:apply-templates select="ead:archdesc/ead:descgrp/ead:otherfindaid"/>
-                     <xsl:apply-templates select="ead:archdesc/ead:descgrp/ead:altformavail"/>
-                     <xsl:apply-templates select="ead:archdesc/ead:descgrp/ead:originalsloc"/>
-                     <xsl:apply-templates select="ead:archdesc/ead:descgrp/ead:relatedmaterial"/>-->
-
-                    <xsl:apply-templates select="ead:archdesc/ead:descgrp"/>
+                    <xsl:apply-templates select="ead:archdesc"/>
 
                     <xsl:apply-templates
                             select="ead:archdesc/ead:dsc | ead:archdesc/ead:odd[following::ead:dsc] | ead:archdesc/ead:odd[preceding::ead:dsc]"/>
@@ -436,7 +422,7 @@
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template match="ead:descgrp/ead:head">
+    <xsl:template match="ead:head">
         <fo:block id="{generate-id()}">
             <fo:marker marker-class-name="anchor">
                 <xsl:value-of select="generate-id()"/>
@@ -756,7 +742,7 @@
         <xsl:apply-templates select="ead:archdesc/ead:bioghist" mode="toc"/>
         <xsl:apply-templates select="ead:archdesc/ead:scopecontent" mode="toc"/>
 
-        <xsl:apply-templates select="ead:archdesc/ead:descgrp/ead:head" mode="toc"/>
+        <xsl:apply-templates select="ead:archdesc/ead:head" mode="toc"/>
 
         <xsl:apply-templates select="ead:archdesc/ead:dsc | ead:archdesc/ead:odd" mode="toc"/>
     </xsl:template>
@@ -773,7 +759,7 @@
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template match="ead:archdesc/ead:descgrp/ead:head" mode="toc">
+    <xsl:template match="ead:archdesc/ead:head" mode="toc">
         <xsl:if test="//ead:userestrict | //ead:processinfo | //ead:altformavail | //ead:relatedmaterial | //ead:arrangement | //ead:controlaccess[normalize-space(ead:head) = 'Tweede archiefvormer'] | //ead:controlaccess[normalize-space(ead:head) = 'Secondary creator'] | //ead:otherfindaid | //ead:originalsloc | //ead:relatedmaterial ">
             <xsl:call-template name="hyper-toc-entry">
                 <xsl:with-param name="entry-titel">

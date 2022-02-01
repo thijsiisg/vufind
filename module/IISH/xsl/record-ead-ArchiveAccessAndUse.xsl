@@ -8,7 +8,7 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:ead="urn:isbn:1-931666-22-9"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="urn:isbn:1-931666-22-9 http://www.loc.gov/ead/ead.xsd"
+                xsi:schemaLocation="urn:isbn:1-931666-22-9 https://www.loc.gov/ead/ead.xsd"
                 exclude-result-prefixes="xsl ead xsi">
 
   <xsl:import href="record-ead-Archive.xsl"/>
@@ -39,7 +39,7 @@
     <xsl:call-template name="row">
       <xsl:with-param name="key" select="'ArchiveAccessAndUse.access'"/>
       <xsl:with-param name="value">
-        <xsl:apply-templates select="ead:archdesc/ead:descgrp[@type='access_and_use']/ead:accessrestrict/*"/>
+        <xsl:apply-templates select="ead:archdesc/ead:accessrestrict/*"/>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
@@ -48,7 +48,7 @@
     <xsl:call-template name="row">
       <xsl:with-param name="key" select="'ArchiveAccessAndUse.userestrict'"/>
       <xsl:with-param name="value">
-        <xsl:apply-templates select="ead:archdesc/ead:descgrp[@type='access_and_use']/ead:userestrict/*"/>
+        <xsl:apply-templates select="ead:archdesc/ead:userestrict/*"/>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
@@ -57,7 +57,7 @@
     <xsl:call-template name="row">
       <xsl:with-param name="key" select="'ArchiveAccessAndUse.prefercite'"/>
       <xsl:with-param name="value">
-        <xsl:apply-templates select="ead:archdesc/ead:descgrp[@type='access_and_use']/ead:prefercite/*"/>
+        <xsl:apply-templates select="ead:archdesc//ead:prefercite/*"/>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
@@ -66,7 +66,7 @@
     <xsl:call-template name="row">
       <xsl:with-param name="key" select="'ArchiveAccessAndUse.otherfindaid'"/>
       <xsl:with-param name="value">
-        <xsl:apply-templates select="ead:archdesc/ead:descgrp[@type='access_and_use']/ead:otherfindaid/*"/>
+        <xsl:apply-templates select="ead:archdesc//ead:otherfindaid/*"/>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:template>

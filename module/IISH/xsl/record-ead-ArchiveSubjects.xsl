@@ -8,7 +8,7 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:ead="urn:isbn:1-931666-22-9"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="urn:isbn:1-931666-22-9 http://www.loc.gov/ead/ead.xsd"
+                xsi:schemaLocation="urn:isbn:1-931666-22-9 https://www.loc.gov/ead/ead.xsd"
                 exclude-result-prefixes="xsl ead xsi">
 
   <xsl:import href="record-ead-Archive.xsl"/>
@@ -39,7 +39,7 @@
   <xsl:template name="persname">
     <xsl:variable name="value">
       <xsl:for-each
-          select="ead:archdesc/ead:descgrp[@type='content_and_structure']/ead:controlaccess/ead:controlaccess/ead:persname">
+          select="ead:archdesc//ead:controlaccess/ead:persname">
         <li>
           <xsl:apply-templates/>
         </li>
@@ -60,7 +60,7 @@
   <xsl:template name="corpname">
     <xsl:variable name="value">
       <xsl:for-each
-          select="ead:archdesc/ead:descgrp[@type='content_and_structure']/ead:controlaccess/ead:controlaccess/ead:corpname">
+          select="ead:archdesc//ead:controlaccess/ead:corpname">
         <li>
           <xsl:apply-templates/>
         </li>
@@ -81,7 +81,7 @@
   <xsl:template name="subject">
     <xsl:variable name="value">
       <xsl:for-each
-          select="ead:archdesc/ead:descgrp[@type='content_and_structure']/ead:controlaccess/ead:controlaccess/ead:subject">
+          select="ead:archdesc//ead:controlaccess/ead:subject">
         <li>
           <xsl:apply-templates/>
         </li>
@@ -102,7 +102,7 @@
   <xsl:template name="geogname">
     <xsl:variable name="value">
       <xsl:for-each
-          select="ead:archdesc/ead:descgrp[@type='content_and_structure']/ead:controlaccess/ead:controlaccess/ead:geogname">
+          select="ead:archdesc//ead:controlaccess/ead:geogname">
         <li>
           <xsl:apply-templates/>
         </li>
@@ -123,7 +123,7 @@
   <xsl:template name="genreform">
     <xsl:variable name="value">
       <xsl:for-each
-          select="ead:archdesc/ead:descgrp[@type='content_and_structure']/ead:controlaccess/ead:controlaccess/ead:genreform">
+          select="ead:archdesc//ead:controlaccess/ead:genreform">
         <li>
           <xsl:apply-templates/>
         </li>

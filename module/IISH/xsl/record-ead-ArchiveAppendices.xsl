@@ -8,7 +8,7 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:ead="urn:isbn:1-931666-22-9"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="urn:isbn:1-931666-22-9 http://www.loc.gov/ead/ead.xsd"
+                xsi:schemaLocation="urn:isbn:1-931666-22-9 https://www.loc.gov/ead/ead.xsd"
                 exclude-result-prefixes="xsl ead xsi">
 
   <xsl:import href="record-ead-Archive.xsl"/>
@@ -31,7 +31,7 @@
   </xsl:template>
 
   <xsl:template name="appendices">
-    <xsl:apply-templates select="ead:archdesc/ead:descgrp[@type='appendices']/ead:odd"/>
+    <xsl:apply-templates select="ead:archdesc/ead:odd"/>
   </xsl:template>
 
   <xsl:template match="ead:odd">

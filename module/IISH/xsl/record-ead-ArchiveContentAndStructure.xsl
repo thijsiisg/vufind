@@ -8,7 +8,7 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:ead="urn:isbn:1-931666-22-9"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="urn:isbn:1-931666-22-9 http://www.loc.gov/ead/ead.xsd"
+                xsi:schemaLocation="urn:isbn:1-931666-22-9 https://www.loc.gov/ead/ead.xsd"
                 exclude-result-prefixes="xsl ead xsi">
 
   <xsl:import href="record-ead-Archive.xsl"/>
@@ -45,7 +45,7 @@
     <xsl:call-template name="row">
       <xsl:with-param name="key" select="'ArchiveContentAndStructure.bibliographical'"/>
       <xsl:with-param name="value">
-        <xsl:apply-templates select="ead:archdesc/ead:descgrp[@type='context']/ead:bioghist/*"/>
+        <xsl:apply-templates select="ead:archdesc/ead:bioghist/*"/>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
@@ -54,7 +54,7 @@
     <xsl:call-template name="row">
       <xsl:with-param name="key" select="'ArchiveContentAndStructure.custodhist'"/>
       <xsl:with-param name="value">
-        <xsl:apply-templates select="ead:archdesc/ead:descgrp[@type='context']/ead:custodhist/*"/>
+        <xsl:apply-templates select="ead:archdesc/ead:custodhist/*"/>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
@@ -64,7 +64,7 @@
       <xsl:with-param name="key" select="'ArchiveContentAndStructure.content'"/>
       <xsl:with-param name="value">
         <xsl:apply-templates
-            select="ead:archdesc/ead:descgrp[@type='content_and_structure']/ead:scopecontent/*"/>
+            select="ead:archdesc//ead:scopecontent/*"/>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
@@ -74,7 +74,7 @@
       <xsl:with-param name="key" select="'ArchiveContentAndStructure.arrangement'"/>
       <xsl:with-param name="value">
         <xsl:apply-templates
-            select="ead:archdesc/ead:descgrp[@type='content_and_structure']/ead:arrangement/*"/>
+            select="ead:archdesc//ead:arrangement/*"/>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
@@ -84,7 +84,7 @@
       <xsl:with-param name="key" select="'ArchiveContentAndStructure.processinfo'"/>
       <xsl:with-param name="value">
         <xsl:apply-templates
-            select="ead:archdesc/ead:descgrp[@type='content_and_structure']/ead:processinfo/*"/>
+            select="ead:archdesc//ead:processinfo/*"/>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
@@ -94,7 +94,7 @@
       <xsl:with-param name="key" select="'ArchiveContentAndStructure.acquisition'"/>
       <xsl:with-param name="value">
         <xsl:apply-templates
-         select="ead:archdesc/ead:descgrp[@type='context']/ead:acqinfo/*"/>
+         select="ead:archdesc/ead:acqinfo/*"/>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
@@ -103,7 +103,7 @@
     <xsl:call-template name="row">
       <xsl:with-param name="key" select="'ArchiveContentAndStructure.altformavail'"/>
       <xsl:with-param name="value">
-        <xsl:apply-templates select="ead:archdesc/ead:descgrp[@type='allied_materials']/ead:altformavail/*"/>
+        <xsl:apply-templates select="ead:archdesc/ead:altformavail/*"/>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
@@ -112,7 +112,7 @@
     <xsl:call-template name="row">
       <xsl:with-param name="key" select="'ArchiveContentAndStructure.originalsloc'"/>
       <xsl:with-param name="value">
-        <xsl:apply-templates select="ead:archdesc/ead:descgrp[@type='allied_materials']/ead:originalsloc/*"/>
+        <xsl:apply-templates select="ead:archdesc/ead:originalsloc/*"/>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
@@ -121,7 +121,7 @@
     <xsl:call-template name="row">
       <xsl:with-param name="key" select="'ArchiveContentAndStructure.relatedmaterial'"/>
       <xsl:with-param name="value">
-        <xsl:apply-templates select="ead:archdesc/ead:descgrp[@type='allied_materials']/ead:relatedmaterial/*"/>
+        <xsl:apply-templates select="ead:archdesc/ead:relatedmaterial/*"/>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
@@ -131,7 +131,7 @@
       <xsl:with-param name="key" select="'ArchiveContentAndStructure.separatedmaterial'"/>
       <xsl:with-param name="value">
         <xsl:apply-templates
-            select="ead:archdesc/ead:descgrp[@type='allied_materials']/ead:separatedmaterial/*"/>
+            select="ead:archdesc/ead:separatedmaterial/*"/>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
