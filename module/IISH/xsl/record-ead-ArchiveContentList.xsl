@@ -232,7 +232,7 @@
   <xsl:template match="ead:physdesc">
     <xsl:text> </xsl:text>
     <span class="physdesc">
-      <xsl:value-of select="normalize-space(*/text())"/>
+      <xsl:value-of select="normalize-space(text())"/>
     </span>
     <br/>
   </xsl:template>

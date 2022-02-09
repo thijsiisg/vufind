@@ -8,7 +8,7 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:ead="urn:isbn:1-931666-22-9"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xs="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xlink="https://www.w3.org/1999/xlink" xmlns:xs="http://www.w3.org/1999/XSL/Transform"
                 xsi:schemaLocation="urn:isbn:1-931666-22-9 https://www.loc.gov/ead/ead.xsd"
                 xmlns:php="http://php.net/xsl"
                 exclude-result-prefixes="xsl ead xsi php xlink">
@@ -24,7 +24,7 @@
   <xsl:param name="isInternal"/>
 
   <xsl:variable name="digital_items"
-                select="count(//ead:daogrp[starts-with(ead:daoloc/@xlink:href, 'http://hdl.handle.net/10622/') or starts-with(ead:daoloc/@xlink:href, 'https://hdl.handle.net/10622/')])"/>
+                select="count(//ead:daogrp[starts-with(ead:daoloc/@xlink:href, 'https://hdl.handle.net/10622/')])"/>
 
   <xsl:template match="/">
     <xsl:apply-templates select="//ead:ead"/>
@@ -62,6 +62,7 @@
           <xsl:call-template name="abstract"/>
           <xsl:call-template name="period"/>
           <xsl:call-template name="extent"/>
+          <xsl:call-template name="physdesc"/>
           <xsl:call-template name="access"/>
           <xsl:call-template name="digitalform"/>
           <xsl:call-template name="langmaterial"/>
@@ -248,15 +249,43 @@
 
   <xsl:template name="extent">
     <xsl:variable name="value">
-      <xsl:for-each select="ead:archdesc/ead:did/ead:physdesc/ead:extent">
+      <xsl:for-each select="ead:archdesc/ead:did/ead:physdesc[ead:extent]">
         <li>
-          <xsl:apply-templates/>
+        <xsl:for-each select="ead:extent">
+            <xsl:apply-templates/>
+          <xsl:choose>
+            <xsl:when test="position()=last()"><!-- . --></xsl:when>
+            <xsl:otherwise>, </xsl:otherwise>
+            </xsl:choose>
+        </xsl:for-each>
         </li>
       </xsl:for-each>
     </xsl:variable>
     <xsl:if test="string-length($value) > 0">
       <xsl:call-template name="row">
         <xsl:with-param name="key" select="'ArchiveCollectionSummary.extent'"/>
+        <xsl:with-param name="value">
+          <ul>
+            <xsl:copy-of select="$value"/>
+          </ul>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="physdesc">
+    <xsl:variable name="value">
+    <xsl:for-each select="ead:archdesc/ead:did/ead:physdesc[not(ead:extent)]">
+      <xsl:apply-templates/>
+      <xsl:choose>
+        <xsl:when test="position()=last()"><!-- . --></xsl:when>
+        <xsl:otherwise>, </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
+  </xsl:variable>
+    <xsl:if test="string-length($value) > 0">
+      <xsl:call-template name="row">
+        <xsl:with-param name="key" select="'ArchiveCollectionSummary.physdesc'"/>
         <xsl:with-param name="value">
           <ul>
             <xsl:copy-of select="$value"/>

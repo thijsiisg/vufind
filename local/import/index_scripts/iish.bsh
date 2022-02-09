@@ -602,7 +602,7 @@ private String subfieldU(DataField datafield) {
                 if (data.contains("10622/N30051"))
                     return "Image";
                     
-                if (data.startsWith("http://hdl.handle.net/10622/") || data.startsWith("https://hdl.handle.net/10622/"))
+                if (data.startsWith("https://hdl.handle.net/10622/"))
                     return "Image";
             }
         }

@@ -20,8 +20,8 @@
     <xsl:variable name="txtLCNNumber">Archiefnummer</xsl:variable>
     <xsl:variable name="txtIdNL">Archiefnummer</xsl:variable>
     <xsl:variable name="txtId">Collection ID</xsl:variable>
-    <xsl:variable name="txtCreatorNL">Archiefvormer</xsl:variable>
-    <xsl:variable name="txtCreator">Creator</xsl:variable>
+    <xsl:variable name="txtCreatorNL">Archiefvormer(s)</xsl:variable>
+    <xsl:variable name="txtCreator">Creator(s)</xsl:variable>
     <xsl:variable name="txtCreator2NL">Tweede archiefvormer</xsl:variable>
     <xsl:variable name="txtCreator2">Other Creator(s)</xsl:variable>
     <xsl:variable name="txtPeriodNL">Periode</xsl:variable>

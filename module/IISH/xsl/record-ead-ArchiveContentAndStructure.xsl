@@ -64,7 +64,7 @@
       <xsl:with-param name="key" select="'ArchiveContentAndStructure.content'"/>
       <xsl:with-param name="value">
         <xsl:apply-templates
-            select="ead:archdesc//ead:scopecontent/*"/>
+            select="ead:archdesc[@type='inventory']/ead:scopecontent/*"/>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:template>
