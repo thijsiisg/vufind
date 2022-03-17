@@ -60,15 +60,15 @@ class Loader extends Cacheable {
 			// Override message concerning corona virus
 			if ($this->getLang() == 'nl') {
 				return array(
-					'title'   => 'De studiezaal is alleen toegankelijk op afspraak.',
-					'content' => '> <a href="https://iisg.amsterdam/nl/collecties/gebruiken">meer informatie</a>',
+					'title'   => 'Bezoek de <a href="https://iisg.amsterdam/nl/collecties/gebruiken">studiezaal</a>',
+					'content' => '',
 					'lang'    => $this->getLang()
 				);
 			}
 
 			return array(
-				'title'   => 'The reading room is open by appointment',
-				'content' => '> <a href="https://iisg.amsterdam/en/collections/using">more information</a>',
+				'title'   => 'Visit the <a href="https://iisg.amsterdam/en/collections/using">reading room</a>',
+				'content' => '',
 				'lang'    => $this->getLang()
 			);
 
